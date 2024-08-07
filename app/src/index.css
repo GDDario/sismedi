@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Defining themes */
+@layer base {
+    :root {
+        --main-bright-blue: 0, 204, 255;
+        --main-light-blue: 162, 224, 235;
+        --main-dark-blue: 27, 52, 147;
+    }
+}
