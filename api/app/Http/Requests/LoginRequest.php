@@ -2,19 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\EmailOrCpfRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,8 +14,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'emailOrCpf' => ['required', 'string', new EmailOrCpfRule],
-            'password' => 'required'
+            'login' => ['required'],
+            'password' => ['required']
         ];
     }
 }
