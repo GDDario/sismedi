@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'cpf' => '67774092030',
         ]);
     }
 }
