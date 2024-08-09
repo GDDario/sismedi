@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\UserType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Ramsey\Uuid\Uuid;
 
 class UserTypeSeeder extends Seeder
 {
@@ -23,7 +21,6 @@ class UserTypeSeeder extends Seeder
 
         foreach ($typeNames as $typeName) {
             UserType::factory()->create([
-                'uuid' => Uuid::uuid4()->toString(),
                 'name' => $typeName,
             ]);
         }
