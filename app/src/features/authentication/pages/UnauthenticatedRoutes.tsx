@@ -11,12 +11,8 @@ const UnauthenticatedRoutes = () => {
     }
 
     return (
-        <div className="min-h-screen bg-appWhite flex justify-center items-center p-8 relative">
-            <div className="p-4 shadow-lg rounded-lg bg-white">
-                <div className="mx-auto w-[30%] min-w-[350px] max-w-[400px] border rounded-lg bg-mainColor p-8 text-appWhite z-10">
-                    <Outlet />
-                </div>
-            </div>
+        <div className="w-screen h-screen bg-mainWhite flex justify-center items-center">
+            <Outlet />
         </div>
     );
 };

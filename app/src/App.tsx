@@ -7,11 +7,11 @@ import router from "./config/router.tsx";
 function App() {
 
     return (
-        <h1 className="text-3xl font-bold underline">
+        <>
             <Provider store={store}>
                 <RouterProvider router={router}/>
             </Provider>
-        </h1>
+        </>
     )
 }
 

@@ -9,7 +9,9 @@ export default {
             colors: {
                 mainBrightBlue: 'rgb(var(--main-bright-blue))',
                 mainLightBlue: 'rgb(var(--main-light-blue))',
-                mainDarkBlue: 'rgb(var(--main-dark-blue))'
+                mainDarkBlue: 'rgb(var(--main-dark-blue))',
+                mainBackgroundBlue: 'rgb(var(--main-background-blue))',
+                mainWhite: 'rgb(var(--main-white))'
             }
         },
     },

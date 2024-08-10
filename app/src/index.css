@@ -5,8 +5,18 @@
 /* Defining themes */
 @layer base {
     :root {
+        --main-background-blue: 113, 143, 200;
         --main-bright-blue: 0, 204, 255;
         --main-light-blue: 162, 224, 235;
         --main-dark-blue: 27, 52, 147;
+        --main-white: 232, 241, 255;
     }
+}
+
+body {
+    background-color: rgb(var(--main-white));
+}
+
+h1 {
+    font-size: 2rem;
 }
