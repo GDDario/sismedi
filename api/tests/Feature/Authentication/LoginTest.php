@@ -8,12 +8,14 @@ use function Pest\Laravel\assertDatabaseEmpty;
 use function Pest\Laravel\assertDatabaseHas;
 use function PHPUnit\Framework\assertTrue;
 
+const LOGIN_PATH = '/api/login';
+
 beforeEach(function () {
     UserType::factory()->create(['name' => 'Administrador']);
 
     User::factory()->create([
         'email' => 'user@example.com',
-        'cpf' => '67774092030',
+        'cpf' => '67774092030'
     ]);
 });
 
@@ -23,7 +25,7 @@ it('should login successfully with email and password', function () {
         'password' => 'password'
     ];
 
-    $response = $this->post('/api/login', $requestData);
+    $response = $this->post(LOGIN_PATH, $requestData);
 
     $response->assertStatus(200);
     $response->assertJson(['user' => [
@@ -40,7 +42,7 @@ it('should login successfully with cpf and password', function () {
         'password' => 'password'
     ];
 
-    $response = $this->post('/api/login', $requestData);
+    $response = $this->post(LOGIN_PATH, $requestData);
 
     $response->assertStatus(200);
     $response->assertJson(['user' => [
@@ -51,12 +53,12 @@ it('should login successfully with cpf and password', function () {
     assertDatabaseHas('personal_access_tokens', ['tokenable_type' => 'App\Models\User']);
 });
 
-it('should login with login field is required error', function () {
+it('should not login with login field is required error', function () {
     $requestData = [
         'password' => 'password'
     ];
 
-    $response = $this->post('/api/login', $requestData);
+    $response = $this->post(LOGIN_PATH, $requestData);
 
     $response->assertStatus(302);
     $response->assertJson(['user' => [
@@ -65,12 +67,12 @@ it('should login with login field is required error', function () {
     ]]);
 })->throws(ValidationException::class, 'The login field is required');
 
-it('should login with password field is required error', function () {
+it('should not login with password field is required error', function () {
     $requestData = [
         'login' => 'user@example.com'
     ];
 
-    $response = $this->post('/api/login', $requestData);
+    $response = $this->post(LOGIN_PATH, $requestData);
 
     $response->assertStatus(302);
     $response->assertJson(['user' => [
@@ -85,7 +87,7 @@ it('should not login with wrong credentials', function () {
         'password' => '@Password123'
     ];
 
-    $response = $this->post('/api/login', $requestData);
+    $response = $this->post(LOGIN_PATH, $requestData);
 
     $response->assertStatus(401);
     $response->assertExactJson([
