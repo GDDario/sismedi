@@ -35,8 +35,9 @@ const InputField = ({label, type, placeholder, name, error, register, variant, f
         <div>
             <label htmlFor={id}>{label}</label>
             <input
-                placeholder={placeholder}
                 id={id}
+                placeholder={placeholder}
+                aria-placeholder={placeholder}
                 type={type}
                 {...register(name)}
                 className={styleClasses()}

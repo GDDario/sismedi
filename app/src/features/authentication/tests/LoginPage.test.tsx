@@ -1,13 +1,13 @@
 import {render, screen} from '@testing-library/react';
 import LoginPage from "../pages/LoginPage.tsx";
+import { axe, toHaveNoViolations } from 'jest-axe';
 
+expect.extend(toHaveNoViolations);
 
 describe('Login page', () => {
-    beforeEach(() => {
-        render(<LoginPage/>);
-    });
-
     it('should load correctly', () => {
+        render(<LoginPage/>);
+
         const title = screen.getByRole('heading', {level: 1})
         const loginInput = screen.getByRole('textbox', {name: 'Email ou RG'});
         const passwordInput = screen.getByLabelText(/Senha/i);
@@ -25,5 +25,11 @@ describe('Login page', () => {
         expect(submitButton).toHaveTextContent('Entrar');
         expect(forgotPasswordLink).toBeInTheDocument();
         expect(forgotPasswordLink).toHaveTextContent('Esqueci minha senha');
+    });
+
+    it('should have no accessibility violations', async () => {
+        const { container } = render(<LoginPage />);
+
+        expect(await axe(container)).toHaveNoViolations();
     });
 });

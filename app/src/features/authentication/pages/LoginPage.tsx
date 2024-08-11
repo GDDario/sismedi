@@ -20,7 +20,6 @@ const LoginPage = () => {
     const {
         register,
         handleSubmit,
-        setError,
         formState: {errors},
     } = useForm<LoginFormSchema>({resolver: zodResolver(schema)});
 
