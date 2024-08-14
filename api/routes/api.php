@@ -3,13 +3,10 @@
 use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/user', function (Request $request) {
-//    return $request->user();
-//})->middleware('auth:sanctum');
-
 Route::post('login', [AuthenticationController::class, 'login']);
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('authenticated-user', [AuthenticationController::class, 'authenticatedUser']);
 
-//Route::middleware('auth:api')->group(function () {
-//    Route::post('login', [AuthenticationController::class, 'login']);
-//});
+    Route::post('logout', [AuthenticationController::class, 'logout']);
+});

@@ -1,6 +1,6 @@
 import {render, screen} from '@testing-library/react';
 import LoginPage from "../pages/LoginPage.tsx";
-import { axe, toHaveNoViolations } from 'jest-axe';
+import {axe, toHaveNoViolations} from 'jest-axe';
 
 expect.extend(toHaveNoViolations);
 
@@ -28,7 +28,7 @@ describe('Login page', () => {
     });
 
     it('should have no accessibility violations', async () => {
-        const { container } = render(<LoginPage />);
+        const {container} = render(<LoginPage/>);
 
         expect(await axe(container)).toHaveNoViolations();
     });

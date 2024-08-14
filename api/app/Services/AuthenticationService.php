@@ -25,13 +25,31 @@ class AuthenticationService
         return new Response(['message' => 'Wrong credentials'], Response::HTTP_UNAUTHORIZED);
     }
 
+    public function getAuthenticatedUser()
+    {
+        $user = Auth::user();
+
+        $user = $user->toArray();
+
+        unset($user['id']);
+
+        return $user;
+    }
+
+    public function logout(): Response
+    {
+        Auth::user()->currentAccessToken()->delete();
+
+        return new Response(null, Response::HTTP_OK);
+    }
+
     private function refineLoginCredentials(string $login, string $password): array
     {
         $loginType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'cpf';
 
         return [
             $loginType => $login,
-            'password' =>$password
+            'password' => $password
         ];
     }
 }
