@@ -13,7 +13,6 @@ class AuthenticationController extends Controller
         public AuthenticationService $service
     )
     {
-
     }
 
     public function login(LoginRequest $request): Response
@@ -21,7 +20,8 @@ class AuthenticationController extends Controller
         return $this->service->doLogin($request->get('login'), $request->get('password'));
     }
 
-    public function authenticatedUser() {
+    public function authenticatedUser(): Response
+    {
         return $this->service->getAuthenticatedUser();
     }
 
