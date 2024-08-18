@@ -22,7 +22,7 @@ class AuthenticationService
             return new Response(['user' => $user, 'token' => $token], Response::HTTP_OK);
         }
 
-        return new Response(['message' => 'Wrong credentials'], Response::HTTP_UNAUTHORIZED);
+        return new Response(['message' => 'Credenciais inválidas.'], Response::HTTP_UNAUTHORIZED);
     }
 
     public function getAuthenticatedUser()
@@ -33,7 +33,7 @@ class AuthenticationService
 
         unset($user['id']);
 
-        return $user;
+        return new Response($user, Response::HTTP_OK);
     }
 
     public function logout(): Response
