@@ -8,7 +8,6 @@ use App\Models\PasswordResetToken;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordService
