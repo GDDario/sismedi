@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthenticationService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
 {
