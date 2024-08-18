@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class LoginRequest extends FormRequest
+class ConfirmEmailResetTokenRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,8 +17,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => ['required'],
-            'password' => ['required']
+            'token' => 'required|size:255|exists:password_reset_tokens'
         ];
     }
 
