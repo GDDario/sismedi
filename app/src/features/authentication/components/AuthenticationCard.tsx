@@ -8,7 +8,7 @@ type AuthenticationCardProps = {
 
 const AuthenticationCard = ({children, title}: AuthenticationCardProps) => {
     return (
-        <div className="rounded-xl border-2 border-mainDarkBlue shadow-md shadow-mainDarkBlue flex h-full">
+        <div className="rounded-xl border-2 border-mainDarkBlue shadow-md shadow-mainDarkBlue flex h-[400px]">
             <div
                 className="p-12 bg-mainBackgroundBlue w-[400px] flex justify-center items-center rounded-tl-md rounded-bl-md">
                 <img src={logo} className="w-[300px]" alt='Sismedi logo'/>

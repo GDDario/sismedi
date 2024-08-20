@@ -7,7 +7,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import InputField from "../components/InputField.tsx";
 import {ForgotPasswordService, SendEmailResponse} from "../services/ForgotPasswordService.ts";
-import {AxiosError, AxiosResponse} from "axios";
+import {AxiosError} from "axios";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../store/messageSlice.ts";
 
@@ -32,7 +32,7 @@ const ForgotPasswordPage = () => {
     const onSubmit = async ({email}: ForgotPasswordSchema) => {
         setLoading(true);
 
-        await ForgotPasswordService.sendEmail(email).then((response: AxiosResponse<SendEmailResponse>) => {
+        await ForgotPasswordService.sendEmail(email).then((response) => {
             dispatch(showMessage({message: response.data.message, duration: 5000}));
         }).catch((error: any) => {
             console.log('Axios error', error);
@@ -47,7 +47,7 @@ const ForgotPasswordPage = () => {
             <AuthenticationCard title="Esqueci minha senha">
                 <p>Digite seu email para enviarmos um link para redefinir sua senha.</p>
 
-                <form className="flex flex-col gap-2 mt-2" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex flex-col gap-8 mt-8" onSubmit={handleSubmit(onSubmit)}>
                     <InputField
                         label="Email"
                         type="text"

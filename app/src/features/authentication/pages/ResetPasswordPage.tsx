@@ -65,26 +65,28 @@ const ResetPasswordPage = () => {
 
     return <div>
         <AuthenticationCard title="Redefinir sua senha">
-            <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-                <InputField
-                    label="Nova senha"
-                    type="password"
-                    placeholder="*********"
-                    fullWidth
-                    name="newPassword"
-                    register={register}
-                    error={errors.newPassword}
-                />
+            <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex flex-col gap-2">
+                    <InputField
+                        label="Nova senha"
+                        type="password"
+                        placeholder="*********"
+                        fullWidth
+                        name="newPassword"
+                        register={register}
+                        error={errors.newPassword}
+                    />
 
-                <InputField
-                    label="Confirmação da nova senha"
-                    type="password"
-                    placeholder="*********"
-                    fullWidth
-                    name="newPasswordConfirmation"
-                    register={register}
-                    error={errors.newPasswordConfirmation}
-                />
+                    <InputField
+                        label="Confirmação da nova senha"
+                        type="password"
+                        placeholder="*********"
+                        fullWidth
+                        name="newPasswordConfirmation"
+                        register={register}
+                        error={errors.newPasswordConfirmation}
+                    />
+                </div>
 
                 <div className="flex gap-1">
                     <Button
