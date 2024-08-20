@@ -3,6 +3,7 @@ import UnauthenticatedRoutes from "../features/authentication/pages/Unauthentica
 import LoginPage from "../features/authentication/pages/LoginPage.tsx";
 import AuthenticatedRoutes from "../features/authentication/pages/AuthenticatedRoutes.tsx";
 import ForgotPasswordPage from "../features/authentication/pages/ForgotPasswordPage.tsx";
+import ResetPasswordPage from "../features/authentication/pages/ResetPasswordPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -15,10 +16,13 @@ const router = createBrowserRouter([
                 element: <LoginPage/>,
             },
             {
-                index: true,
                 path: "/forgot-password",
                 element: <ForgotPasswordPage/>,
             },
+            {
+                path: '/reset-password',
+                element: <ResetPasswordPage/>
+            }
         ],
     },
     {

@@ -13,7 +13,7 @@ const schema = z.object({
     password: z.string().min(1, 'Campo obrigatório')
 });
 
-export type LoginFormSchema = z.infer<typeof schema>
+export type LoginFormSchema = z.infer<typeof schema>;
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -37,13 +37,8 @@ const LoginPage = () => {
 
     return (
         <div>
-            <AuthenticationCard>
-                <header className="mb-6">
-                    <h1>Login</h1>
-                    <hr className="border-mainDarkBlue"/>
-                </header>
-
-                <form className="flex flex-col  gap-2" onSubmit={handleSubmit(onSubmit)}>
+            <AuthenticationCard title="Login">
+                <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
                     <InputField
                         label="Email ou RG"
                         type="text"
