@@ -23,6 +23,19 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get the custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'login.required' => 'O campo login é obrigatório.',
+            'password.required' => 'O campo password é obrigatório.',
+        ];
+    }
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param Validator $validator
