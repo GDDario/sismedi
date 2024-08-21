@@ -1,0 +1,22 @@
+.loader {
+    width: 100%;
+    height: 6px;
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 4px 4px;
+}
+
+.progressBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    animation: fillLoader 3s linear forwards;
+}
+
+@keyframes fillLoader {
+    from { width: 0; }
+    to { width: 100%; }
+}
