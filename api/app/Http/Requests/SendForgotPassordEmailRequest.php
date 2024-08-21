@@ -22,6 +22,18 @@ class SendForgotPassordEmailRequest extends FormRequest
     }
 
     /**
+     * Get the custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.exists' => 'Email inválido.',
+        ];
+    }
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param Validator $validator

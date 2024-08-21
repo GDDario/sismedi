@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ConfirmEmailResetTokenRequest;
+use App\Http\Requests\ConfirmPasswordResetTokenRequest;
 use App\Http\Requests\ResetPasswordWithTokenRequest;
 use App\Http\Requests\SendForgotPassordEmailRequest;
 use App\Services\ForgotPasswordService;
@@ -21,7 +21,7 @@ class ForgotPasswordController extends Controller
         return $this->service->sendEmail($request->get('email'));
     }
 
-    public function confirmToken(ConfirmEmailResetTokenRequest $request): Response
+    public function confirmToken(ConfirmPasswordResetTokenRequest $request): Response
     {
         return $this->service->confirmToken($request->get('token'));
     }

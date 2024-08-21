@@ -3,11 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
+ Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class ConfirmEmailResetTokenRequest extends FormRequest
+class ConfirmPasswordResetTokenRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -18,6 +18,18 @@ class ConfirmEmailResetTokenRequest extends FormRequest
     {
         return [
             'token' => 'required|size:255|exists:password_reset_tokens'
+        ];
+    }
+
+    /**
+     * Get the custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'token.exists' => 'Token inválido.',
         ];
     }
 

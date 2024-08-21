@@ -23,6 +23,19 @@ class ResetPasswordWithTokenRequest extends FormRequest
     }
 
     /**
+     * Get the custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'new_password.confirmed' => 'As senhas não coincidem.',
+            'token.exists' => 'Token inválido.'
+        ];
+    }
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param Validator $validator
