@@ -6,8 +6,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import InputField from "../components/InputField.tsx";
-import {ForgotPasswordService, SendEmailResponse} from "../services/ForgotPasswordService.ts";
-import {AxiosError} from "axios";
+import {ForgotPasswordService} from "../services/ForgotPasswordService.ts";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../store/messageSlice.ts";
 
@@ -21,13 +20,11 @@ const ForgotPasswordPage = () => {
     const {
         register,
         handleSubmit,
-        formState: {errors},
-        setError
+        formState: {errors}
     } = useForm<ForgotPasswordSchema>({resolver: zodResolver(schema)});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
 
     const onSubmit = async ({email}: ForgotPasswordSchema) => {
         setLoading(true);
