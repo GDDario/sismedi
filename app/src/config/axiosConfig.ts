@@ -1,11 +1,11 @@
 import axios from 'axios';
-import {getToken} from "../features/authentication/services/authenticationService.ts";
+import {AuthenticationService} from "../features/authentication/services/AuthenticationService.ts";
 
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(
     async (config) => {
-        const token = getToken();
+        const token = AuthenticationService.getToken();
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;

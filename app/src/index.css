@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.element {
+    background: rgb(113, 143, 200);
+    background: rgb(0, 204, 255);
+    background: rgb(162, 224, 235);
+    background: rgb(27, 52, 147);
+    background: rgb(232, 241, 255);
+}
+
 /* Defining themes */
 @layer base {
     :root {
