@@ -4,9 +4,13 @@ import InputField from "../components/InputField.tsx";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {login} from "../services/authenticationService.ts";
+import {AuthenticationService} from "../services/AuthenticationService.ts";
 import {LoginResponse} from "../types.ts";
 import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {showMessage} from "../../../store/messageSlice.ts";
+import {useNavigate} from "react-router-dom";
+import {AxiosResponse} from "axios";
 
 const schema = z.object({
     login: z.string().min(1, 'Campo obrigatório'),
@@ -17,6 +21,8 @@ export type LoginFormSchema = z.infer<typeof schema>;
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
@@ -26,8 +32,11 @@ const LoginPage = () => {
     const onSubmit = (data: LoginFormSchema) => {
         setLoading(true);
 
-        login(data).then((response: LoginResponse) => {
-            console.log('Login response', response);
+        AuthenticationService.login(data).then((response: AxiosResponse<LoginResponse>) => {
+            // TODO: Verify user type to make the redirect
+            AuthenticationService.saveToken(response.data.token);
+            dispatch(showMessage({message: 'Logado com sucesso!', type: 'success'}));
+            navigate('/patients');
         }).catch((error) => {
             console.log('Login error!', error)
         }).finally(() => {

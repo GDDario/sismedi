@@ -8,7 +8,7 @@ import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {showMessage} from "../../../store/messageSlice.ts";
-import {ForgotPasswordService, ResetPasswordResponse, SendEmailResponse} from "../services/ForgotPasswordService.ts";
+import {ForgotPasswordService, ResetPasswordResponse} from "../services/ForgotPasswordService.ts";
 import {AxiosResponse} from "axios";
 
 const schema = z

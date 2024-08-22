@@ -1,4 +1,6 @@
-import {render, screen} from '@testing-library/react';
+// @ts-ignore
+import {fullyRender} from '../../../../.jest/test-utils.js';
+import {screen} from '@testing-library/react';
 import LoginPage from "../pages/LoginPage.tsx";
 import {axe, toHaveNoViolations} from 'jest-axe';
 
@@ -6,7 +8,7 @@ expect.extend(toHaveNoViolations);
 
 describe('Login page', () => {
     it('should load correctly', () => {
-        render(<LoginPage/>);
+        fullyRender(<LoginPage/>);
 
         const title = screen.getByRole('heading', {level: 1})
         const loginInput = screen.getByRole('textbox', {name: 'Email ou RG'});
@@ -28,7 +30,7 @@ describe('Login page', () => {
     });
 
     it('should have no accessibility violations', async () => {
-        const {container} = render(<LoginPage/>);
+        const {container} = fullyRender(<LoginPage/>);
 
         expect(await axe(container)).toHaveNoViolations();
     });
