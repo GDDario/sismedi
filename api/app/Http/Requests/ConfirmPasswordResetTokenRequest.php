@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
- Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
