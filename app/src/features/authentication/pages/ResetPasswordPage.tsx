@@ -99,7 +99,7 @@ const ResetPasswordPage = () => {
                     />
                     <Button
                         className="mt-2"
-                        text={!loading ? 'Enviar' : 'Carregando...'}
+                        text={!loading ? 'Redefinir' : 'Carregando...'}
                         disabled={loading}
                     />
                 </div>
