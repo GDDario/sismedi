@@ -1,13 +1,13 @@
-import SideMenuButton from "./SideMenuButton/SideMenuButton.tsx";
+import SideMenuButton from "./SideMenuButton.tsx";
 
 const NavigationMenu = () => {
     return (
-          <>
-            <SideMenuButton text="Gerenciar usuários" />
-            <SideMenuButton text="Gerenciar médicos" />
-            <SideMenuButton text="Consultas" />
-            <SideMenuButton text="Medicamentos" />
-          </>
+        <div className="mt-6 flex flex-col gap-2">
+            <SideMenuButton text="Gerenciar usuários"/>
+            <SideMenuButton text="Gerenciar médicos"/>
+            <SideMenuButton text="Consultas"/>
+            <SideMenuButton text="Medicamentos"/>
+        </div>
     );
 };
 
