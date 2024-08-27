@@ -7,16 +7,14 @@ export type AuthenticatedLayoutProps = {
 };
 
 const Authenticatedlayout = ({children}: AuthenticatedLayoutProps) => {
-    const pageName = 'Gerenciar usuários';
-
     return (
-        <div className="flex gap-8 bg-mainBackgroundBlue">
+        <div className="flex gap-20 bg-mainBackgroundBlue">
             <SideMenu/>
 
-            <div className="w-full overflow-y-auto mt-[5vh] pr-8">
+            <div className="w-full overflow-y-auto mt-[5vh] pr-20">
                 <AuthenticatedLayoutHeader />
 
-                <main>
+                <main className="mt-8">
                     {children}
                 </main>
             </div>

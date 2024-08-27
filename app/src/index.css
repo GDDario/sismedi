@@ -8,6 +8,7 @@
     background: rgb(162, 224, 235);
     background: rgb(27, 52, 147);
     background: rgb(232, 241, 255);
+    background: rgb(187, 17, 17);
 }
 
 /* Defining themes */
@@ -18,6 +19,7 @@
         --main-light-blue: 162, 224, 235;
         --main-dark-blue: 27, 52, 147;
         --main-white: 232, 241, 255;
+        --main-red: 187, 17, 17;
     }
 }
 
@@ -27,4 +29,8 @@ body {
 
 h1 {
     font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.4rem;
 }
