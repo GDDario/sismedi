@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    box-sizing: border-box;
+}
+
 .element {
     background: rgb(113, 143, 200);
     background: rgb(0, 204, 255);

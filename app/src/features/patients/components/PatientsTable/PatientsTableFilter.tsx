@@ -1,7 +1,7 @@
 const PatientsTableFilter = () => {
     return (
         <>
-
+            Filter
         </>
     );
 };

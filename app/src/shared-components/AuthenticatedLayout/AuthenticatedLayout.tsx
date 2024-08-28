@@ -11,11 +11,13 @@ const Authenticatedlayout = ({children}: AuthenticatedLayoutProps) => {
         <div className="flex gap-20 bg-mainBackgroundBlue">
             <SideMenu/>
 
-            <div className="w-full overflow-y-auto mt-[5vh] pr-20">
-                <AuthenticatedLayoutHeader />
+            <div className="w-full">
+                <AuthenticatedLayoutHeader/>
 
-                <main className="mt-8">
-                    {children}
+                <main className="pr-20">
+                    <div>
+                        {children}
+                    </div>
                 </main>
             </div>
         </div>
