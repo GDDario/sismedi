@@ -1,5 +1,5 @@
 import NavigationMenu from "./NavigationMenu.tsx";
-import logo from '../../../assets/images/logo-sismedi.png'
+import logo from '../../../assets/images/logovert.png'
 
 const SideMenu = () => {
     return (
