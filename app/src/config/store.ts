@@ -1,12 +1,14 @@
 import {configureStore} from "@reduxjs/toolkit";
 import userReducer from '../features/authentication/store/userSlice';
-import messageReducer from '../store/messageSlice.ts';
+import messageReducer from '../store/messageSlice';
+import patientsReducer from '../features/patients/store/patientsSlice';
 
 export const store = configureStore(
     {
         reducer: {
             user: userReducer,
-            message: messageReducer
+            message: messageReducer,
+            patients: patientsReducer
         }
     }
 );

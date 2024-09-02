@@ -10,10 +10,10 @@ class PaginationUtil
     {
         return [
             'data' => $paginator->items(),
-            'currentPage' => $paginator->currentPage(),
+            'current_page' => $paginator->currentPage(),
             'per_page' => $paginator->perPage(),
             'total' => $paginator->total(),
-            'lastPage' => $paginator->lastPage(),
+            'last_page' => $paginator->lastPage(),
             'from' => $paginator->firstItem(),
             'to' => $paginator->lastItem()
         ];
