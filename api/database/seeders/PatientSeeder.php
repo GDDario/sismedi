@@ -16,7 +16,7 @@ class PatientSeeder extends Seeder
         // Accessible
         Patient::factory()->withUser(['email' => 'user@patient.com'])->create();
 
-        Patient::factory()->withUser()->count(9)->create();
+        Patient::factory()->withUser()->count(29)->create();
     }
 
 }

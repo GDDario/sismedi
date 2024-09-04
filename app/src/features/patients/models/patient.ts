@@ -4,5 +4,5 @@ export type Patient = {
     cpf: string;
     cns: string;
     email: string;
-    created_at: Date;
+    created_at: Date | string;
 }
