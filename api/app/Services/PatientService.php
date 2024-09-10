@@ -31,16 +31,20 @@ class PatientService
     private function filterQueryByFields(Builder $query, array $parameters): Builder
     {
         $blackList = ['offset', 'page', 'limit'];
+        $patientBlackList = ['name', 'cpf', 'email'];
 
         foreach ($parameters as $key => $parameter) {
             if (strlen($key) === 5 && str_starts_with($key, 'name') && !in_array($parameter, $blackList)) {
                 $number = substr($key, 4, 5);
 
                 if (array_key_exists("value$number", $parameters)) {
-                    $query = $query->whereHas('user', function ($query) use ($parameter, $parameters, $number) {
-                        $searchValue = $parameters["value$number"];
-                        $query->whereRaw("$parameter LIKE '$searchValue%'");
-                    });
+                    $query =
+                        $query->whereHas('user', function ($query) use ($parameter, $parameters, $number, $patientBlackList) {
+                            $searchValue = $parameters["value$number"];
+                            $table = in_array($parameter, $patientBlackList) ? 'users' : 'patients';
+
+                            $query->whereRaw("$table.$parameter LIKE '$searchValue%'");
+                        });
                 }
             }
         }
