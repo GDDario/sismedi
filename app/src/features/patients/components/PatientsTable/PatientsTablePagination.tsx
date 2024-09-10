@@ -1,4 +1,4 @@
-import Button from "../../../../shared-components/Button.tsx";
+import Button from "../../../../shared-components/Button/Button.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {nextPage, previousPage} from "../../store/patientsSlice.ts";
 import {AppDispatch} from "../../../../config/store.ts";

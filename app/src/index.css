@@ -14,6 +14,7 @@
     /*background: rgb(27, 52, 147);*/
     /*background: rgb(232, 241, 255);*/
     /*background: rgb(187, 17, 17);*/
+    /*background: rgb(117, 12, 12);*/
 }
 
 /* Defining themes */
@@ -25,6 +26,7 @@
         --main-dark-blue: 27, 52, 147;
         --main-white: 232, 241, 255;
         --main-red: 187, 17, 17;
+        --dark-red: 117, 12, 12;
     }
 }
 

@@ -22,17 +22,7 @@ const PatientsTable = () => {
     useEffect(() => {
         // @ts-ignore
         dispatch(fetchPatients({page: 1, per_page: 17}));
-
-        setTimeout(() => {
-            // @ts-ignore
-            // dispatch(fetchPatients({page: 2}));
-        }, 3000);
     }, []);
-
-    // const [pagination, setPagination] = React.useState<PaginationState>({
-    //     pageIndex: 0,
-    //     pageSize: 17,
-    // });
 
     const columns = useMemo(() => [
         columnHelper.accessor('uuid', {
@@ -90,7 +80,6 @@ const PatientsTable = () => {
         columns,
         data: patientsState.data.data,
         getCoreRowModel: getCoreRowModel(),
-        manualPagination: true
     });
 
     const closeEditModal = () => {

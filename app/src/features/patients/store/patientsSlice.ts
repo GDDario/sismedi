@@ -1,9 +1,7 @@
-import {createAsyncThunk, createSlice, UnknownAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ListPatientsResponse} from "../types.ts";
 import {PatientService} from "../services/PatientService.ts";
 import {redactedPatientsMockData} from "../../../../.jest/mocks/patientsMock.ts";
-import {AppDispatch} from "../../../config/store.ts";
-import {RootState} from "@reduxjs/toolkit/query";
 
 export type PatientsType = {
     data: ListPatientsResponse | null,

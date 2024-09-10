@@ -12,7 +12,8 @@ export default {
                 mainDarkBlue: 'rgb(var(--main-dark-blue))',
                 mainBackgroundBlue: 'rgb(var(--main-background-blue))',
                 mainWhite: 'rgb(var(--main-white))',
-                mainRed: 'rgb(var(--main-red))'
+                mainRed: 'rgb(var(--main-red))',
+                darkRed: 'rgb(var(--dark-red))'
             }
         },
     },
