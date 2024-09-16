@@ -1,0 +1,52 @@
+services:
+  php:
+    build:
+      context: .docker/php
+    container_name: sismedi-php
+    volumes:
+      - ./:/var/www/html/sismedi
+    networks:
+      - sismedi-network
+
+  nginx:
+    build:
+      context: .docker/nginx
+    container_name: sismedi-nginx
+    volumes:
+      - ./:/var/www/html/sismedi
+    ports:
+      - "8080:80"
+    networks:
+      - sismedi-network
+
+  mysql:
+    image: mysql:9.0.0
+    container_name: sismedi-mysql
+    platform: linux/x86_64
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: sismedi
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - sismedi-network
+
+  node:
+    image: sismedi-node
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    #    environment:
+    #      NODE_ENV: production
+    ports:
+      - "5173:5173"
+    networks:
+      - sismedi-network
+
+networks:
+  sismedi-network:
+    driver: bridge
+volumes:
+  mysql-data:

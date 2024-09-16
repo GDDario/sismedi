@@ -11,8 +11,6 @@ const CONFIRM_TOKEN_PATH = '/api/forgot-password/confirm-token';
 const RESET_PASSWORD_PATH = '/api/forgot-password/reset-password';
 
 beforeEach(function () {
-    UserType::factory()->create(['name' => 'Administrador']);
-
     User::factory()->create([
         'email' => 'test@example.com',
         'cpf' => '67774092030'
@@ -137,7 +135,7 @@ it('should have error when passwords do not match', function () {
     $this->assertDatabaseCount(PasswordResetToken::class, 1);
 });
 
-it('should hav2e error when token is invalid', function () {
+it('should have error when token is invalid', function () {
     $token = str()->random(255);
     $invalidToken = str()->random(255);
 

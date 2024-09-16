@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use App\Models\UserType;
 use Ramsey\Uuid\Uuid;
 use function Pest\Laravel\assertDatabaseEmpty;
 use function Pest\Laravel\assertDatabaseHas;
@@ -10,8 +9,6 @@ use function PHPUnit\Framework\assertTrue;
 const LOGIN_PATH = '/api/login';
 
 beforeEach(function () {
-    UserType::factory()->create(['name' => 'Administrador']);
-
     User::factory()->create([
         'email' => 'user@example.com',
         'cpf' => '67774092030'

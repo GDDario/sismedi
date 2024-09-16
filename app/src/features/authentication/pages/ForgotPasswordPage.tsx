@@ -1,14 +1,14 @@
 import AuthenticationCard from "../components/AuthenticationCard.tsx";
-import Button from "../../../shared-components/Button.tsx";
+import Button from "../../../shared-components/Button/Button.tsx";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
-import InputField from "../components/InputField.tsx";
 import {ForgotPasswordService} from "../services/ForgotPasswordService.ts";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../store/messageSlice.ts";
+import InputField from "../../../shared-components/InputField.tsx";
 
 const schema = z.object({
     email: z.string().email('Email inválido'),
