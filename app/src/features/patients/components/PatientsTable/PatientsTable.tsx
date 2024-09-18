@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 // @ts-ignore
 import {patientsMockData} from "../../../../../.jest/mocks/patientsMock.ts";
@@ -30,8 +30,8 @@ const PatientsTable = () => {
             cell: info => info.getValue(),
         }),
         columnHelper.accessor('name', {
-            header: 'Name',
-            cell: info => info.getValue(),
+            header: 'Nome',
+            cell: info => info.getValue() + 'Nome',
         }),
         columnHelper.accessor('cpf', {
             header: 'CPF',
