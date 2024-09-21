@@ -42,6 +42,8 @@ services:
     #      NODE_ENV: production
     ports:
       - "5173:5173"
+    volumes:
+      - ./app:/app
     networks:
       - sismedi-network
 
