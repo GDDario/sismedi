@@ -17,6 +17,7 @@ Tecnologias:
 - Laravel v11.17.0
 - PHP v8.3.9
 - MySQL v9.0
+- Docker
 
 ## Acadêmicos
 
