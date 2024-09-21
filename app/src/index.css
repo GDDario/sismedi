@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    box-sizing: border-box;
+}
+
+/* Just for testing colors */
+.element {
+    /*background: rgb(113, 143, 200);*/
+    /*background: rgb(0, 204, 255);*/
+    /*background: rgb(162, 224, 235);*/
+    /*background: rgb(27, 52, 147);*/
+    /*background: rgb(232, 241, 255);*/
+    /*background: rgb(187, 17, 17);*/
+    /*background: rgb(117, 12, 12);*/
+}
+
+/* Defining themes */
+@layer base {
+    :root {
+        --main-background-blue: 113, 143, 200;
+        --main-bright-blue: 0, 204, 255;
+        --main-light-blue: 162, 224, 235;
+        --main-dark-blue: 27, 52, 147;
+        --main-white: 232, 241, 255;
+        --main-red: 187, 17, 17;
+        --dark-red: 117, 12, 12;
+    }
+}
+
+body {
+    background-color: rgb(var(--main-white));
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
