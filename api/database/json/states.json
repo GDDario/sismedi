@@ -1,0 +1,218 @@
+[
+    {
+        "id": 1,
+        "uuid": "0044d956-e1d6-4338-a53c-08b3e6ca16ab",
+        "name": "Acre",
+        "code": "AC",
+        "ibge": 12,
+        "ddd": "68"
+    },
+    {
+        "id": 2,
+        "uuid": "d1afb7a8-7d9b-4a8b-98f1-731c4d043c2b",
+        "name": "Alagoas",
+        "code": "AL",
+        "ibge": 27,
+        "ddd": "82"
+    },
+    {
+        "id": 3,
+        "uuid": "67141bb9-fe99-4708-8cfc-5d495e45556f",
+        "name": "Amazonas",
+        "code": "AM",
+        "ibge": 13,
+        "ddd": "97,92"
+    },
+    {
+        "id": 4,
+        "uuid": "8e67b8e3-8779-41df-a428-13677bf31263",
+        "name": "Amapá",
+        "code": "AP",
+        "ibge": 16,
+        "ddd": "96"
+    },
+    {
+        "id": 5,
+        "uuid": "166b77b1-120c-4973-9726-192622834c58",
+        "name": "Bahia",
+        "code": "BA",
+        "ibge": 29,
+        "ddd": "77,75,73,74,71"
+    },
+    {
+        "id": 6,
+        "uuid": "0b18de60-0ac2-4e56-926f-aa61d3b4826e",
+        "name": "Ceará",
+        "code": "CE",
+        "ibge": 23,
+        "ddd": "88,85"
+    },
+    {
+        "id": 7,
+        "uuid": "17597b3b-e401-4c20-a9a5-dc4a20818bfe",
+        "name": "Distrito Federal",
+        "code": "DF",
+        "ibge": 53,
+        "ddd": "61"
+    },
+    {
+        "id": 8,
+        "uuid": "1794749f-6826-46ba-82e4-92749f322c50",
+        "name": "Espírito Santo",
+        "code": "ES",
+        "ibge": 32,
+        "ddd": "28,27"
+    },
+    {
+        "id": 9,
+        "uuid": "0df1a9c9-a1e1-4bc0-9b16-fd7b42214e31",
+        "name": "Goiás",
+        "code": "GO",
+        "ibge": 52,
+        "ddd": "62,64,61"
+    },
+    {
+        "id": 10,
+        "uuid": "9605c391-31d8-4fc6-bda5-583f97a46481",
+        "name": "Maranhão",
+        "code": "MA",
+        "ibge": 21,
+        "ddd": "99,98"
+    },
+    {
+        "id": 11,
+        "uuid": "4ec059f8-f2b3-495d-9911-f33670461590",
+        "name": "Minas Gerais",
+        "code": "MG",
+        "ibge": 31,
+        "ddd": "34,37,31,33,35,38,32"
+    },
+    {
+        "id": 12,
+        "uuid": "e4248c13-e194-4f09-9ed5-d991b9bf663c",
+        "name": "Mato Grosso do Sul",
+        "code": "MS",
+        "ibge": 50,
+        "ddd": "67"
+    },
+    {
+        "id": 13,
+        "uuid": "e655f8f3-9835-432d-826a-30ea6c501645",
+        "name": "Mato Grosso",
+        "code": "MT",
+        "ibge": 51,
+        "ddd": "65,66"
+    },
+    {
+        "id": 14,
+        "uuid": "e877325f-1e30-4b73-8590-692467c97640",
+        "name": "Pará",
+        "code": "PA",
+        "ibge": 15,
+        "ddd": "91,94,93"
+    },
+    {
+        "id": 15,
+        "uuid": "e89ed39c-5247-4182-8946-d48c6e2b66c5",
+        "name": "Paraíba",
+        "code": "PB",
+        "ibge": 25,
+        "ddd": "83"
+    },
+    {
+        "id": 16,
+        "uuid": "b3345dd3-b04d-49b8-bc2a-dc38d1ba4c9b",
+        "name": "Pernambuco",
+        "code": "PE",
+        "ibge": 26,
+        "ddd": "81,87"
+    },
+    {
+        "id": 17,
+        "uuid": "81c8373b-cb32-473a-af9d-f77e85391834",
+        "name": "Piauí",
+        "code": "PI",
+        "ibge": 22,
+        "ddd": "89,86"
+    },
+    {
+        "id": 18,
+        "uuid": "2565d439-73b0-4b44-940c-5f416773f862",
+        "name": "Paraná",
+        "code": "PR",
+        "ibge": 41,
+        "ddd": "43,41,42,44,45,46"
+    },
+    {
+        "id": 19,
+        "uuid": "022f4356-cdee-47a0-baac-6eeb56fa1a6d",
+        "name": "Rio de Janeiro",
+        "code": "RJ",
+        "ibge": 33,
+        "ddd": "24,22,21"
+    },
+    {
+        "id": 20,
+        "uuid": "3bcd671c-8205-4112-9af5-17df108d0c3a",
+        "name": "Rio Grande do Norte",
+        "code": "RN",
+        "ibge": 24,
+        "ddd": "84"
+    },
+    {
+        "id": 21,
+        "uuid": "1c75ca9e-984d-4351-817b-f7a14e7ab73d",
+        "name": "Rondônia",
+        "code": "RO",
+        "ibge": 11,
+        "ddd": "69"
+    },
+    {
+        "id": 22,
+        "uuid": "66ba8b2f-0517-47fa-bbaf-943d2c199794",
+        "name": "Roraima",
+        "code": "RR",
+        "ibge": 14,
+        "ddd": "95"
+    },
+    {
+        "id": 23,
+        "uuid": "3cfe01c7-8fe4-429f-9e0a-bc975b001969",
+        "name": "Rio Grande do Sul",
+        "code": "RS",
+        "ibge": 43,
+        "ddd": "53,54,55,51"
+    },
+    {
+        "id": 24,
+        "uuid": "4df38447-9ef4-44ff-b1fb-bc9b3c0af1e1",
+        "name": "Santa Catarina",
+        "code": "SC",
+        "ibge": 42,
+        "ddd": "47,48,49"
+    },
+    {
+        "id": 25,
+        "uuid": "2e90d62a-b473-4f4e-98b8-60b1aec83c28",
+        "name": "Sergipe",
+        "code": "SE",
+        "ibge": 28,
+        "ddd": "79"
+    },
+    {
+        "id": 26,
+        "uuid": "c225f5d0-d177-4b6a-b991-53231ce849ad",
+        "name": "São Paulo",
+        "code": "SP",
+        "ibge": 35,
+        "ddd": "11,12,13,14,15,16,17,18,19"
+    },
+    {
+        "id": 27,
+        "uuid": "96cc809e-d054-41f8-80a4-2642fcc7a868",
+        "name": "Tocantins",
+        "code": "TO",
+        "ibge": 17,
+        "ddd": "63"
+    }
+]
