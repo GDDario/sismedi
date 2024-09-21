@@ -1,19 +1,28 @@
-import React, { useMemo, useState } from "react";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { TDataPatientsMock } from "../../../../../.jest/mocks/patientsMock.ts";
+import {useEffect, useMemo, useState} from "react";
+import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+// @ts-ignore
+import {patientsMockData} from "../../../../../.jest/mocks/patientsMock.ts";
 import EditButton from "./EditButton.tsx";
 import EditPatientModal from "./EditPatientModal.tsx";
 import AppointsButton from "./AppointsButton.tsx";
-import { format } from "date-fns";
-import { OpenModal } from "../../types.ts";
-
-const data = TDataPatientsMock;
+import {format, isValid} from "date-fns";
+import {OpenModal} from "../../types.ts";
+import {useDispatch, useSelector} from "react-redux";
+import PatientsTablePagination from "./PatientsTablePagination.tsx";
+import {fetchPatients} from "../../store/patientsSlice.ts";
 
 const columnHelper = createColumnHelper();
 
 const PatientsTable = () => {
-    const [openEditModal, setOpenEditModal] = useState<OpenModal>({ open: false, uuid: undefined });
-    const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({ open: false, uuid: undefined });
+    const [openEditModal, setOpenEditModal] = useState<OpenModal>({open: false, uuid: undefined});
+    const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({open: false, uuid: undefined});
+    const dispatch = useDispatch();
+    const patientsState = useSelector((state: any) => state.patients);
+
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(fetchPatients({page: 1, per_page: 17}));
+    }, []);
 
     const columns = useMemo(() => [
         columnHelper.accessor('uuid', {
@@ -21,8 +30,8 @@ const PatientsTable = () => {
             cell: info => info.getValue(),
         }),
         columnHelper.accessor('name', {
-            header: 'Name',
-            cell: info => info.getValue(),
+            header: 'Nome',
+            cell: info => info.getValue() + 'Nome',
         }),
         columnHelper.accessor('cpf', {
             header: 'CPF',
@@ -36,22 +45,30 @@ const PatientsTable = () => {
             header: 'Email',
             cell: info => info.getValue(),
         }),
-        columnHelper.accessor('createdAt', {
+        columnHelper.accessor('created_at', {
             header: 'Data de cadastro',
-            cell: info => format(info.getValue(), 'd/MM/y H:m'),
+            cell: info => {
+                const value = info.getValue();
+                if (!isValid(value)) {
+                    return value;
+                }
+
+                return format(value, 'd/MM/y H:m');
+            },
         }),
         columnHelper.accessor('action', {
             header: 'Ações',
             cell: info => {
+                // @ts-ignore
                 const uuid = info.row.original.uuid; // Pega o UUID da linha atual
 
                 return (
                     <>
                         <EditButton onClick={() => {
                             console.log('Clicou');
-                            setOpenEditModal({ open: true, uuid });
-                        }} />
-                        <AppointsButton onClick={() => setOpenAppointsModal({ open: true, uuid })} />
+                            setOpenEditModal({open: true, uuid});
+                        }}/>
+                        <AppointsButton onClick={() => setOpenAppointsModal({open: true, uuid})}/>
                     </>
                 );
             }
@@ -59,90 +76,63 @@ const PatientsTable = () => {
     ], []);
 
     const table = useReactTable({
+        // @ts-ignore
         columns,
-        data,
+        data: patientsState.data.data,
         getCoreRowModel: getCoreRowModel(),
     });
 
     const closeEditModal = () => {
-        setOpenEditModal({ uuid: undefined, open: false });
+        setOpenEditModal({uuid: undefined, open: false});
     }
 
-    return (
-        <section className="table-container">
-            <table>
-                <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                            <th key={header.id} className="text-start">
-                                {flexRender(header.column.columnDef.header, header.getContext())}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-                </thead>
-                <tbody>
-                {table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-                {table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}{table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}{table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}{table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}{table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </td>
-                        ))}
-                    </tr>
-                ))}</tbody>
-            </table>
+    if (patientsState.error) return <div>Error: {patientsState.error}</div>;
 
-            {openEditModal.open && (
-                <EditPatientModal
-                    uuid={openEditModal.uuid!}
-                    visible={openEditModal.open}
-                    onClose={closeEditModal}
-                />
-            )}
-            <p>Open appoints modal to patient {openAppointsModal.uuid}</p>
+    return (
+        <section>
+            <div className="w-full">
+                <div className="relative h-[631px]">
+                    {patientsState.loading && (<div
+                        className="absolute top-0 left-0 bg-black bg-opacity-30 w-full h-full flex items-center justify-center">
+                        <span className="font-bold text-white">Carregando...</span>
+                    </div>)}
+                    <table>
+                        <thead>
+                        {table.getHeaderGroups().map(headerGroup => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map(header => (
+                                    <th key={header.id} className="text-start">
+                                        {flexRender(header.column.columnDef.header, header.getContext())}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                        </thead>
+                        <tbody>
+                        {table.getRowModel().rows.map(row => (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map(cell => (
+                                    <td key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <PatientsTablePagination />
+
+                {openEditModal.open && (
+                    <EditPatientModal
+                        uuid={openEditModal.uuid!}
+                        visible={openEditModal.open}
+                        onClose={closeEditModal}
+                    />
+                )}
+                <p>Open appoints modal to patient {openAppointsModal.uuid}</p>
+            </div>
         </section>
     );
 }

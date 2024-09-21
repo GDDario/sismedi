@@ -1,6 +1,5 @@
 import AuthenticationCard from "../components/AuthenticationCard.tsx";
-import InputField from "../components/InputField.tsx";
-import Button from "../../../shared-components/Button.tsx";
+import Button from "../../../shared-components/Button/Button.tsx";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {z} from "zod";
@@ -10,6 +9,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {showMessage} from "../../../store/messageSlice.ts";
 import {ForgotPasswordService, ResetPasswordResponse} from "../services/ForgotPasswordService.ts";
 import {AxiosResponse} from "axios";
+import InputField from "../../../shared-components/InputField.tsx";
 
 const schema = z
     .object({

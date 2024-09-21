@@ -1,6 +1,5 @@
 import AuthenticationCard from "../components/AuthenticationCard.tsx";
-import Button from "../../../shared-components/Button.tsx";
-import InputField from "../components/InputField.tsx";
+import Button from "../../../shared-components/Button/Button.tsx";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,6 +10,7 @@ import {useDispatch} from "react-redux";
 import {showMessage} from "../../../store/messageSlice.ts";
 import {useNavigate} from "react-router-dom";
 import {AxiosResponse} from "axios";
+import InputField from "../../../shared-components/InputField.tsx";
 
 const schema = z.object({
     login: z.string().min(1, 'Campo obrigatório'),

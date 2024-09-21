@@ -1,17 +1,16 @@
+import {Patient} from "./models/patient.ts";
+
 export type OpenModal = {
     open: boolean;
     uuid: string | undefined;
 }
 
-export const enum FILTER_OPTIONS {
-    ID = 'Id',
-    NAME = 'Name',
-    CPF = 'Cpf',
-    CNS = 'Cns',
-    EMAIL = 'Email',
-    CREATED_AT = 'Data de criação',
+export type ListPatientsResponse = {
+    data: Patient[];
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+    from: number;
+    to: number;
 }
-
-export type FilterType = {
-    id?: FILTER_OPTIONS.ID,
-};
