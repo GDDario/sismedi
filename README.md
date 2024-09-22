@@ -15,9 +15,10 @@ Objetivos secundários:
 
 Tecnologias:
 - Laravel v11.17.0
-- PHP v8.3.9
+- PHP v8.3.9 e composer v2.7.6
 - MySQL v9.0
-- Docker
+- Node v20.13.1 e npm v10.5.2
+- Docker (opcional)
 
 ## Acadêmicos
 
