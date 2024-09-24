@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\NotFoundException;
 use App\Models\Patient;
-use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class PatientRepository
@@ -14,7 +14,8 @@ class PatientRepository
      */
     public function findByUuid(string $uuid): Patient
     {
-        if (!$patient = Patient::query()->select('uuid, cns, created_at, updated_at, deleted_at')->where('uuid', $uuid)->first()) {
+        if (!$patient = Patient::query()->select('uuid', 'cns', 'created_at', 'updated_at', 'deleted_at')
+            ->where('uuid', $uuid)->first()) {
             throw new NotFoundException("Patient with uuid $uuid not found.");
         }
 
@@ -24,16 +25,17 @@ class PatientRepository
 
     /**
      * @param array $parameters
-     * @return Builder
+     * @return LengthAwarePaginator
      */
-    public function findPatientsByQueryFields(array $parameters): Builder
+    public function paginate(array $parameters): LengthAwarePaginator
     {
         $query = Patient::query()->join('users', 'patients.user_id', '=', 'users.id')
             ->select('patients.uuid', 'users.name', 'users.cpf', 'users.email',
                 'patients.cns', 'patients.created_at');
 
-        return $this->filterQueryByFields($query, $parameters);
+        $query = $this->filterQueryByFields($query, $parameters);
 
+        return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
     }
 
     private function filterQueryByFields(Builder $query, array $parameters): Builder
