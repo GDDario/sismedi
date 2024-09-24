@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class State extends Model
+class City extends Model
 {
     use HasFactory;
 
@@ -13,8 +13,7 @@ class State extends Model
         'id',
         'uuid',
         'name',
-        'code',
+        'state_id',
         'ibge_code',
-        'ddd'
     ];
 }
