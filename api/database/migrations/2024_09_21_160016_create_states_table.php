@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid()->unique();
             $table->string('name');
             $table->char('code', 2);
-            $table->char('ibge_code', 2);
+            $table->char('ibge_code', 2)->unique();
             $table->string('ddd');
             $table->timestamps();
         });
