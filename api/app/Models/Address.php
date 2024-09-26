@@ -6,20 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class City extends Model
+class Address extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'id',
         'uuid',
-        'name',
-        'state_id',
-        'ibge_code',
+        'street_address',
+        'house_number',
+        'address_line_2',
+        'neighborhood',
+        'postal_code',
+        'city_id',
+        'patient_id'
     ];
 
-    public function state(): BelongsTo
+    public function patient(): BelongsTo
     {
-        return $this->belongsTo(State::class, 'state_id', 'id');
+        return $this->belongsTo(Patient::class);
     }
 }

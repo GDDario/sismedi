@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->uuid()->unique();
             $table->string('name');
             $table->unsignedBigInteger('state_id');
-            $table->integer('ibge_code')->unique();
+            $table->integer('ibge_code');
             $table->timestamps();
 
             $table->foreign('state_id')->references('id')->on('states');

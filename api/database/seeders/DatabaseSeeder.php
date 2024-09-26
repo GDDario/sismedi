@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\UserType;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
 //            UserSeeder::class,
             StateSeeder::class,
             CitySeeder::class,
-            PatientSeeder::class
+            PatientSeeder::class,
         ]);
     }
 }
