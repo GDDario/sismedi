@@ -1,5 +1,9 @@
 import BaseModal from "../../../../shared-components/Modal/BaseModal.tsx";
 import {useEffect, useState} from "react";
+import {PatientService} from "../../services/PatientService.ts";
+import {GetPatientResponse} from "../../types.ts";
+import {useDispatch} from "react-redux";
+import {showMessage} from "../../../../store/messageSlice.ts";
 
 type EditPatientModalProps = {
     uuid: string;
@@ -9,6 +13,22 @@ type EditPatientModalProps = {
 
 const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
     const [loading, setLoading] = useState(true);
+    const [patientData, setPatientData] = useState<any>(undefined);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        getPatientData(uuid);
+    }, [uuid]);
+
+    const getPatientData = async (uuid: string): Promise<void> => {
+        await PatientService.getPatient(uuid).then((response: GetPatientResponse) => {
+            console.log('Response', response)
+            setPatientData(response.data);
+        }).catch(err => {
+            dispatch(showMessage({message: 'Error on getting the patient data!', type: 'error'}));
+            console.error(err);
+        });
+    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -18,7 +38,7 @@ const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
 
     return (
         <BaseModal title="Editar/visualizar paciente" visible={visible} loading={loading} onClose={onClose}>
-            <p></p>
+            <p>teste</p>
         </BaseModal>
     );
 }

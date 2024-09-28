@@ -28,8 +28,8 @@ class PatientRepository
                 'patients.uuid', 'patients.cns', 'patients.created_at', 'patients.updated_at',
                 'patients.deleted_at',
                 'users.name', 'users.email', 'users.cpf', 'users.email_verified_at',
-                'addresses.street_address', 'addresses.house_number', 'addresses.address_line_2',
-                'addresses.neighborhood', 'addresses.postal_code',
+                'addresses.uuid as address_uuid', 'addresses.street_address', 'addresses.house_number',
+                'addresses.address_line_2', 'addresses.neighborhood', 'addresses.postal_code',
                 'cities.uuid as city_uuid', 'cities.name as city_name', 'cities.ibge_code',
                 'states.uuid as state_uuid', 'states.name as state_name', 'states.code as state_code',
                 'states.ibge_code as state_ibge_code', 'states.ddd'
