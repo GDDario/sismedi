@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthenticationController::class, 'logout']);
 
     Route::prefix('patient')->group(function () {
-       Route::get('', [PatientController::class, 'index']);
+        Route::get('', [PatientController::class, 'index']);
+        Route::get('/{uuid}', [PatientController::class, 'show']);
     });
 });
