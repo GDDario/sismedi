@@ -12,7 +12,6 @@ class PatientController extends Controller
         private PatientService $service
     )
     {
-
     }
 
     public function index(Request $request): Response
@@ -27,5 +26,10 @@ class PatientController extends Controller
         ];
 
         return $this->service->list($parameters);
+    }
+
+    public function show(Request $request): Response
+    {
+        return $this->service->getByUuid($request->route('uuid'));
     }
 }

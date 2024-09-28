@@ -1,0 +1,198 @@
+[
+    {
+        "id": 1,
+        "name": "Acre",
+        "code": "AC",
+        "ibge_code": 12,
+        "ddd": "68"
+    },
+    {
+        "id": 2,
+        "name": "Alagoas",
+        "code": "AL",
+        "ibge_code": 27,
+        "ddd": "82"
+    },
+    {
+        "id": 3,
+        "name": "Amazonas",
+        "code": "AM",
+        "ibge_code": 13,
+        "ddd": "97,92"
+    },
+    {
+        "id": 4,
+        "name": "Amapá",
+        "code": "AP",
+        "ibge_code": 16,
+        "ddd": "96"
+    },
+    {
+        "id": 5,
+        "name": "Bahia",
+        "code": "BA",
+        "ibge_code": 29,
+        "ddd": "77,75,73,74,71"
+    },
+    {
+        "id": 6,
+        "name": "Ceará",
+        "code": "CE",
+        "ibge_code": 23,
+        "ddd": "88,85"
+    },
+    {
+        "id": 7,
+        "name": "Distrito Federal",
+        "code": "DF",
+        "ibge_code": 53,
+        "ddd": "61"
+    },
+    {
+        "id": 8,
+        "name": "Espírito Santo",
+        "code": "ES",
+        "ibge_code": 32,
+        "ddd": "28,27"
+    },
+    {
+        "id": 9,
+        "name": "Goiás",
+        "code": "GO",
+        "ibge_code": 52,
+        "ddd": "62,64,61"
+    },
+    {
+        "id": 10,
+        "name": "Maranhão",
+        "code": "MA",
+        "ibge_code": 21,
+        "ddd": "99,98"
+    },
+    {
+        "id": 11,
+        "name": "Minas Gerais",
+        "code": "MG",
+        "ibge_code": 31,
+        "ddd": "34,37,31,33,35,38,32"
+    },
+    {
+        "id": 12,
+        "name": "Mato Grosso do Sul",
+        "code": "MS",
+        "ibge_code": 50,
+        "ddd": "67"
+    },
+    {
+        "id": 13,
+        "name": "Mato Grosso",
+        "code": "MT",
+        "ibge_code": 51,
+        "ddd": "65,66"
+    },
+    {
+        "id": 14,
+        "name": "Pará",
+        "code": "PA",
+        "ibge_code": 15,
+        "ddd": "91,94,93"
+    },
+    {
+        "id": 15,
+        "name": "Paraíba",
+        "code": "PB",
+        "ibge_code": 25,
+        "ddd": "83"
+    },
+    {
+        "id": 16,
+        "name": "Pernambuco",
+        "code": "PE",
+        "ibge_code": 26,
+        "ddd": "81,87"
+    },
+    {
+        "id": 17,
+        "name": "Piauí",
+        "code": "PI",
+        "ibge_code": 22,
+        "ddd": "89,86"
+    },
+    {
+        "id": 18,
+        "name": "Paraná",
+        "code": "PR",
+        "ibge_code": 41,
+        "ddd": "43,41,42,44,45,46"
+    },
+    {
+        "id": 19,
+        "name": "Rio de Janeiro",
+        "code": "RJ",
+        "ibge_code": 33,
+        "ddd": "24,22,21"
+    },
+    {
+        "id": 20,
+        "name": "Rio Grande do Norte",
+        "code": "RN",
+        "ibge_code": 24,
+        "ddd": "84"
+    },
+    {
+        "id": 21,
+        "name": "Rondônia",
+        "code": "RO",
+        "ibge_code": 11,
+        "ddd": "69"
+    },
+    {
+        "id": 22,
+        "name": "Roraima",
+        "code": "RR",
+        "ibge_code": 14,
+        "ddd": "95"
+    },
+    {
+        "id": 23,
+        "name": "Rio Grande do Sul",
+        "code": "RS",
+        "ibge_code": 43,
+        "ddd": "53,54,55,51"
+    },
+    {
+        "id": 24,
+        "name": "Santa Catarina",
+        "code": "SC",
+        "ibge_code": 42,
+        "ddd": "47,48,49"
+    },
+    {
+        "id": 25,
+        "name": "Sergipe",
+        "code": "SE",
+        "ibge_code": 28,
+        "ddd": "79"
+    },
+    {
+        "id": 26,
+        "name": "São Paulo",
+        "code": "SP",
+        "ibge_code": 35,
+        "ddd": "11,12,13,14,15,16,17,18,19"
+    },
+    {
+        "id": 27,
+        "name": "Tocantins",
+        "code": "TO",
+        "ibge_code": 17,
+        "ddd": "63"
+    },
+    {
+        "id": 99,
+        "name": "Exterior",
+        "code": "EX",
+        "ibge_code": 0,
+        "ddd": "00"
+    }
+]

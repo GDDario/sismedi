@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\UserType;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +17,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
 //            UserSeeder::class,
-            PatientSeeder::class
+            StateSeeder::class,
+            CitySeeder::class,
+            PatientSeeder::class,
         ]);
     }
 }
