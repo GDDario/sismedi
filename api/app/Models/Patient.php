@@ -38,4 +38,9 @@ class Patient extends UserAlias
     {
         return $this->hasMany(Address::class);
     }
+
+    public function cellphones(): HasMany
+    {
+        return $this->hasMany(Cellphone::class);
+    }
 }

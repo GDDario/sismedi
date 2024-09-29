@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Address;
+use App\Models\Cellphone;
 use App\Models\Patient;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,7 @@ class PatientSeeder extends Seeder
     {
         $this->createDefaultPatient();
 
-        Patient::factory()->withUser()->hasAddress()->count(29)->create();
+        Patient::factory()->withUser()->hasAddress()->hasCellphones()->count(29)->create();
     }
 
     /**
@@ -37,6 +38,11 @@ class PatientSeeder extends Seeder
                         'street_address' => 'Good Street',
                         'house_number' => 'AB65'
                     ])
+            )
+            ->has(Cellphone::factory()
+                ->state([
+                    'number' => '14998128923'
+                ])
             )
             ->create([
                 'uuid' => 'c9eff2e0-bd27-4c5f-930b-b12664801bcd',
