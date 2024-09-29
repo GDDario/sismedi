@@ -23,7 +23,7 @@ class PatientRepository
             ->where('uuid', $uuid)
             ->with([
                 'user:id,name,email,cpf,email_verified_at',
-                'cellphones:uuid,number,description,patient_id', // Telefone relacionado
+                'cellphones:uuid,number,description,patient_id',
                 'address' => function ($query) {
                     $query->select(
                         'uuid', 'street_address', 'house_number', 'address_line_2',

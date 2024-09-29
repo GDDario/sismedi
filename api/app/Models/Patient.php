@@ -18,6 +18,8 @@ class Patient extends UserAlias
     protected $fillable = [
         'uuid',
         'cns',
+        'rg',
+        'birth_date',
         'user_id',
         'created_at',
         'updated_at',

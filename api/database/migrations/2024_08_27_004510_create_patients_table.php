@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->uuid()->unique();
             $table->char('cns', 15);
+            $table->string('rg', '13');
+            $table->date('birth_date');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
