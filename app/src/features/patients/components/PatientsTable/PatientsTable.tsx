@@ -31,7 +31,7 @@ const PatientsTable = () => {
         }),
         columnHelper.accessor('name', {
             header: 'Nome',
-            cell: info => info.getValue() + 'Nome',
+            cell: info => info.getValue(),
         }),
         columnHelper.accessor('cpf', {
             header: 'CPF',
