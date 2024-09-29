@@ -20,21 +20,20 @@ class PatientRepository
         }
 
         $patient = Patient::query()
-            ->join('users', 'patients.user_id', '=', 'users.id')
-            ->join('addresses', 'patients.id', '=', 'addresses.patient_id')
-            ->join('cities', 'addresses.city_id', '=', 'cities.id')
-            ->join('states', 'cities.state_id', '=', 'states.id')
-            ->select(
-                'patients.uuid', 'patients.cns', 'patients.created_at', 'patients.updated_at',
-                'patients.deleted_at',
-                'users.name', 'users.email', 'users.cpf', 'users.email_verified_at',
-                'addresses.uuid as address_uuid', 'addresses.street_address', 'addresses.house_number',
-                'addresses.address_line_2', 'addresses.neighborhood', 'addresses.postal_code',
-                'cities.uuid as city_uuid', 'cities.name as city_name', 'cities.ibge_code',
-                'states.uuid as state_uuid', 'states.name as state_name', 'states.code as state_code',
-                'states.ibge_code as state_ibge_code', 'states.ddd'
-            )
-            ->where('patients.uuid', $uuid)
+            ->where('uuid', $uuid)
+            ->with([
+                'user:id,name,email,cpf,email_verified_at',
+                'cellphones:uuid,number,description,patient_id', // Telefone relacionado
+                'address' => function ($query) {
+                    $query->select(
+                        'uuid', 'street_address', 'house_number', 'address_line_2',
+                        'neighborhood', 'postal_code', 'city_id', 'patient_id'
+                    )->with([
+                        'city:id,uuid,name,ibge_code,state_id',
+                        'city.state:id,uuid,name,code,ibge_code,ddd'
+                    ]);
+                }
+            ])
             ->first();
 
         return $patient;

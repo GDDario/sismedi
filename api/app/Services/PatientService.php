@@ -40,34 +40,40 @@ class PatientService
 
     private function arrangePatientData(Patient $patientsData): array
     {
+
+//        dd($patientsData);
+
         return [
             'data' => [
                 'patient' => [
                     'uuid' => $patientsData->uuid,
-                    'name' => $patientsData->name,
-                    'email' => $patientsData->email,
-                    'cpf' => $patientsData->cpf,
+                    'name' => $patientsData->user->name,
+                    'email' => $patientsData->user->email,
+                    'cpf' => $patientsData->user->cpf,
                     'cns' => $patientsData->cns,
-                    'email_verified_at' => $patientsData->email_verified_at,
+                    'email_verified_at' => $patientsData->user->email_verified_at,
                     'created_at' => $patientsData->created_at,
                     'updated_at' => $patientsData->updated_at,
                     'deleted_at' => $patientsData->deleted_at
                 ],
                 'address' => [
-                    'address_uuid' => $patientsData->address_uuid,
-                    'street_address' => $patientsData->street_address,
-                    'house_number' => $patientsData->house_number,
-                    'address_line_2' => $patientsData->address_line_2,
-                    'neighborhood' => $patientsData->neighborhood,
-                    'postal_code' => $patientsData->postal_code,
-                    'city_uuid' => $patientsData->city_uuid,
-                    'city_name' => $patientsData->city_name,
-                    'ibge_code' => $patientsData->ibge_code,
-                    'state_uuid' => $patientsData->state_uuid,
-                    'state_name' => $patientsData->state_name,
-                    'state_code' => $patientsData->state_code,
-                    'state_ibge_code' => $patientsData->state_ibge_code,
-                    'ddd' => $patientsData->ddd
+                    'address_uuid' => $patientsData->address->uuid,
+                    'street_address' => $patientsData->address->street_address,
+                    'house_number' => $patientsData->address->house_number,
+                    'address_line_2' => $patientsData->address->address_line_2,
+                    'neighborhood' => $patientsData->address->neighborhood,
+                    'postal_code' => $patientsData->address->postal_code,
+                    'city_uuid' => $patientsData->address->city->uuid,
+                    'city_name' => $patientsData->address->city->name,
+                    'ibge_code' => $patientsData->address->city->ibge_code,
+                    'state_uuid' => $patientsData->address->city->state->uuid,
+                    'state_name' => $patientsData->address->city->state->name,
+                    'state_code' => $patientsData->address->city->state->code,
+                    'state_ibge_code' => $patientsData->address->city->state->ibge_code,
+                    'ddd' => $patientsData->address->city->state->ddd
+                ],
+                'cellphones' => [
+
                 ]
             ]
         ];
