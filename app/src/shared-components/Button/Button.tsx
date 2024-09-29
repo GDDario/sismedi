@@ -1,7 +1,7 @@
 type ButtonProps = {
     text: string;
     className?: string;
-    color?: 'primary' | 'secondary' | 'outlined';
+    color?: 'primary' | 'secondary' | 'danger' | 'outlined';
     type?: 'submit' | 'reset' | 'button';
     disabled?: boolean;
     onClick?: () => void;
@@ -17,6 +17,9 @@ const Button = ({color = "primary", text, type = "submit", className, disabled =
                 break;
             case "secondary":
                 classNames += 'bg-mainWhite text-mainDarkBlue';
+                break;
+            case "danger":
+                classNames += 'bg-mainRed text-mainWhite border-darkRed';
                 break;
             case "outlined":
                 classNames += 'bg-mainWhite text-mainDarkBlue border-2 border';

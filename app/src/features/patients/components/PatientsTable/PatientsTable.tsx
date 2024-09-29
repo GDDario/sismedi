@@ -3,7 +3,7 @@ import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@t
 // @ts-ignore
 import {patientsMockData} from "../../../../../.jest/mocks/patientsMock.ts";
 import EditButton from "./EditButton.tsx";
-import EditPatientModal from "./EditPatientModal.tsx";
+import EditPatientModal from "../EditPatientModal/EditPatientModal.tsx";
 import AppointsButton from "./AppointsButton.tsx";
 import {format, isValid} from "date-fns";
 import {OpenModal} from "../../types.ts";
