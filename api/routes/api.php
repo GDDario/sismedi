@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
 
