@@ -18,7 +18,7 @@ class DoctorFactory extends Factory
         return [
             'uuid' => Str::uuid(),
             'CRM' => "{$sequencial}-{$uf}", 
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => $this->faker->unique()->numberBetween(1, 30),
         ];
     }
 }
