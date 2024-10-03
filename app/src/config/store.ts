@@ -2,13 +2,15 @@ import {configureStore} from "@reduxjs/toolkit";
 import userReducer from '../features/authentication/store/userSlice';
 import messageReducer from '../store/messageSlice';
 import patientsReducer from '../features/patients/store/patientsSlice';
+import doctorsReducer from '../features/doctors/store/doctorsSlice';
 
 export const store = configureStore(
     {
         reducer: {
             user: userReducer,
             message: messageReducer,
-            patients: patientsReducer
+            patients: patientsReducer,
+            doctors: doctorsReducer
         }
     }
 );

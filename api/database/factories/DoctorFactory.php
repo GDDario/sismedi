@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Doctor;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,7 +19,7 @@ class DoctorFactory extends Factory
         return [
             'uuid' => Str::uuid(),
             'CRM' => "{$sequencial}-{$uf}", 
-            'user_id' => $this->faker->unique()->numberBetween(1, 30),
+            'user_id' => User::factory(),
         ];
     }
 }
