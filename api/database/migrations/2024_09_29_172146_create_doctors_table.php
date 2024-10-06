@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->string('name');
-            $table->char('code', 2);
-            $table->char('ibge_code', 2)->unique();
-            $table->string('ddd');
+            $table->string('CRM');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('doctors');
     }
 };

@@ -5,6 +5,7 @@ import AuthenticatedRoutes from "../features/authentication/pages/AuthenticatedR
 import ForgotPasswordPage from "../features/authentication/pages/ForgotPasswordPage.tsx";
 import ResetPasswordPage from "../features/authentication/pages/ResetPasswordPage.tsx";
 import PatientsPage from "../features/patients/pages/PatientsPage.tsx";
+import DoctorsPage from "../features/doctors/pages/DoctorsPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
                 index: true,
                 path: "/patients",
                 element: <PatientsPage/>
+            },
+            {
+                index: true,
+                path: "/doctors",
+                element: <DoctorsPage/>
             }
         ],
     },
