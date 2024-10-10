@@ -16,7 +16,7 @@ class PatientsHelper
     {
         Patient::factory()
             ->withUser(['email' => 'user@patient.com', 'name' => 'Jhon Doe', 'cpf' => '44654545972'])
-            ->create(['uuid' => 'c9eff2e0-bd27-4c5f-930b-b12664801bcd', 'cns' => '7093887818289',
+            ->create(['uuid' => 'c9eff2e0-bd27-4c5f-930b-b12664801bcd', 'cns' => '991373255580003',
                 'rg' => '978862946', 'created_at' => '2024-09-02 03:50:29']);
     }
 

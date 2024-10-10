@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\DTO\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Cellphone;
 use App\Models\Patient;
 use App\Repositories\PatientRepository;
 use App\Util\PaginationUtil;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
@@ -40,11 +42,23 @@ class PatientService
         return new Response($pageData, Response::HTTP_OK);
     }
 
+    public function update(UpdatePatientDTO $dto): Response
+    {
+        try {
+            $patient = $this->repository->update($dto);
+
+            if (is_null($patient)) {
+                return new Response(['message' => 'Could not update the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
+            }
+        } catch (NotFoundException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
     private function arrangePatientData(Patient $patientData): array
     {
-
-//        dd($patientsData);
-
         return [
             'data' => [
                 'patient' => [
@@ -61,7 +75,7 @@ class PatientService
                     'deleted_at' => $patientData->deleted_at
                 ],
                 'address' => [
-                    'address_uuid' => $patientData->address->uuid,
+                    'uuid' => $patientData->address->uuid,
                     'street_address' => $patientData->address->street_address,
                     'house_number' => $patientData->address->house_number,
                     'address_line_2' => $patientData->address->address_line_2,

@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\DTO\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
+use App\Models\City;
 use App\Models\Patient;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,7 +44,7 @@ class PatientRepository
 
     /**
      * @param array $parameters
-     * @return LengthAwarePaginator
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate(array $parameters): LengthAwarePaginator
     {
@@ -53,6 +55,76 @@ class PatientRepository
         $query = $this->filterQueryByFields($query, $parameters);
 
         return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
+    }
+
+
+    /**
+     * @param UpdatePatientDTO $dto
+     * @return \App\DTO\UpdatePatientDTO The updated model.
+     * @throws \App\Exceptions\NotFoundException
+     */
+    public function update(UpdatePatientDTO $dto): ?Patient
+    {
+        if (!$patient = Patient::query()->where('uuid', $dto->patientUuid)->first()) {
+            throw new NotFoundException("Patient with uuid {$dto->patientUuid} not found.");
+        }
+
+        DB::beginTransaction();
+
+        $state = $patient->update([
+            'cns' => $dto->patient['cns'],
+            'rg' => $dto->patient['rg'],
+            'birth_date' => $dto->patient['birth_date']
+        ]);
+
+        if (!$state) {
+            DB::rollBack();
+            return null;
+        }
+
+        $state = $patient->user()->update([
+            'name' => $dto->patient['name'],
+            'cpf' => $dto->patient['cpf'],
+            'email' => $dto->patient['email']
+        ]);
+
+        if (!$state) {
+            DB::rollBack();
+            return null;
+        }
+
+        if (!$city = City::query()->where('uuid', $dto->address['city_uuid'])->first()) {
+            throw new NotFoundException("City with uuid {$dto->address['city_uuid']} not found.");
+        }
+
+        $state = $patient->address()->update([
+            'street_address' => $dto->address['street_address'],
+            'house_number' => $dto->address['house_number'],
+            'address_line_2' => $dto->address['address_line_2'],
+            'neighborhood' => $dto->address['neighborhood'],
+            'city_id' => $city->id,
+        ]);
+
+        if (!$state) {
+            DB::rollBack();
+            return null;
+        }
+
+        $state = $patient->cellphones()->delete();
+
+        foreach ($dto->cellphones as $cellphone) {
+            $patient->cellphones()->create([
+                'uuid' => fake()->uuid,
+                'number' => $cellphone['number'],
+                'description' => $cellphone['number'],
+                'is_primary' => $cellphone['is_primary']
+            ]);
+        }
+
+        DB::commit();
+        $patient->refresh();
+
+        return $patient;
     }
 
     private function filterQueryByFields(Builder $query, array $parameters): Builder

@@ -46,7 +46,7 @@ class PatientSeeder extends Seeder
             )
             ->create([
                 'uuid' => 'c9eff2e0-bd27-4c5f-930b-b12664801bcd',
-                'cns' => '7093887818289',
+                'cns' => '991373255580003',
                 'rg' => '978862946',
                 'birth_date' => '1988-09-09',
                 'created_at' => '2024-09-02 03:50:29'
