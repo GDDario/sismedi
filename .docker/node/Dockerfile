@@ -2,15 +2,12 @@ FROM node:20.13.1-alpine
 
 WORKDIR /app
 
-# Copie o package.json e instale as dependências
-COPY ../app/package.json .
-RUN npm install
+COPY ./app/package.json ./
 
-# Copie todos os arquivos do app
-COPY ../app .
+RUN npm install --legacy-peer-deps
 
-# Exponha a porta que o Vite usará
+COPY ./app .
+
 EXPOSE 5173
 
-# Execute o servidor de desenvolvimento do Vite
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
