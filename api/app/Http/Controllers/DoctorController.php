@@ -32,4 +32,9 @@ class DoctorController extends Controller
     {
         return $this->service->getByUuid($request->route('uuid'));
     }
+
+    public function getAgenda(Request $request): Response
+    {
+        return $this->service->getAgendaByID($request->route('id'));
+    }
 }
