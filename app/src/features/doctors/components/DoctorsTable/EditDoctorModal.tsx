@@ -1,13 +1,13 @@
 import BaseModal from "../../../../shared-components/Modal/BaseModal.tsx";
 import {useEffect, useState} from "react";
 
-type EditPatientModalProps = {
+type EditDoctorModalProps = {
     uuid: string;
     visible: boolean;
     onClose: () => void;
 }
 
-const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
+const EditDoctorModal = ({uuid, visible, onClose}: EditDoctorModalProps) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -17,10 +17,10 @@ const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
     }, []);
 
     return (
-        <BaseModal title="Editar/visualizar paciente" visible={visible} loading={loading} onClose={onClose}>
+        <BaseModal title="Editar/visualizar médico" visible={visible} loading={loading} onClose={onClose}>
             <p></p>
         </BaseModal>
     );
 }
 
-export default EditPatientModal;
+export default EditDoctorModal;

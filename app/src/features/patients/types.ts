@@ -13,4 +13,11 @@ export type ListPatientsResponse = {
     last_page: number;
     from: number;
     to: number;
-}
+};
+
+export type GetPatientResponse = {
+    data: {
+        patient: Patient;
+
+    };
+};

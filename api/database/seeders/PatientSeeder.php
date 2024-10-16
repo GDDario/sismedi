@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Address;
+use App\Models\Cellphone;
 use App\Models\Patient;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,7 @@ class PatientSeeder extends Seeder
     {
         $this->createDefaultPatient();
 
-        Patient::factory()->withUser()->hasAddress()->count(29)->create();
+        Patient::factory()->withUser()->hasAddress()->hasCellphones()->count(29)->create();
     }
 
     /**
@@ -38,9 +39,16 @@ class PatientSeeder extends Seeder
                         'house_number' => 'AB65'
                     ])
             )
+            ->has(Cellphone::factory()
+                ->state([
+                    'number' => '14998128923'
+                ])
+            )
             ->create([
                 'uuid' => 'c9eff2e0-bd27-4c5f-930b-b12664801bcd',
-                'cns' => '7093887818289',
+                'cns' => '991373255580003',
+                'rg' => '978862946',
+                'birth_date' => '1988-09-09',
                 'created_at' => '2024-09-02 03:50:29'
             ]);
     }

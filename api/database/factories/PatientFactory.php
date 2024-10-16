@@ -18,8 +18,11 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
             'uuid' => fake()->uuid(),
             'cns' => $this->generateCNS(),
+            'rg' => $this->generateRG(),
+            'birth_date' => $this->faker->date('Y-m-d', '2001-01-01')
         ];
     }
 
@@ -38,7 +41,7 @@ class PatientFactory extends Factory
         });
     }
 
-    private function generateCNS()
+    private function generateCNS(): string
     {
         $pis = str_pad(rand(0, 99999999999), 11, '0', STR_PAD_LEFT);
 
@@ -68,5 +71,31 @@ class PatientFactory extends Factory
         $cns = $basePis . $dv;
 
         return $cns;
+    }
+
+    private function generateRG(): string
+    {
+        $minLength = 7;
+        $maxLength = 13;
+        $length = rand($minLength, $maxLength - 1);
+        $rg = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $rg .= rand(0, 9);
+        }
+
+        $length = strlen($rg);
+        $weight = $length + 1;
+        $sum = 0;
+
+        for ($i = 0; $i < $length; $i++) {
+            $sum += $rg[$i] * $weight--;
+        }
+
+        $rest = $sum % 11;
+
+        $verifierDigit = $rest < 2 ? 0 : 11 - $rest;
+
+        return $rg . $verifierDigit;
     }
 }

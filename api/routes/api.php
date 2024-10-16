@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticationController::class, 'login']);
@@ -21,5 +22,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('patient')->group(function () {
         Route::get('', [PatientController::class, 'index']);
         Route::get('/{uuid}', [PatientController::class, 'show']);
+        Route::put('/{uuid}', [PatientController::class, 'update']);
+    });
+
+    Route::prefix('doctor')->group(function () {
+        Route::get('', [DoctorController::class, 'index']);
+        Route::get('/{uuid}', [DoctorController::class, 'show']);
+        Route::get('/agenda/{id}', [DoctorController::class, 'getAgenda']);
     });
 });
