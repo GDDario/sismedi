@@ -13,12 +13,12 @@ class DoctorFactory extends Factory
 
     public function definition()
     {
-        $uf = $this->faker->randomElement(['SP', 'RJ', 'MG', 'RS', 'BA']); 
+        $uf = $this->faker->randomElement(['SP', 'RJ', 'MG', 'RS', 'BA']);
         $sequencial = str_pad($this->faker->unique()->numberBetween(1, 99999999), 8, '0', STR_PAD_LEFT);
-    
+
         return [
-            'uuid' => Str::uuid(),
-            'CRM' => "{$sequencial}-{$uf}", 
+            'uuid' => fake()->uuid(),
+            'CRM' => "{$sequencial}-{$uf}",
             'user_id' => User::factory(),
         ];
     }

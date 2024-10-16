@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             PatientSeeder::class,
             DoctorSeeder::class,
+            AgendaSeeder::class,
         ]);
     }
 }

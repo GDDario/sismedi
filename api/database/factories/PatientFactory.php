@@ -18,6 +18,7 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
             'uuid' => fake()->uuid(),
             'cns' => $this->generateCNS(),
             'rg' => $this->generateRG(),
