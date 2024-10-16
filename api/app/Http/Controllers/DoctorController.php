@@ -33,6 +33,7 @@ class DoctorController extends Controller
         return $this->service->getByUuid($request->route('uuid'));
     }
 
+    //Controlador para a função de obter a agenda de X médico utilizando sua id
     public function getAgenda(Request $request): Response
     {
         return $this->service->getAgendaByID($request->route('id'));

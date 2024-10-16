@@ -8,6 +8,7 @@ use App\Models\Agenda;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class DoctorRepository
 {
@@ -79,29 +80,20 @@ class DoctorRepository
         return $query;
     }
 
-    public function getAgendaByID(string $id): Agenda
+    //Realiza a consulta no Banco de Dados buscando a agenda de x médico por sua id
+    public function getAgendaByID(string $id): Collection
     {
         if (!Agenda::query()->where('id', $id)->exists()) {
             throw new NotFoundException("Agenda with id $id not found.");
         }
 
-        /*
-        $agenda = Agenda::query()
-            ->select(
-                'id', 'patient_id', 'doctor_id', 'session_date', 'obs'
-            )
-            ->where('doctor_id', $id);
-        */
-
-        $agenda = Agenda::query()
+        return Agenda::query()
                 ->select('agendas.id', 'doctors_users.name as doctor_name', 'patients_users.name as patient_name', 'agendas.session_date')
                 ->join('doctors', 'agendas.doctor_id', '=', 'doctors.id')
                 ->join('users as doctors_users', 'doctors.user_id', '=', 'doctors_users.id')
                 ->join('patients', 'agendas.patient_id', '=', 'patients.id')
                 ->join('users as patients_users', 'patients.user_id', '=', 'patients_users.id')
                 ->where('agendas.doctor_id', $id)
-                ->first();
-
-        return $agenda;
+                ->get();
     }
 }
