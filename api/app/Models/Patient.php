@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as UserAlias;
 
 /**
@@ -17,6 +18,8 @@ class Patient extends UserAlias
     protected $fillable = [
         'uuid',
         'cns',
+        'rg',
+        'birth_date',
         'user_id',
         'created_at',
         'updated_at',
@@ -34,8 +37,13 @@ class Patient extends UserAlias
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function address(): HasMany
+    public function address(): HasOne
     {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Address::class);
+    }
+
+    public function cellphones(): HasMany
+    {
+        return $this->hasMany(Cellphone::class);
     }
 }

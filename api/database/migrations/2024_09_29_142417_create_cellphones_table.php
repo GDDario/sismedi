@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patients', function (Blueprint $table) {
+        Schema::create('cellphones', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->char('cns', 15);
-            $table->string('rg', '13');
-            $table->date('birth_date');
-            $table->unsignedBigInteger('user_id');
+            $table->char('number', 11);
+            $table->string('description')->nullable();
+            $table->boolean('is_primary')->default(false);
+            $table->unsignedBigInteger('patient_id');
             $table->timestamps();
-            $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
+            $table->foreign('patient_id')->references('id')->on('patients');
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patients');
+        Schema::dropIfExists('cellphones');
     }
 };

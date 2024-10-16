@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use App\DTO\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
+use App\Models\Cellphone;
 use App\Models\Patient;
 use App\Repositories\PatientRepository;
 use App\Util\PaginationUtil;
+use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
 class PatientService
@@ -38,35 +42,67 @@ class PatientService
         return new Response($pageData, Response::HTTP_OK);
     }
 
-    private function arrangePatientData(Patient $patientsData): array
+    public function update(UpdatePatientDTO $dto): Response
+    {
+        try {
+            $patient = $this->repository->update($dto);
+
+            if (is_null($patient)) {
+                return new Response(['message' => 'Could not update the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
+            }
+        } catch (NotFoundException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    private function arrangePatientData(Patient $patientData): array
     {
         return [
-            'patient' => [
-                'uuid' => $patientsData->uuid,
-                'name' => $patientsData->name,
-                'email' => $patientsData->email,
-                'cpf' => $patientsData->cpf,
-                'cns' => $patientsData->cns,
-                'email_verified_at' => $patientsData->email_verified_at,
-                'created_at' => $patientsData->created_at,
-                'updated_at' => $patientsData->updated_at,
-                'deleted_at' => $patientsData->deleted_at
-            ],
-            'address' => [
-                'street_address' => $patientsData->street_address,
-                'house_number' => $patientsData->house_number,
-                'address_line_2' => $patientsData->address_line_2,
-                'neighborhood' => $patientsData->neighborhood,
-                'postal_code' => $patientsData->postal_code,
-                'city_uuid' => $patientsData->city_uuid,
-                'city_name' => $patientsData->city_name,
-                'ibge_code' => $patientsData->ibge_code,
-                'state_uuid' => $patientsData->state_uuid,
-                'state_name' => $patientsData->state_name,
-                'state_code' => $patientsData->state_code,
-                'state_ibge_code' => $patientsData->state_ibge_code,
-                'ddd' => $patientsData->ddd
+            'data' => [
+                'patient' => [
+                    'uuid' => $patientData->uuid,
+                    'name' => $patientData->user->name,
+                    'email' => $patientData->user->email,
+                    'cpf' => $patientData->user->cpf,
+                    'rg' => $patientData->rg,
+                    'cns' => $patientData->cns,
+                    'birth_date' => $patientData->birth_date,
+                    'email_verified_at' => $patientData->user->email_verified_at,
+                    'created_at' => $patientData->created_at,
+                    'updated_at' => $patientData->updated_at,
+                    'deleted_at' => $patientData->deleted_at
+                ],
+                'address' => [
+                    'uuid' => $patientData->address->uuid,
+                    'street_address' => $patientData->address->street_address,
+                    'house_number' => $patientData->address->house_number,
+                    'address_line_2' => $patientData->address->address_line_2,
+                    'neighborhood' => $patientData->address->neighborhood,
+                    'postal_code' => $patientData->address->postal_code,
+                    'city_uuid' => $patientData->address->city->uuid,
+                    'city_name' => $patientData->address->city->name,
+                    'ibge_code' => $patientData->address->city->ibge_code,
+                    'state_uuid' => $patientData->address->city->state->uuid,
+                    'state_name' => $patientData->address->city->state->name,
+                    'state_code' => $patientData->address->city->state->code,
+                    'state_ibge_code' => $patientData->address->city->state->ibge_code,
+                    'ddd' => $patientData->address->city->state->ddd
+                ],
+                'cellphones' => $this->arrangeCellphones($patientData->cellphones)
             ]
         ];
+    }
+
+    private function arrangeCellphones(Collection $cellphones): array
+    {
+        return $cellphones->map(function (Cellphone $cellphone) {
+            return [
+                'uuid' => $cellphone->uuid,
+                'number' => $cellphone->number,
+                'description' => $cellphone->description,
+            ];
+        })->toArray();
     }
 }
