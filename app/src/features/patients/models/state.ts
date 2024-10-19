@@ -1,7 +1,7 @@
 export type State = {
     uuid: string;
     name: string;
-    code: number;
+    code: string;
     id?: number;
     ibge_code?: number;
     ddd?: string;

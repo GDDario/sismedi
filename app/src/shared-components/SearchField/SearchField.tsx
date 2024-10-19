@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {ChangeEvent, useEffect, useRef, useState} from "react";
+import FoundItems from "./FoundItems.tsx";
 
 type InputFieldProps = {
     label: string;
@@ -30,6 +31,16 @@ const SearchField = ({
     const id: string = label + "_" + name;
     const [debounceTimeout, setDebounceTimeout] = useState<number | null>(null);
     const [items, setItems] = useState<any>([]);
+    const [value, setValue] = useState<string | undefined>('');
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     const styleClasses = () => {
         let classes = "text-black p-1 rounded block border-mainDarkBlue border ";
@@ -47,32 +58,52 @@ const SearchField = ({
         return classes;
     };
 
-    const handleKeyDown = (event: KeyboardEvent): void => {
-        const target = event.currentTarget as HTMLInputElement;
-
-        if (event.key === "Escape") {
-            target.blur();
-            event.stopPropagation();
-        }
+    const handleChange = async (event: ChangeEvent): Promise<void> => {
+        const target = event.target as HTMLInputElement;
 
         const value: string = target.value;
+        setValue(value);
 
         if (debounceTimeout) {
             clearTimeout(debounceTimeout);
         }
 
-        const newTimeout = setTimeout(() => {
-            const searchValues = onSearch(value);
-            // onSelect(value);
+        const newTimeout = setTimeout(async () => {
+            const searchValues = await onSearch(value);
+
+            setItems(searchValues);
         }, 200);
 
         setDebounceTimeout(newTimeout);
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+        const target = event.target as HTMLInputElement;
+
+        if (event.key === "Escape") {
+            target.blur();
+            event.stopPropagation();
+            setItems([]);
+        }
+    };
+
+    const handleOnSelect = async (item: any) => {
+        setItems([]);
+        onSelect(item);
+        setValue(item.label);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+            setItems([]);
+        }
+    };
+
     return (
-        <div>
+        <div className="relative">
             <label htmlFor={id}>{label}</label>
             <input
+                ref={inputRef}
                 id={id}
                 placeholder={placeholder}
                 aria-placeholder={placeholder}
@@ -81,10 +112,12 @@ const SearchField = ({
                 disabled={disabled}
                 className={styleClasses()}
                 onKeyDown={handleKeyDown}
+                onChange={handleChange}
+                value={value}
             />
             {error && <p className="mt-0.5 text-[#ff4e4e]">{error?.message}</p>}
 
-
+            <FoundItems items={items} onSelectItem={handleOnSelect}/>
         </div>
     );
 };

@@ -4,21 +4,22 @@ type FountItemsProps = {
 };
 
 const FoundItems = ({items, onSelectItem}: FountItemsProps) => {
-    const handleSelectItem = (item: any): void => {
-        console.log('Selected item', item)
-    }
-
     return (
-        <div className="absolute top-2 left-0 w-full">
-            <ul>
-                {
-                    items.map((item: any, index: number) => {
-                        return (
-                            <li onClick={() => handleSelectItem(item)}>{item.text}</li>
-                        );
-                    })
-                }
-            </ul>
+        <div className="absolute top-[100%] min-w-[195px] z-10">
+            {items.length > 0 &&
+                <ul className="py-2 flex flex-col bg-mainBackgroundBlue w-full">
+                    {
+                        items.map((item: any, index: number) => {
+                            return (
+                                <li
+                                    key={item.uuid}
+                                    className="w-full text-mainWhite cursor-pointer hover:bg-mainDarkBlue px-2"
+                                    onClick={() => onSelectItem(item)}>{item.label}</li>
+                            );
+                        })
+                    }
+                </ul>
+            }
         </div>
     );
 };

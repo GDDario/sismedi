@@ -17,7 +17,8 @@ class CityController extends Controller
     public function search(Request $request): Response
     {
         $search = $request->get('query', '') ?? '';
+        $stateUuid = $request->get('state_uuid', null);
 
-        return $this->service->search($search);
+        return $this->service->search($search, $stateUuid);
     }
 }

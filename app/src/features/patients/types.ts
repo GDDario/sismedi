@@ -1,4 +1,6 @@
 import {Patient} from "./models/patient.ts";
+import {State} from "./models/state.ts";
+import {City} from "./models/city.ts";
 
 export type OpenModal = {
     open: boolean;
@@ -18,6 +20,19 @@ export type ListPatientsResponse = {
 export type GetPatientResponse = {
     data: {
         patient: Patient;
-
     };
 };
+
+export type SearchStatesResponse = {
+    data: State[];
+};
+
+type Code = {
+    code: string;
+}
+
+export type CitySearch = City & Code;
+
+export type SearchCitiesResponse = {
+    data: CitySearch[];
+}
