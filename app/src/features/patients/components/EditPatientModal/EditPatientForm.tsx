@@ -10,14 +10,17 @@ import {State} from "../../models/state.ts";
 import {CityService} from "../../services/CityService.ts";
 import {City} from "../../models/city.ts";
 import {CitySearch} from "../../types.ts";
+import CopyableInput from "../../../../shared-components/CopyableInput.tsx";
 
 const schema = z.any({});
 
 type EditPatientSchema = z.infer<typeof schema>;
 
-type EditPatientFormProps = {};
+type EditPatientFormProps = {
+    uuid: string;
+};
 
-const EditPatientForm = (props: EditPatientFormProps) => {
+const EditPatientForm = ({uuid}: EditPatientFormProps) => {
     const {
         register,
         handleSubmit,
@@ -29,8 +32,7 @@ const EditPatientForm = (props: EditPatientFormProps) => {
 
     useEffect(() => {
 
-    }, [props]);
-
+    }, [uuid]);
 
     const handleStateSearch = async (text: string): Promise<any> => {
         const states = await StateService.searchByName(text);
@@ -69,7 +71,8 @@ const EditPatientForm = (props: EditPatientFormProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <section>
                 <h2>Dados pessoais</h2>
-                <InputField name="uuid" label="ID do paciente" register={register} error={errors.uuid}/>
+                {/*<InputField name="uuid" label="ID do paciente" register={register} error={errors.uuid}/>*/}
+                <CopyableInput value={uuid} inputClassName="w-[309px]" />
                 <InputField name="name" label="Nome do paciente" register={register} error={errors.name}/>
 
                 <div>
