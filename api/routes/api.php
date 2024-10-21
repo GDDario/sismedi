@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('', [PatientController::class, 'index']);
         Route::get('{uuid}', [PatientController::class, 'show']);
         Route::put('{uuid}', [PatientController::class, 'update']);
+        Route::post('', [PatientController::class, 'create']);
+//        Route::delete('{uuid}', [PatientController::class, 'destroy']);
     });
 
     Route::prefix('state')->group(function() {

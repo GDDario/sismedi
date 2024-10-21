@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\CreatePatientDTO;
 use App\DTO\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Cellphone;
@@ -54,6 +55,17 @@ class PatientService
             }
         } catch (NotFoundException $e) {
             return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function create(CreatePatientDTO $dto)
+    {
+        $patient = $this->repository->insert($dto);
+
+        if (is_null($patient)) {
+            return new Response(['message' => 'Could not update the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
         }
     }
 

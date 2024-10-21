@@ -2,13 +2,18 @@
 
 namespace App\Repositories;
 
+use App\DTO\CreatePatientDTO;
 use App\DTO\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
+use App\Models\Address;
 use App\Models\City;
 use App\Models\Patient;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class PatientRepository
 {
@@ -102,6 +107,7 @@ class PatientRepository
             'house_number' => $dto->address['house_number'],
             'address_line_2' => $dto->address['address_line_2'],
             'neighborhood' => $dto->address['neighborhood'],
+            'postal_code' => $dto->address['postal_code'],
             'city_id' => $city->id,
         ]);
 
@@ -110,11 +116,11 @@ class PatientRepository
             return null;
         }
 
-        $state = $patient->cellphones()->delete();
+        $patient->cellphones()->delete();
 
         foreach ($dto->cellphones as $cellphone) {
             $patient->cellphones()->create([
-                'uuid' => fake()->uuid,
+                'uuid' => Uuid::uuid4(),
                 'number' => $cellphone['number'],
                 'description' => $cellphone['number'],
                 'is_primary' => $cellphone['is_primary']
@@ -123,6 +129,56 @@ class PatientRepository
 
         DB::commit();
         $patient->refresh();
+
+        return $patient;
+    }
+
+
+    /**
+     * @throws NotFoundException
+     */
+    public function insert(CreatePatientDTO $dto): Patient
+    {
+        if (!$city = City::query()->where('uuid', $dto->address['city_uuid'])->first()) {
+            throw new NotFoundException("City with uuid {$dto->address['city_uuid']} not found.");
+        }
+
+        $user = User::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'name' => $dto->patient['name'],
+            'cpf' => $dto->patient['cpf'],
+            'email' => $dto->patient['email'],
+            'password' => $dto->patient['password']
+        ]);
+
+        $patient = Patient::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'name' => $dto->patient['name'],
+            'cns' => $dto->patient['cns'],
+            'rg' => $dto->patient['rg'],
+            'birth_date' => $dto->patient['birth_date'],
+            'user_id' => $user->id
+        ]);
+
+        $address = Address::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'patient_id' => $patient->id,
+            'street_address' => $dto->address['street_address'],
+            'house_number' => $dto->address['house_number'],
+            'address_line_2' => $dto->address['address_line_2'],
+            'neighborhood' => $dto->address['neighborhood'],
+            'postal_code' => $dto->address['postal_code'],
+            'city_id' => $city->id
+        ]);
+
+        foreach ($dto->cellphones as $cellphone) {
+            $patient->cellphones()->create([
+                'uuid' => Uuid::uuid4(),
+                'number' => $cellphone['number'],
+                'description' => $cellphone['number'],
+                'is_primary' => $cellphone['is_primary']
+            ]);
+        }
 
         return $patient;
     }
