@@ -2,15 +2,16 @@ type InputFieldProps = {
     label: string;
     name: string;
     register: any;
-    error: any;
+    className?: string;
+    error?: any;
     placeholder?: string;
-    type?: 'text' | 'password' | 'email';
+    type?: 'text' | 'password' | 'email' | 'date';
     variant?: 'default';
     fullWidth?: boolean;
     disabled?: boolean;
 };
 
-const InputField = ({label, type = 'text', placeholder, name, error, register, variant, fullWidth, disabled = false}: InputFieldProps) => {
+const InputField = ({label, type = 'text', placeholder, name, error, register, variant, fullWidth, disabled = false, className}: InputFieldProps) => {
     const id: string = label + "_" + name;
 
     const styleClasses = () => {
@@ -29,7 +30,7 @@ const InputField = ({label, type = 'text', placeholder, name, error, register, v
             classes += " w-full";
         }
 
-        return classes;
+        return classes + " " + className;
     };
 
     return (

@@ -8,6 +8,7 @@ type InputFieldProps = {
     error: any;
     onSearch: (text: string) => any;
     onSelect: (text: string) => void;
+    value: string;
     placeholder?: string;
     type?: 'text' | 'password' | 'email';
     variant?: 'default';
@@ -26,13 +27,18 @@ const SearchField = ({
                          fullWidth,
                          disabled = false,
                          onSearch,
-                         onSelect
+                         onSelect,
+                         value: valueInput
                      }: InputFieldProps) => {
     const id: string = label + "_" + name;
     const [debounceTimeout, setDebounceTimeout] = useState<number | null>(null);
     const [items, setItems] = useState<any>([]);
-    const [value, setValue] = useState<string | undefined>('');
+    const [value, setValue] = useState<string>(valueInput);
     const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        setValue(valueInput);
+    }, [valueInput]);
 
     useEffect(() => {
         document.addEventListener('click', handleClickOutside);

@@ -1,4 +1,4 @@
-import { MdOutlineContentCopy } from "react-icons/md";
+import {MdOutlineContentCopy} from "react-icons/md";
 import {ChangeEvent, useState} from "react";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../store/messageSlice.ts";
