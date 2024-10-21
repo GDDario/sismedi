@@ -1,7 +1,7 @@
 import DigitalClock from "./DigitalClock.tsx";
 
 const AuthenticatedLayoutHeader = () => {
-    const pageName = 'Gerenciamento de usuários';
+    const pageName = 'Gerenciamento de pacientes';
 
     return (
         <header className="sticky top-0 w-full pr-20 bg-mainBackgroundBlue h-[13vh]">

@@ -41,7 +41,7 @@ export type SearchCitiesResponse = {
     data: CitySearch[];
 }
 
-export type UpdatePatientData = {
+export type CreateOrUpdatePatientData = {
     patient: Patient;
     address: Address;
     cellphones: Cellphone[];

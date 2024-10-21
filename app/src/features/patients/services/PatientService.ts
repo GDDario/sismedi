@@ -1,4 +1,4 @@
-import {GetPatientResponse, ListPatientsResponse, UpdatePatientData} from "../types.ts";
+import {GetPatientResponse, ListPatientsResponse, CreateOrUpdatePatientData} from "../types.ts";
 import axiosInstance from "../../../config/axiosConfig.ts";
 
 export class PatientService {
@@ -15,9 +15,12 @@ export class PatientService {
         return response.data;
     }
 
-    static update = async (uuid: string, patientData: UpdatePatientData): Promise<void> => {
+    static create = async (patientData: CreateOrUpdatePatientData): Promise<void> => {
+        await axiosInstance.post<GetPatientResponse>('/patient', patientData);
+    }
+
+    static update = async (uuid: string, patientData: CreateOrUpdatePatientData): Promise<void> => {
         const url = `/patient/${uuid}`;
         await axiosInstance.put<GetPatientResponse>(url, patientData);
     }
-
 }

@@ -14,7 +14,7 @@ import {fetchPatients} from "../../store/patientsSlice.ts";
 const columnHelper = createColumnHelper();
 
 const PatientsTable = () => {
-    const [openEditModal, setOpenEditModal] = useState<OpenModal>({open: false, uuid: undefined});
+    const [editModal, setEditModal] = useState<OpenModal>({open: false, uuid: undefined});
     const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({open: false, uuid: undefined});
     const dispatch = useDispatch();
     const patientsState = useSelector((state: any) => state.patients);
@@ -66,7 +66,7 @@ const PatientsTable = () => {
                     <>
                         <EditButton onClick={() => {
                             console.log('Clicou');
-                            setOpenEditModal({open: true, uuid});
+                            setEditModal({open: true, uuid});
                         }}/>
                         <AppointsButton onClick={() => setOpenAppointsModal({open: true, uuid})}/>
                     </>
@@ -83,7 +83,7 @@ const PatientsTable = () => {
     });
 
     const closeEditModal = () => {
-        setOpenEditModal({uuid: undefined, open: false});
+        setEditModal({uuid: undefined, open: false});
     }
 
     if (patientsState.error) return <div>Error: {patientsState.error}</div>;
@@ -124,14 +124,14 @@ const PatientsTable = () => {
 
                 <PatientsTablePagination />
 
-                {openEditModal.open && (
+                {editModal.open && (
                     <EditPatientModal
-                        uuid={openEditModal.uuid!}
-                        visible={openEditModal.open}
+                        uuid={editModal.uuid!}
+                        visible={editModal.open}
                         onClose={closeEditModal}
                     />
                 )}
-                <p>Open appoints modal to patient {openAppointsModal.uuid}</p>
+                {/*<p>Open appoints modal to patient {openAppointsModal.uuid}</p>*/}
             </div>
         </section>
     );
