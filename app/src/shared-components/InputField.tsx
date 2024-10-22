@@ -1,15 +1,17 @@
 type InputFieldProps = {
     label: string;
-    type: 'text' | 'password' | 'email';
     name: string;
     register: any;
-    error: any;
+    className?: string;
+    error?: any;
     placeholder?: string;
+    type?: 'text' | 'password' | 'email' | 'date';
     variant?: 'default';
     fullWidth?: boolean;
+    disabled?: boolean;
 };
 
-const InputField = ({label, type, placeholder, name, error, register, variant, fullWidth}: InputFieldProps) => {
+const InputField = ({label, type = 'text', placeholder, name, error, register, variant, fullWidth, disabled = false, className}: InputFieldProps) => {
     const id: string = label + "_" + name;
 
     const styleClasses = () => {
@@ -28,7 +30,7 @@ const InputField = ({label, type, placeholder, name, error, register, variant, f
             classes += " w-full";
         }
 
-        return classes;
+        return classes + " " + className;
     };
 
     return (
@@ -41,6 +43,7 @@ const InputField = ({label, type, placeholder, name, error, register, variant, f
                 type={type}
                 {...register(name)}
                 className={styleClasses()}
+                disabled={disabled}
             />
             {error && <p className="mt-0.5 text-[#ff4e4e]">{error?.message}</p>}
         </div>
