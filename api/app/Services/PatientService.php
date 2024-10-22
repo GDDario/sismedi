@@ -9,7 +9,6 @@ use App\Models\Cellphone;
 use App\Models\Patient;
 use App\Repositories\PatientRepository;
 use App\Util\PaginationUtil;
-use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 

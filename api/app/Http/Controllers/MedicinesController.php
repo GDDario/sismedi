@@ -16,7 +16,16 @@ class MedicinesController extends Controller
 
     public function index(Request $request): Response
     {
-        return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 20);
+
+        $parameters = [
+            ...$request->all(),
+            'page' => $page,
+            'per_page' => $perPage
+        ];
+
+        return $this->service->list($parameters);
     }
 
     public function show(Request $request): Response

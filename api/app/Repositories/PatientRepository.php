@@ -45,7 +45,6 @@ class PatientRepository
         return $patient;
     }
 
-
     /**
      * @param array $parameters
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -60,7 +59,6 @@ class PatientRepository
 
         return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
     }
-
 
     /**
      * @param UpdatePatientDTO $dto
