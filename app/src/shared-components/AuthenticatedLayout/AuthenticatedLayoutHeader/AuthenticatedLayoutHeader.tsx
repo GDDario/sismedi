@@ -1,7 +1,9 @@
 import DigitalClock from "./DigitalClock.tsx";
+import {useSelector} from "react-redux";
+import {selectTitle} from "../../../store/pageSlice.ts";
 
 const AuthenticatedLayoutHeader = () => {
-    const pageName = 'Gerenciamento de pacientes';
+    const pageName = useSelector(selectTitle);
 
     return (
         <header className="sticky top-0 w-full pr-20 bg-mainBackgroundBlue h-[13vh]">
