@@ -7,7 +7,7 @@ const NavigationMenu = () => {
             <SideMenuButton text="Gerenciar pacientes" action="patients"/>
             <SideMenuButton text="Gerenciar médicos" action="doctors"/>
             <SideMenuButton text="Consultas"/>
-            <SideMenuButton text="Medicamentos"/>
+            <SideMenuButton text="Medicamentos" action="medicines"/>
         </div>
     );
 };
