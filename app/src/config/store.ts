@@ -3,6 +3,7 @@ import userReducer from '../features/authentication/store/userSlice';
 import pageReducer from '../store/pageSlice';
 import messageReducer from '../store/messageSlice';
 import patientsReducer from '../features/patients/store/patientsSlice';
+import doctorsReducer from '../features/doctors/store/doctorsSlice';
 
 export const store = configureStore(
     {
@@ -10,7 +11,8 @@ export const store = configureStore(
             user: userReducer,
             page: pageReducer,
             message: messageReducer,
-            patients: patientsReducer
+            patients: patientsReducer,
+            doctors: doctorsReducer
         }
     }
 );
