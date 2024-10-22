@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             PatientSeeder::class,
             DoctorSeeder::class,
             AgendaSeeder::class,
-            MedicineCategorySeeder::class
+            MedicineCategorySeeder::class,
+            MedicineSeeder::class
         ]);
     }
 }
