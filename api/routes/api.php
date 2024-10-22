@@ -5,6 +5,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticationController::class, 'login']);
@@ -34,5 +35,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('city')->group(function() {
         Route::get('search', [CityController::class, 'search']);
+    });
+
+    Route::prefix('doctor')->group(function () {
+        Route::get('', [DoctorController::class, 'index']);
+        Route::get('/{uuid}', [DoctorController::class, 'show']);
+        Route::get('/agenda/{id}', [DoctorController::class, 'getAgenda']);
     });
 });

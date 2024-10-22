@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
             CitySeeder::class,
             PatientSeeder::class,
+            DoctorSeeder::class,
+            AgendaSeeder::class,
         ]);
     }
 }
