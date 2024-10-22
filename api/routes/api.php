@@ -42,4 +42,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{uuid}', [DoctorController::class, 'show']);
         Route::get('/agenda/{id}', [DoctorController::class, 'getAgenda']);
     });
+
+    Route::prefix('medicine')->group(function () {
+        Route::get('', [DoctorController::class, 'index']);
+        Route::get('/{uuid}', [DoctorController::class, 'show']);
+        Route::put('/{uuid}', [DoctorController::class, 'update']);
+        Route::post('', [DoctorController::class, 'create']);
+        Route::delete('/{uuid}', [DoctorController::class, 'delete']);
+    });
 });

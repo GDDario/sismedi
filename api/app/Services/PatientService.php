@@ -21,6 +21,15 @@ class PatientService
     {
     }
 
+    public function list(array $parameters): Response
+    {
+        $paginator = $this->repository->paginate($parameters);
+
+        $pageData = PaginationUtil::extractData($paginator);
+
+        return new Response($pageData, Response::HTTP_OK);
+    }
+
     public function getByUuid(string $uuid): Response
     {
         try {
@@ -32,15 +41,6 @@ class PatientService
         } catch (NotFoundException $e) {
             return new Response(['message' => 'Patient not found.'], Response::HTTP_NOT_FOUND);
         }
-    }
-
-    public function list(array $parameters): Response
-    {
-        $paginator = $this->repository->paginate($parameters);
-
-        $pageData = PaginationUtil::extractData($paginator);
-
-        return new Response($pageData, Response::HTTP_OK);
     }
 
     public function update(UpdatePatientDTO $dto): Response
