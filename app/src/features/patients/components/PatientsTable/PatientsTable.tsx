@@ -10,12 +10,17 @@ import {OpenModal} from "../../types.ts";
 import {useDispatch, useSelector} from "react-redux";
 import PatientsTablePagination from "./PatientsTablePagination.tsx";
 import {fetchPatients} from "../../store/patientsSlice.ts";
+import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
+import DeleteButton from "../../../../shared-components/DeleteButton.tsx";
+import {PatientService} from "../../services/PatientService.ts";
+import {showMessage} from "../../../../store/messageSlice.ts";
 
 const columnHelper = createColumnHelper();
 
 const PatientsTable = () => {
     const [editModal, setEditModal] = useState<OpenModal>({open: false, uuid: undefined});
     const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({open: false, uuid: undefined});
+    const [deleteModal, setDeleteModal] = useState<OpenModal>({open: false, uuid: undefined});
     const dispatch = useDispatch();
     const patientsState = useSelector((state: any) => state.patients);
 
@@ -23,6 +28,15 @@ const PatientsTable = () => {
         // @ts-ignore
         dispatch(fetchPatients({page: 1, per_page: 17}));
     }, []);
+
+    const deletePatient = async (): Promise<void> => {
+        await PatientService.delete(deleteModal.uuid!);
+
+        dispatch(showMessage({message: 'Patient deleted successfully!', type: 'success'}));
+        // @ts-ignore
+        dispatch(fetchPatients({page: 1, per_page: 17}));
+        setDeleteModal({open: false, uuid: undefined});
+    }
 
     const columns = useMemo(() => [
         columnHelper.accessor('uuid', {
@@ -65,10 +79,10 @@ const PatientsTable = () => {
                 return (
                     <>
                         <EditButton onClick={() => {
-                            console.log('Clicou');
                             setEditModal({open: true, uuid});
                         }}/>
                         <AppointsButton onClick={() => setOpenAppointsModal({open: true, uuid})}/>
+                        <DeleteButton onClick={() => setDeleteModal({open: true, uuid})}/>
                     </>
                 );
             }
@@ -81,10 +95,6 @@ const PatientsTable = () => {
         data: patientsState.data.data,
         getCoreRowModel: getCoreRowModel(),
     });
-
-    const closeEditModal = () => {
-        setEditModal({uuid: undefined, open: false});
-    }
 
     if (patientsState.error) return <div>Error: {patientsState.error}</div>;
 
@@ -122,19 +132,31 @@ const PatientsTable = () => {
                     </table>
                 </div>
 
-                <PatientsTablePagination />
+                <PatientsTablePagination/>
 
                 {editModal.open && (
                     <EditPatientModal
                         uuid={editModal.uuid!}
                         visible={editModal.open}
-                        onClose={closeEditModal}
+                        onClose={() => setEditModal({uuid: undefined, open: false})}
                     />
                 )}
                 {/*<p>Open appoints modal to patient {openAppointsModal.uuid}</p>*/}
+
+                <ConfirmationMessage
+                    title="Excluir paciente"
+                    loading={false}
+                    onConfirm={() => deletePatient()}
+                    onCancel={() => setDeleteModal({uuid: undefined, open: false})}
+                    visible={deleteModal.open}
+                    onClose={() => setDeleteModal({uuid: undefined, open: false})}
+                >
+                    Tem <b>certeza</b> que deseja excluir esse paciente? Essa ação <b>não</b> poderá ser desfeita.
+                </ConfirmationMessage>
             </div>
         </section>
-    );
+    )
+        ;
 }
 
 export default PatientsTable;

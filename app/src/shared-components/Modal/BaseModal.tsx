@@ -7,9 +7,10 @@ type BaseModalProps = {
     loading: boolean;
     visible: boolean;
     onClose: () => void;
+    className?: string;
 };
 
-const BaseModal = ({title, children, visible, loading, onClose}: BaseModalProps) => {
+const BaseModal = ({title, children, visible, loading, onClose, className}: BaseModalProps) => {
     useEffect(() => {
         const handleWindowKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
@@ -37,7 +38,7 @@ const BaseModal = ({title, children, visible, loading, onClose}: BaseModalProps)
         <div
             className={`h-screen w-full bg-black bg-opacity-40 flex justify-center items-center 
             absolute top-0 left-0 ${!visible && 'invisible'} close-modal`}>
-            <section className="bg-mainWhite px-12 pt-8 pb-12 rounded-xl w-[45%] shadow-md shadow-black h-[70%]">
+            <section className={`bg-mainWhite px-12 pt-8 pb-12 rounded-xl w-[45%] shadow-md shadow-black ${className}`}>
                 <header className="flex justify-between items-center h-[10%] bg-blue-200]">
                     <h2 className="select-none">{title}</h2>
 

@@ -23,4 +23,9 @@ export class PatientService {
         const url = `/patient/${uuid}`;
         await axiosInstance.put<GetPatientResponse>(url, patientData);
     }
+
+    static delete = async (uuid: string): Promise<void> => {
+        const url = `/patient/${uuid}`;
+        await axiosInstance.delete<void>(url);
+    }
 }
