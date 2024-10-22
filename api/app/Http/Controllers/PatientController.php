@@ -67,7 +67,8 @@ class PatientController extends Controller
         return $this->service->update($dto);
     }
 
-    public function create(CreatePatientRequest $request) {
+    public function create(CreatePatientRequest $request)
+    {
         $patient = $request->get('patient');
         $address = $request->get('address');
         $cellphones = $request->get('cellphones');
@@ -94,5 +95,10 @@ class PatientController extends Controller
         );
 
         return $this->service->create($dto);
+    }
+
+    public function delete(Request $request): Response
+    {
+        return $this->service->delete($request->route('uuid'));
     }
 }

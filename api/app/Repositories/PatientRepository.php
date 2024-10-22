@@ -9,7 +9,6 @@ use App\Models\Address;
 use App\Models\City;
 use App\Models\Patient;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -181,6 +180,23 @@ class PatientRepository
         }
 
         return $patient;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function destroy(string $uuid): bool
+    {
+        if (!$patient = Patient::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("Patient with uuid $uuid not found");
+        }
+
+        $patient->address()->delete();
+        $patient->cellphones()->delete();
+        $user = $patient->user();
+        $patient->delete();
+
+        return $user->delete();
     }
 
     private function filterQueryByFields(Builder $query, array $parameters): Builder

@@ -69,6 +69,19 @@ class PatientService
         }
     }
 
+    public function delete(string $uuid)
+    {
+        try {
+            if ($this->repository->destroy($uuid)) {
+                return new Response(['message' => 'Patient deleted successfully'], Response::HTTP_OK);
+            } else {
+                return new Response(['message' => 'Could not delete the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } catch (NotFoundException $e) {
+            return new Response($e->getMessage(), 404);
+        }
+    }
+
     private function arrangePatientData(Patient $patientData): array
     {
         return [
