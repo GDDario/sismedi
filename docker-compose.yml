@@ -22,7 +22,7 @@ services:
   mysql:
     image: mysql:9.0.0
     container_name: sismedi-mysql
-    platform: linux/x86_64
+    platform: linux/amd64
     ports:
       - "3307:3306"
     volumes:
@@ -30,6 +30,22 @@ services:
     environment:
       MYSQL_DATABASE: sismedi
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - sismedi-network
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
       - sismedi-network
 
