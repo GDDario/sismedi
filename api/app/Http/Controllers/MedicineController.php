@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateMedicineRequest;
 use App\Services\MedicineService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -38,7 +39,7 @@ class MedicineController extends Controller
         return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-    public function create(Request $request): Response
+    public function create(CreateMedicineRequest $request): Response
     {
         return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
     }
