@@ -6,7 +6,7 @@ use App\Services\MedicineService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class MedicinesController extends Controller
+class MedicineController extends Controller
 {
     public function __construct(
         private MedicineService $service
@@ -30,7 +30,7 @@ class MedicinesController extends Controller
 
     public function show(Request $request): Response
     {
-        return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
+        return $this->service->getByUuid($request->route('uuid'));
     }
 
     public function update(Request $request): Response

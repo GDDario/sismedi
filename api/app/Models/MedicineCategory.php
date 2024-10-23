@@ -21,6 +21,10 @@ class MedicineCategory extends Model
         'updated_at' => 'datetime'
     ];
 
+    protected $hidden = [
+        'id'
+    ];
+
     public function state(): BelongsToMany
     {
         return $this->belongsToMany(Medicine::class, 'medicine', 'category_id');

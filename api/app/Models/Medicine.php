@@ -26,12 +26,18 @@ class Medicine extends Model
     ];
 
     protected $casts = [
+        'price' => 'double',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
 
-    public function address(): HasOne
+    protected $hidden = [
+        'id',
+        'category_id'
+    ];
+
+    public function category(): HasOne
     {
-        return $this->hasOne(MedicineCategory::class, 'category_id', 'id');
+        return $this->hasOne(MedicineCategory::class, 'id', 'category_id');
     }
 }

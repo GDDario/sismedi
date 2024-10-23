@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Medicine;
 use App\Models\Patient;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -40,5 +41,20 @@ class MedicineRepository
         }
 
         return $query;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function findByUuid(string $uuid)
+    {
+        if (!Medicine::query()->where('uuid', $uuid)->exists()) {
+            throw new NotFoundException("Patient with uuid $uuid not found.");
+        }
+
+        $medicine = Medicine::query()->where('uuid', $uuid)
+            ->with('category')->get();
+
+        return $medicine->toArray();
     }
 }
