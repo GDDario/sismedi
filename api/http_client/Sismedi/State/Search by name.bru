@@ -1,0 +1,19 @@
+meta {
+  name: Search by name
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/state/search?query=Sao
+  body: none
+  auth: bearer
+}
+
+params:query {
+  query: Sao
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Send email
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{api_url}}/forgot-password/send-email
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/9.3.3
+  Accept: application/json
+}
+
+body:json {
+  {
+      "email": "test@exrample.com"
+  }  
+}

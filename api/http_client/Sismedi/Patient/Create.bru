@@ -1,0 +1,51 @@
+meta {
+  name: Create
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{api_url}}/patient
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.0.0
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "patient": {
+      "name": "Jhon Doe Diferente",
+      "email": "user@patient3.com",
+      "cpf": "39299815054",
+      "cns": "183981783120003",
+      "rg": "224133202",
+      "birth_date": "1998-08-09",
+      "password": "password",
+      "password_confirmation": "password"
+    },
+    "address": {
+      "street_address": "Avenida teste",
+      "house_number": "29DS",
+      "neighborhood": "Vila Tutituti",
+      "postal_code": "12365478",
+      "address_line_2": "asdoijasiojsdoi",
+      "city_uuid": "4e70bc2f-3107-3230-a148-ec8e03099756"
+    },
+    "cellphones": [
+        {
+          "number": "38192831293",
+          "description": "",
+          "is_primary": true
+        }
+    ]
+  }  
+}

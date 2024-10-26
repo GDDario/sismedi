@@ -1,0 +1,23 @@
+meta {
+  name: List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/medicine?page=1&name1=name&value1=Zol
+  body: none
+  auth: bearer
+}
+
+params:query {
+  page: 1
+  name1: name
+  value1: Zol
+  ~name2: cns
+  ~value2: 7093887818289
+}
+
+auth:bearer {
+  token: {{token}}
+}

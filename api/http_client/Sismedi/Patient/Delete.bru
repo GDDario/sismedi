@@ -1,0 +1,15 @@
+meta {
+  name: Delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{api_url}}/patient/c1005b19-8972-31e5-bd2f-5e0aaa3d6e01
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

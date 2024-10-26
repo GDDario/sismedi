@@ -1,0 +1,49 @@
+meta {
+  name: Update
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{api_url}}/patient/c9eff2e0-bd27-4c5f-930b-b12664801bcd
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.0.0
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "patient": {
+      "name": "Jhon Doe alterado",
+      "email": "user@patient.com",
+      "cpf": "44654545972",
+      "cns": "121373255580003",
+      "rg": "978862946",
+      "birth_date": "1998-08-09"
+    },
+    "address": {
+      "street_address": "Avenida teste",
+      "house_number": "29DS",
+      "neighborhood": "Vila Tutituti",
+      "postal_code": "12365478",
+      "address_line_2": "asdoijasiojsdoi",
+      "city_uuid": "4e70bc2f-3107-3230-a148-ec8e03099756"
+    },
+    "cellphones": [
+        {
+          "number": "38192831293",
+          "description": "",
+          "is_primary": true
+        }
+    ]
+  }  
+}
