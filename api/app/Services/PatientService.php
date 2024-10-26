@@ -77,7 +77,7 @@ class PatientService
                 return new Response(['message' => 'Could not delete the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         } catch (NotFoundException $e) {
-            return new Response($e->getMessage(), 404);
+            return new Response(['message' => $e->getMessage()], 404);
         }
     }
 

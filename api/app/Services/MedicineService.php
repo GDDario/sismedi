@@ -67,5 +67,18 @@ class MedicineService
             return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
+
+    public function delete(string $uuid): Response
+    {
+        try {
+            if ($this->repository->destroy($uuid)) {
+                return new Response(['message' => 'Medicine deleted successfully'], Response::HTTP_OK);
+            } else {
+                return new Response(['message' => 'Could not delete the medicine.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } catch (NotFoundException $e) {
+            return new Response(['message' => $e->getMessage()], 404);
+        }
+    }
 }
 

@@ -103,6 +103,17 @@ class MedicineRepository
         return Medicine::query()->where('id', $medicine->id)->with('category')->first();
     }
 
+    /**
+     * @throws NotFoundException
+     */
+    public function destroy(string $uuid): bool {
+        if (!$medicine = Medicine::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("Medicine with uuid $uuid not found.");
+        }
+
+        return $medicine->delete();
+    }
+
     private function filterQueryByFields(Builder $query, array $parameters): Builder
     {
         $blackList = ['offset', 'page', 'limit'];

@@ -72,8 +72,8 @@ class MedicineController extends Controller
         );
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): Response
     {
-        return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
+        return $this->service->delete($request->route('uuid'));
     }
 }
