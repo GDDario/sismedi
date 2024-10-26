@@ -2,11 +2,13 @@
 
 namespace App\Repositories;
 
+use App\DTO\CreateMedicineDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Medicine;
-use App\Models\Patient;
+use App\Models\MedicineCategory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Ramsey\Uuid\Uuid;
 
 class MedicineRepository
 {
@@ -26,21 +28,33 @@ class MedicineRepository
         return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
     }
 
-    private function filterQueryByFields(Builder $query, array $parameters): Builder
-    {
-        $blackList = ['offset', 'page', 'limit'];
-        foreach ($parameters as $key => $parameter) {
-            if (strlen($key) === 5 && str_starts_with($key, 'name') && !in_array($parameter, $blackList)) {
-                $number = substr($key, 4, 5);
 
-                if (array_key_exists("value$number", $parameters)) {
-                    $searchValue = $parameters["value$number"];
-                    $query = $query->whereRaw("medicines.$parameter LIKE '$searchValue%'");
-                }
-            }
+    /**
+     * @throws NotFoundException
+     */
+    public function insert(CreateMedicineDTO $dto): ?Medicine
+    {
+        if (!$category = MedicineCategory::query()->where('uuid', $dto->categoryUuid)->first()) {
+            throw new NotFoundException("Medicine with uuid {$dto->categoryUuid} not found.");
         }
 
-        return $query;
+        $medicine = Medicine::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'name' => $dto->name,
+            'quantity' => $dto->quantity,
+            'dosage' => $dto->dosage,
+            'concentration' => $dto->concentration,
+            'expiration_date' => $dto->expirationDate,
+            'manufacturer' => $dto->manufacturer,
+            'batch_number' => $dto->batchNumber,
+            'price' => $dto->price,
+            'category_id' => $category->id,
+            'prescription' => $dto->prescription,
+            'description' => $dto->description
+        ]);
+        $medicine->refresh();
+
+        return Medicine::query()->where('id', $medicine->id)->with('category')->first();
     }
 
     /**
@@ -56,5 +70,22 @@ class MedicineRepository
             ->with('category')->get();
 
         return $medicine->toArray();
+    }
+
+    private function filterQueryByFields(Builder $query, array $parameters): Builder
+    {
+        $blackList = ['offset', 'page', 'limit'];
+        foreach ($parameters as $key => $parameter) {
+            if (strlen($key) === 5 && str_starts_with($key, 'name') && !in_array($parameter, $blackList)) {
+                $number = substr($key, 4, 5);
+
+                if (array_key_exists("value$number", $parameters)) {
+                    $searchValue = $parameters["value$number"];
+                    $query = $query->whereRaw("medicines.$parameter LIKE '$searchValue%'");
+                }
+            }
+        }
+
+        return $query;
     }
 }

@@ -27,7 +27,7 @@ class CreateMedicineRequest extends FormRequest
             'manufacturer' => 'required',
             'batch_number' => 'required',
             'price' => 'required|numeric',
-            'category_uuid' => 'required|uuid'
+            'category_uuid' => 'required|uuid|exists:medicine_categories,uuid'
         ];
     }
 

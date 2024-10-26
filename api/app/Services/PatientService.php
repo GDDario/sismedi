@@ -62,7 +62,7 @@ class PatientService
         $patient = $this->repository->insert($dto);
 
         if (is_null($patient)) {
-            return new Response(['message' => 'Could not update the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new Response(['message' => 'Could not create the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         } else {
             return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
         }

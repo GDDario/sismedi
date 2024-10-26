@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\CreateMedicineDTO;
 use App\Http\Requests\CreateMedicineRequest;
 use App\Services\MedicineService;
 use Illuminate\Http\Request;
@@ -41,7 +42,17 @@ class MedicineController extends Controller
 
     public function create(CreateMedicineRequest $request): Response
     {
-        return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
+        return $this->service->create(
+            new CreateMedicineDTO(
+                name: $request->get('name'),
+                quantity: $request->get('quantity'),
+                expirationDate: $request->get('expiration_date'),
+                manufacturer: $request->get('manufacturer'),
+                batchNumber: $request->get('batch_number'),
+                price: $request->get('price'),
+                categoryUuid: $request->get('category_uuid')
+            )
+        );
     }
 
     public function delete(Request $request)

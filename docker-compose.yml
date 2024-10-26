@@ -31,7 +31,8 @@ services:
       MYSQL_DATABASE: sismedi
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     networks:
-      - sismedi-network
+      sismedi-network:
+          ipv4_address: 172.25.0.10
 
   mailpit:
     image: axllent/mailpit
@@ -65,6 +66,9 @@ services:
 networks:
   sismedi-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
 
 volumes:
   mysql-data:
