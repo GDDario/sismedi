@@ -1,0 +1,19 @@
+meta {
+  name: Search by name
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/city/search?query=santa cruz
+  body: none
+  auth: bearer
+}
+
+params:query {
+  query: santa cruz
+}
+
+auth:bearer {
+  token: {{token}}
+}

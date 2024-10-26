@@ -1,0 +1,20 @@
+meta {
+  name: Search by name and state
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{api_url}}/city/search?query=santa cruz&state_uuid=7c59fa48-6707-38e8-9054-3e2fdced325f
+  body: none
+  auth: bearer
+}
+
+params:query {
+  query: santa cruz
+  state_uuid: 7c59fa48-6707-38e8-9054-3e2fdced325f
+}
+
+auth:bearer {
+  token: {{token}}
+}

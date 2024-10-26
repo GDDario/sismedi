@@ -1,4 +1,4 @@
-w<?php
+<?php
 
 namespace App\Http\Requests;
 
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class CreatePatientRequest extends FormRequest
+class CreateMedicineRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,25 +19,15 @@ class CreatePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Patient object
-            'patient.name' => 'required',
-            'patient.email' => 'required|email|unique:users,email',
-            'patient.cpf' => ['required', new CPFRule, 'unique:users,cpf'],
-            'patient.cns' => ['required', new CNSRule, 'unique:patients,cns'],
-            'patient.rg' => 'required|unique:patients,rg',
-            'patient.birth_date' => 'required|date',
-            'patient.password' => 'required|confirmed',
-
-            // Address object
-            'address.street_address' => 'required',
-            'address.house_number' => 'required',
-            'address.neighborhood' => 'required',
-            'address.postal_code' => 'required',
-            "address.city_uuid" => "required|uuid|exists:cities,uuid",
-
-            // Cellphones
-            "cellphones" => "array|min:1",
-            "cellphones.*.number" => 'required|size:11'
+            'name' => 'required',
+            'dosage' => '',
+            'concentration' => 'nullable|numeric',
+            'quantity' => 'required|integer',
+            'expiration_date' => 'required|date',
+            'manufacturer' => 'required',
+            'batch_number' => 'required',
+            'price' => 'required|numeric',
+            'category_uuid' => 'required|uuid|exists:medicine_categories,uuid'
         ];
     }
 

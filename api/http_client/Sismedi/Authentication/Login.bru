@@ -1,0 +1,27 @@
+meta {
+  name: Login
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{api_url}}/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/9.3.3
+}
+
+body:json {
+  {
+    "login": "user@patient.com",
+    "password": "password"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar('token', res.body.token);
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Show
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{api_url}}/patient/c9eff2e0-bd27-4c5f-930b-b12664801bcd
+  body: none
+  auth: bearer
+}
+
+headers {
+  User-Agent: insomnia/10.0.0
+}
+
+auth:bearer {
+  token: {{token}}
+}

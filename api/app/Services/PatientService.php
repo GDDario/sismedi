@@ -9,7 +9,6 @@ use App\Models\Cellphone;
 use App\Models\Patient;
 use App\Repositories\PatientRepository;
 use App\Util\PaginationUtil;
-use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
@@ -19,6 +18,15 @@ class PatientService
         private PatientRepository $repository
     )
     {
+    }
+
+    public function list(array $parameters): Response
+    {
+        $paginator = $this->repository->paginate($parameters);
+
+        $pageData = PaginationUtil::extractData($paginator);
+
+        return new Response($pageData, Response::HTTP_OK);
     }
 
     public function getByUuid(string $uuid): Response
@@ -32,15 +40,6 @@ class PatientService
         } catch (NotFoundException $e) {
             return new Response(['message' => 'Patient not found.'], Response::HTTP_NOT_FOUND);
         }
-    }
-
-    public function list(array $parameters): Response
-    {
-        $paginator = $this->repository->paginate($parameters);
-
-        $pageData = PaginationUtil::extractData($paginator);
-
-        return new Response($pageData, Response::HTTP_OK);
     }
 
     public function update(UpdatePatientDTO $dto): Response
@@ -63,7 +62,7 @@ class PatientService
         $patient = $this->repository->insert($dto);
 
         if (is_null($patient)) {
-            return new Response(['message' => 'Could not update the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new Response(['message' => 'Could not create the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         } else {
             return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
         }

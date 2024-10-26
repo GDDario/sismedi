@@ -12,11 +12,20 @@ export class AuthenticationService {
         localStorage.setItem('token', token);
     };
 
+    static deleteToken = (): void => {
+        localStorage.removeItem('token');
+    };
+
     static async login(credentials: LoginFormSchema): Promise<AxiosResponse<LoginResponse>> {
         return await axiosInstance.post<LoginResponse>('/login', credentials);
     };
 
-    static async tokenLogin (): Promise<AxiosResponse<UserResponse>> {
+    static async tokenLogin(): Promise<AxiosResponse<UserResponse>> {
         return await axiosInstance.get<UserResponse>('/authenticated-user');
-    }
+    };
+
+    static async logout(): Promise<void> {
+        await axiosInstance.post<void>('/logout');
+        this.deleteToken();
+    };
 }

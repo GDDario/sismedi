@@ -1,0 +1,19 @@
+meta {
+  name: Authenticated user
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{api_url}}/authenticated-user
+  body: none
+  auth: bearer
+}
+
+headers {
+  User-Agent: insomnia/9.3.3
+}
+
+auth:bearer {
+  token: {{token}}
+}

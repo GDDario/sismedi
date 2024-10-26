@@ -1,0 +1,28 @@
+meta {
+  name: List
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{api_url}}/patient
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~name1: name
+  ~value1: Ramiro
+  ~name2: cns
+  ~value2: 7093887818289
+  ~name3: uuid
+  ~value3: 8d06259f
+}
+
+headers {
+  User-Agent: insomnia/9.3.3
+}
+
+auth:bearer {
+  token: {{token}}
+}
