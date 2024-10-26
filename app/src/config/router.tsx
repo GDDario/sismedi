@@ -37,7 +37,6 @@ const router = createBrowserRouter([
                 element: <PatientsPage/>
             },
             {
-                index: true,
                 path: "/doctors",
                 element: <DoctorsPage/>
             }

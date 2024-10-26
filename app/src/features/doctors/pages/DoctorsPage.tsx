@@ -1,12 +1,17 @@
-import DoctorsTable from "../components/DoctorsTable/DoctorsTable.tsx";
-import DoctorsTableFilter from "../components/DoctorsTable/DoctorsTableFilter.tsx";
+import {setTitle} from "../../../store/pageSlice.ts";
+import {useEffect} from "react";
+import {useDispatch} from "react-redux";
 
-const DoctorsPage = () => {
+type DoctorsPageProps = {};
+const DoctorsPage = ({}: DoctorsPageProps) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setTitle('Gerenciar médicos'));
+    }, []);
+
     return (
-        <>
-            <DoctorsTableFilter />
-            <DoctorsTable />
-        </>
+        <div>Doctors page</div>
     );
 };
 

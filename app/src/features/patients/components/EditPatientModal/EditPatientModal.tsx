@@ -34,8 +34,9 @@ const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
     }
 
     return (
-        <BaseModal title="Editar/visualizar paciente" visible={visible} loading={loading} onClose={onClose}>
-            <EditPatientForm />
+        <BaseModal title="Editar/visualizar paciente" visible={visible} loading={loading} onClose={onClose}
+                   className="h-[70%]">
+            <EditPatientForm uuid={uuid} onClose={onClose}/>
         </BaseModal>
     );
 }

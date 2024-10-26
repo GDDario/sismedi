@@ -35,18 +35,18 @@ services:
     networks:
       - sismedi-network
 
-  node:
-    build:
-      context: .
-      dockerfile: .docker/node/Dockerfile
-    container_name: sismedi-node
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./app:/app
-      - /app/node_modules # Esta linha garante que o node_modules do contêiner não seja sobrescrito
-    networks:
-      - sismedi-network
+#  node:
+#    build:
+#      context: .
+#      dockerfile: .docker/node/Dockerfile
+#    container_name: sismedi-node
+#    ports:
+#      - "5173:5173"
+#    volumes:
+#      - ./app:/app
+#      - /app/node_modules # Esta linha garante que o node_modules do contêiner não seja sobrescrito
+#    networks:
+#      - sismedi-network
 
 networks:
   sismedi-network:
