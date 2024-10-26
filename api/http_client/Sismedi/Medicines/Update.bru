@@ -1,0 +1,29 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api_url}}/medicine/0b9c8b1a-47bf-4470-8b9c-6ed9d8400fd6
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Dipirona",
+    "dosage": "10 ml",
+    "concentration": 13.30,
+    "quantity": 2,
+    "expiration_date": "2028-04-08",
+    "manufacturer": "Genérico",
+    "batch_number": "8210XD",
+    "price": 10.0,
+    "category_uuid": "773de7cc-db2e-300b-85a2-5a49fbc7f052"
+  }
+}

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DTO\CreateMedicineDTO;
+use App\DTO\UpdateMedicineDTO;
 use App\Http\Requests\CreateMedicineRequest;
+use App\Http\Requests\UpdateMedicineRequest;
 use App\Services\MedicineService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,9 +37,24 @@ class MedicineController extends Controller
         return $this->service->getByUuid($request->route('uuid'));
     }
 
-    public function update(Request $request): Response
+    public function update(UpdateMedicineRequest $request): Response
     {
-        return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
+        return $this->service->update(
+            new UpdateMedicineDTO(
+                uuid: $request->route('uuid'),
+                name: $request->get('name'),
+                quantity: $request->get('quantity'),
+                expirationDate: $request->get('expiration_date'),
+                manufacturer: $request->get('manufacturer'),
+                batchNumber: $request->get('batch_number'),
+                price: $request->get('price'),
+                categoryUuid: $request->get('category_uuid'),
+                dosage: $request->get('dosage'),
+                concentration: $request->get('concentration'),
+                prescription: $request->get('prescription'),
+                description: $request->get('description')
+            )
+        );
     }
 
     public function create(CreateMedicineRequest $request): Response
