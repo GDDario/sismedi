@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from "react";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 // @ts-ignore
 import {doctor} from "../../../../../.jest/mocks/doctorsMock.ts";
-import EditButton from "./EditButton.tsx";
+import EditButton from "../../../../shared-components/Table/EditButton.tsx";
 import EditDoctorModal from "./EditDoctorModal.tsx";
 import AppointsButton from "./AppointsButton.tsx";
 import {format, isValid} from "date-fns";

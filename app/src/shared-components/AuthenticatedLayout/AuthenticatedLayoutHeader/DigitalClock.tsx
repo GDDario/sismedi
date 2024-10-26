@@ -6,8 +6,10 @@ const DigitalClock = () => {
     const [hours, setHours] = useState<string | undefined>(undefined);
 
     useEffect(() => {
+        runClock();
+
         setInterval(() => {
-            runClock()
+            runClock();
         }, 1000);
     }, []);
 

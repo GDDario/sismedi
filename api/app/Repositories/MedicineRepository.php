@@ -21,8 +21,8 @@ class MedicineRepository
     {
         $query = Medicine::query()
             ->join('medicine_categories', 'medicines.category_id', '=', 'medicine_categories.id')
-            ->select('medicines.uuid', 'medicines.name', 'medicines.quantity', 'medicines.expiration_date',
-                'medicines.manufacturer', 'medicines.batch_number', 'medicine_categories.name as category');
+            ->select('medicines.uuid', 'medicines.name', 'medicine_categories.name as category',
+                'medicines.concentration', 'medicines.quantity', 'medicines.price', 'medicines.expiration_date');
 
         $query = $this->filterQueryByFields($query, $parameters);
 
@@ -106,7 +106,8 @@ class MedicineRepository
     /**
      * @throws NotFoundException
      */
-    public function destroy(string $uuid): bool {
+    public function destroy(string $uuid): bool
+    {
         if (!$medicine = Medicine::query()->where('uuid', $uuid)->first()) {
             throw new NotFoundException("Medicine with uuid $uuid not found.");
         }
