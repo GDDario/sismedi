@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useFieldArray, useForm} from "react-hook-form";
 import {useDispatch} from "react-redux";
 import Button from "../Button/Button.tsx";
@@ -19,6 +19,34 @@ const TableFilter = ({filters, fetchFunction}: TableFilterProps) => {
         control,
         name: "filters",
     });
+
+    useEffect(() => {
+        const handleWindowKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setMenuOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleWindowKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleWindowKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = () => {
+            if (menuOpen) {
+                setMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuOpen]);
 
     const handleMenuOpen = () => {
         if (fields.length >= filters.length) {
@@ -77,7 +105,7 @@ const TableFilter = ({filters, fetchFunction}: TableFilterProps) => {
                     {
                         menuOpen &&
                         <div
-                            className="absolute top-[36px] left-0 w-[164px] h-max bg-mainDarkBlue rounded-xl z-10 shadow-black shadow-sm text-white">
+                            className="menu absolute top-[36px] left-0 w-[164px] h-max bg-mainDarkBlue rounded-xl z-10 shadow-black shadow-sm text-white">
 
                             <ul>
                                 {Object.values(filters).map((filter: FilterType) => {

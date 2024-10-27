@@ -37,6 +37,25 @@ class MedicineController extends Controller
         return $this->service->getByUuid($request->route('uuid'));
     }
 
+    public function create(CreateMedicineRequest $request): Response
+    {
+        return $this->service->create(
+            new CreateMedicineDTO(
+                name: $request->get('name'),
+                quantity: $request->get('quantity'),
+                expirationDate: $request->get('expiration_date'),
+                manufacturer: $request->get('manufacturer'),
+                batchNumber: $request->get('batch_number'),
+                price: $request->get('price'),
+                categoryUuid: $request->get('category_uuid'),
+                dosage: $request->get('dosage'),
+                concentration: $request->get('concentration'),
+                prescription: $request->get('prescription'),
+                description: $request->get('description')
+            )
+        );
+    }
+
     public function update(UpdateMedicineRequest $request): Response
     {
         return $this->service->update(
@@ -53,21 +72,6 @@ class MedicineController extends Controller
                 concentration: $request->get('concentration'),
                 prescription: $request->get('prescription'),
                 description: $request->get('description')
-            )
-        );
-    }
-
-    public function create(CreateMedicineRequest $request): Response
-    {
-        return $this->service->create(
-            new CreateMedicineDTO(
-                name: $request->get('name'),
-                quantity: $request->get('quantity'),
-                expirationDate: $request->get('expiration_date'),
-                manufacturer: $request->get('manufacturer'),
-                batchNumber: $request->get('batch_number'),
-                price: $request->get('price'),
-                categoryUuid: $request->get('category_uuid')
             )
         );
     }

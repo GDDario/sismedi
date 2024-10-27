@@ -9,3 +9,26 @@ export type ListMedicinesResponse = {
     from: number;
     to: number;
 };
+
+export type CreateMedicineData = {
+    name: string,
+    quantity: number
+    expiration_date: string;
+    manufacturer: string;
+    batch_number: string;
+    price: number;
+    category_uuid: string;
+    dosage?: string;
+    concentration?: number;
+    prescription?: string;
+    description?: string;
+}
+
+export type MedicineCategorySearch = {
+    uuid: string;
+    name: string;
+};
+
+export type SearchMedicineCategoriesResponse = {
+    data: MedicineCategorySearch[];
+}

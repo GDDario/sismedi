@@ -13,9 +13,9 @@ class CreateMedicineDTO
         public float   $price,
         public string  $categoryUuid,
         public ?string $dosage = null,
-        public ?float  $concentration = null,
-        public ?float  $prescription = null,
-        public ?float  $description = null
+        public ?string $concentration = null,
+        public ?string $prescription = null,
+        public ?string $description = null
     )
     {
 
