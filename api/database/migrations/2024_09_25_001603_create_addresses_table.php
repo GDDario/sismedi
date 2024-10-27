@@ -19,11 +19,13 @@ return new class extends Migration {
             $table->string('neighborhood');
             $table->string('postal_code'); // Also known as CEP
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
 
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->nullable();
         });
     }
 

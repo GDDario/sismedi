@@ -26,4 +26,10 @@ class Cellphone extends Model
     {
         return $this->belongsTo(Patient::class, 'patient_id', 'id');
     }
+
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(Doctor::class, 'user_id', 'id');
+    }
 }

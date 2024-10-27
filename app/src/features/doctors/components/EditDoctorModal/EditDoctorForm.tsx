@@ -10,7 +10,7 @@ import {State} from "../../models/state.ts";
 import {CityService} from "../../services/CityService.ts";
 import {CitySearch} from "../../types.ts";
 import CopyableInput from "../../../../shared-components/CopyableInput.tsx";
-import {PatientService} from "../../services/PatientService.ts";
+import {DoctorService} from "../../services/DoctorService.ts";
 import {Cellphone} from "../../models/cellphone.ts";
 import {MdDelete} from "react-icons/md";
 import {v4 as uuidv4} from 'uuid';
@@ -18,17 +18,18 @@ import FormSectionHeading from "../../../../shared-components/FormSectionHeading
 import {calculateAgeFromBirthDate} from "../../../../util/dateUtil.ts";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../../store/messageSlice.ts";
+import { Doctor } from "../../models/doctor.ts";
 
 const schema = z.any({});
 
-type EditPatientSchema = z.infer<typeof schema>;
+type EditDoctorSchema = z.infer<typeof schema>;
 
-type EditPatientFormProps = {
+type EditDoctorFormProps = {
     uuid: string;
     onClose: () => void;
 };
 
-const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
+const EditDoctorForm = ({uuid, onClose}: EditDoctorFormProps) => {
     const {
         register,
         handleSubmit,
@@ -36,20 +37,20 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
         setValue,
         control,
         watch
-    } = useForm<EditPatientSchema>({resolver: zodResolver(schema)});
+    } = useForm<EditDoctorSchema>({resolver: zodResolver(schema)});
     const [stateUuid, setStateUuid] = useState<string | undefined>(undefined);
     const [state, setState] = useState<string>('');
     const [city, setCity] = useState<string>('');
     const [age, setAge] = useState<number | string>('...');
     const dispatch = useDispatch();
-    const birthDate = watch("patient.birth_date");
+    const birthDate = watch("doctor.birth_date");
     const {fields, append, remove} = useFieldArray({
         control,
         name: "cellphones"
     });
 
     useEffect(() => {
-        loadPatientData();
+        loadDoctorData();
     }, [uuid]);
 
     useEffect(() => {
@@ -58,32 +59,31 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
         }
     }, [birthDate]);
 
-    const loadPatientData = async (): Promise<void> => {
-        const data = await PatientService.getPatient(uuid);
-        const patientData = data.data;
-        console.log('Patient data', data);
+    const loadDoctorData = async (): Promise<void> => {
+        const data = await DoctorService.getDoctor(uuid);
+        const doctorData = data;
 
-        setValue('patient.name', patientData.patient.name);
-        setValue('patient.birth_date', patientData.patient.birth_date);
-        setValue('patient.cpf', patientData.patient.cpf);
-        setValue('patient.rg', patientData.patient.rg);
-        setValue('patient.cns', patientData.patient.cns);
-        setValue('patient.email', patientData.patient.email);
+        setValue('doctor.name', doctorData.doctor.name); 
+        setValue('doctor.birth_date', doctorData.doctor.birth_date);
+        setValue('doctor.cpf', doctorData.doctor.cpf);
+        setValue('doctor.rg', doctorData.doctor.rg);
+        setValue('doctor.crm', doctorData.doctor.crm);
+        setValue('doctor.email', doctorData.doctor.email);
 
-        setValue('address.postal_code', patientData.address.postal_code);
-        setCity(patientData.address.city_name);
-        setState(patientData.address.state_name);
-        setStateUuid(patientData.address.state_uuid);
-        setValue('address.state_uuid', patientData.address.state_uuid);
-        setValue('address.city_uuid', patientData.address.city_uuid);
-        setValue('address.street_address', patientData.address.street_address);
-        setValue('address.house_number', patientData.address.house_number);
-        setValue('address.neighborhood', patientData.address.neighborhood);
-        setValue('address.address_line_2', patientData.address.address_line_2);
+        setValue('address.postal_code', doctorData.address.postal_code);
+        setCity(doctorData.address.city_name);
+        setState(doctorData.address.state_name);
+        setStateUuid(doctorData.address.state_uuid);
+        setValue('address.state_uuid', doctorData.address.state_uuid);
+        setValue('address.city_uuid', doctorData.address.city_uuid);
+        setValue('address.street_address', doctorData.address.street_address);
+        setValue('address.house_number', doctorData.address.house_number);
+        setValue('address.neighborhood', doctorData.address.neighborhood);
+        setValue('address.address_line_2', doctorData.address.address_line_2);
 
-        patientData.cellphones.forEach((cellphone: Cellphone) => {
-            append(cellphone);
-        });
+        //doctorData.cellphones.forEach((cellphone: Cellphone) => {
+        //    append(cellphone);
+        //});
     }
 
     const handleStateSearch = async (text: string): Promise<any> => {
@@ -132,7 +132,7 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
         append(newNumber);
     }
 
-    const onSubmit = async (data: EditPatientSchema) => {
+    const onSubmit = async (data: EditDoctorSchema) => {
         const updatedData = {
             ...data,
             cellphones: data.cellphones.map((cellphone: any, index: number) => {
@@ -141,9 +141,9 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
          }
 
          console.log('Sending data', updatedData)
-        await PatientService.update(uuid, updatedData);
+        await DoctorService.update(uuid, updatedData);
 
-        dispatch(showMessage({message: "Paciente atualizado com sucesso!", type: "success"}))
+        dispatch(showMessage({message: "Médico atualizado com sucesso!", type: "success"}))
     }
 
     return (
@@ -159,12 +159,12 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField className="w-[347px]" name="patient.name" label="Nome do paciente" register={register}
+                    <InputField className="w-[347px]" name="doctor.name" label="Nome do médico" register={register}
                                 error={errors.name}/>
 
                     <div className="flex gap-2 items-end">
                         <InputField
-                            name="patient.birth_date"
+                            name="doctor.birth_date"
                             label="Data de nascimento"
                             register={register}
                             error={errors.birth_date}
@@ -176,14 +176,14 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField name="patient.cpf" label="CPF" register={register} error={errors.cpf}/>
-                    <InputField className="w-[136px]" name="patient.rg" label="RG" register={register}
+                    <InputField name="doctor.cpf" label="CPF" register={register} error={errors.cpf}/>
+                    <InputField className="w-[136px]" name="doctor.rg" label="RG" register={register}
                                 error={errors.rg}/>
-                    <InputField className="w-[150px]" name="patient.cns" label="CNS" register={register}
-                                error={errors.cns}/>
+                    <InputField className="w-[150px]" name="doctor.crm" label="CRM" register={register}
+                                error={errors.crm}/>
                 </div>
 
-                <InputField className="w-[347px]" name="patient.email" label="Email" register={register}
+                <InputField className="w-[347px]" name="doctor.email" label="Email" register={register}
                             error={errors.email}/>
             </section>
 
@@ -287,4 +287,4 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
     );
 };
 
-export default EditPatientForm;
+export default EditDoctorForm;

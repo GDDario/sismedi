@@ -9,9 +9,7 @@ import {StateService} from "../../services/StateService.ts";
 import {State} from "../../models/state.ts";
 import {CityService} from "../../services/CityService.ts";
 import {CitySearch} from "../../types.ts";
-import CopyableInput from "../../../../shared-components/CopyableInput.tsx";
-import {PatientService} from "../../services/PatientService.ts";
-import {Cellphone} from "../../models/cellphone.ts";
+import {DoctorService} from "../../services/DoctorService.ts";
 import {MdDelete} from "react-icons/md";
 import {v4 as uuidv4} from 'uuid';
 import FormSectionHeading from "../../../../shared-components/FormSectionHeading.tsx";
@@ -21,70 +19,42 @@ import {showMessage} from "../../../../store/messageSlice.ts";
 
 const schema = z.any({});
 
-type EditPatientSchema = z.infer<typeof schema>;
+type CreateDoctorSchema = z.infer<typeof schema>;
 
-type EditPatientFormProps = {
-    uuid: string;
+type CreateDoctorFormProps = {
     onClose: () => void;
 };
 
-const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
+const CreateDoctorForm = ({onClose}: CreateDoctorFormProps) => {
     const {
         register,
         handleSubmit,
         formState: {errors},
         setValue,
         control,
-        watch
-    } = useForm<EditPatientSchema>({resolver: zodResolver(schema)});
+        watch,
+        reset
+    } = useForm<CreateDoctorSchema>({resolver: zodResolver(schema)});
     const [stateUuid, setStateUuid] = useState<string | undefined>(undefined);
     const [state, setState] = useState<string>('');
     const [city, setCity] = useState<string>('');
     const [age, setAge] = useState<number | string>('...');
     const dispatch = useDispatch();
-    const birthDate = watch("patient.birth_date");
+    const birthDate = watch("doctor.birth_date");
     const {fields, append, remove} = useFieldArray({
         control,
         name: "cellphones"
     });
 
     useEffect(() => {
-        loadPatientData();
-    }, [uuid]);
+        handleAddCellphoneNumber();
+    }, []);
 
     useEffect(() => {
         if (birthDate) {
             setAge(calculateAgeFromBirthDate(new Date(birthDate)));
         }
     }, [birthDate]);
-
-    const loadPatientData = async (): Promise<void> => {
-        const data = await PatientService.getPatient(uuid);
-        const patientData = data.data;
-        console.log('Patient data', data);
-
-        setValue('patient.name', patientData.patient.name);
-        setValue('patient.birth_date', patientData.patient.birth_date);
-        setValue('patient.cpf', patientData.patient.cpf);
-        setValue('patient.rg', patientData.patient.rg);
-        setValue('patient.cns', patientData.patient.cns);
-        setValue('patient.email', patientData.patient.email);
-
-        setValue('address.postal_code', patientData.address.postal_code);
-        setCity(patientData.address.city_name);
-        setState(patientData.address.state_name);
-        setStateUuid(patientData.address.state_uuid);
-        setValue('address.state_uuid', patientData.address.state_uuid);
-        setValue('address.city_uuid', patientData.address.city_uuid);
-        setValue('address.street_address', patientData.address.street_address);
-        setValue('address.house_number', patientData.address.house_number);
-        setValue('address.neighborhood', patientData.address.neighborhood);
-        setValue('address.address_line_2', patientData.address.address_line_2);
-
-        patientData.cellphones.forEach((cellphone: Cellphone) => {
-            append(cellphone);
-        });
-    }
 
     const handleStateSearch = async (text: string): Promise<any> => {
         const states = await StateService.searchByName(text);
@@ -113,7 +83,6 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
     const handleSelectState = (state: any) => {
         setValue('address.state_uuid', state.uuid);
         setStateUuid(state.uuid);
-
     }
 
     const handleSelectCity = (city: any) => {
@@ -132,18 +101,19 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
         append(newNumber);
     }
 
-    const onSubmit = async (data: EditPatientSchema) => {
+    const onSubmit = async (data: CreateDoctorSchema) => {
         const updatedData = {
             ...data,
             cellphones: data.cellphones.map((cellphone: any, index: number) => {
                 return {...cellphone, is_primary: index === 0};
             })
-         }
+        }
 
-         console.log('Sending data', updatedData)
-        await PatientService.update(uuid, updatedData);
+        await DoctorService.create(updatedData);
 
-        dispatch(showMessage({message: "Paciente atualizado com sucesso!", type: "success"}))
+        dispatch(showMessage({message: "Médico atualizado com sucesso!", type: "success"}))
+        reset();
+        onClose();
     }
 
     return (
@@ -151,20 +121,13 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
             <section className="flex flex-col gap-2">
                 <FormSectionHeading text="Dados pessoais"/>
 
-                <div>
-                    <label>
-                        Identificador
-                    </label>
-                    <CopyableInput value={uuid} inputClassName="w-[309px]"/>
-                </div>
-
                 <div className="flex gap-4">
-                    <InputField className="w-[347px]" name="patient.name" label="Nome do paciente" register={register}
+                    <InputField className="w-[347px]" name="doctor.name" label="Nome do médico" register={register}
                                 error={errors.name}/>
 
                     <div className="flex gap-2 items-end">
                         <InputField
-                            name="patient.birth_date"
+                            name="doctor.birth_date"
                             label="Data de nascimento"
                             register={register}
                             error={errors.birth_date}
@@ -176,15 +139,31 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField name="patient.cpf" label="CPF" register={register} error={errors.cpf}/>
-                    <InputField className="w-[136px]" name="patient.rg" label="RG" register={register}
+                    <InputField name="doctor.cpf" label="CPF" register={register} error={errors.cpf}/>
+                    <InputField className="w-[136px]" name="doctor.rg" label="RG" register={register}
                                 error={errors.rg}/>
-                    <InputField className="w-[150px]" name="patient.cns" label="CNS" register={register}
-                                error={errors.cns}/>
+                    <InputField className="w-[150px]" name="doctor.crm" label="CRM" register={register}
+                                error={errors.crm}/>
                 </div>
 
-                <InputField className="w-[347px]" name="patient.email" label="Email" register={register}
+                <InputField className="w-[347px]" name="doctor.email" label="Email" register={register}
                             error={errors.email}/>
+
+                <div className="flex gap-4">
+                    <InputField
+                        name="doctor.password"
+                        type="password"
+                        label="Senha do médico" register={register}
+                        error={errors.password}
+                    />
+                    <InputField
+                        name="doctor.password_confirmation"
+                        type="password"
+                        label="Confirmaçáo da senha" register={register}
+                        error={errors.password_confirmation}
+                    />
+
+                </div>
             </section>
 
             <section className="flex flex-col gap-2">
@@ -276,15 +255,16 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
 
 
                 </div>
-                <Button className="mt-2 w-[180px]" text="Adicionar número +" type="button" onClick={() => handleAddCellphoneNumber()}/>
+                <Button className="mt-2 w-[180px]" text="Adicionar número +" type="button"
+                        onClick={() => handleAddCellphoneNumber()}/>
             </section>
 
             <section className="mt-2 flex gap-2">
-                <Button text="Salvar" type="submit"/>
+                <Button text="Cadastrar" type="submit"/>
                 <Button text="Cancelar" color="danger" type="button" onClick={onClose}/>
             </section>
         </form>
     );
 };
 
-export default EditPatientForm;
+export default CreateDoctorForm;
