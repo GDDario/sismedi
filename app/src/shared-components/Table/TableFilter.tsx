@@ -35,16 +35,23 @@ const TableFilter = ({filters, fetchFunction}: TableFilterProps) => {
     }, []);
 
     useEffect(() => {
-        const handleClickOutside = () => {
-            if (menuOpen) {
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as HTMLLIElement;
+
+            if (
+                menuOpen &&
+                !target.classList.contains('menu') &&
+                !target.classList.contains('filter-item')
+            ) {
+                console.log('Target classList', target.classList)
                 setMenuOpen(false);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mouseup', handleClickOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mouseup', handleClickOutside);
         };
     }, [menuOpen]);
 
@@ -120,7 +127,7 @@ const TableFilter = ({filters, fetchFunction}: TableFilterProps) => {
 
                                     return (
                                         <li
-                                            className="px-2 py-1 [&:not(:last-child)]:border-b-[1px] border-white hover:bg-white hover:bg-opacity-10 cursor-pointer"
+                                            className="filter-item px-2 py-1 [&:not(:last-child)]:border-b-[1px] border-white hover:bg-white hover:bg-opacity-10 cursor-pointer"
                                             key={filter.name}
                                             onClick={() => handleSelectFilter(filter)}
                                         >
