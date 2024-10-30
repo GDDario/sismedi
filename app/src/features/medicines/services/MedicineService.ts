@@ -11,4 +11,10 @@ export class MedicineService {
     static create = async (body: CreateMedicineData): Promise<void> => {
         await axiosInstance.post<void>('/medicine', body);
     }
+
+    static delete = async (uuid: string): Promise<void> => {
+        const url: string = `/medicine/${uuid}`;
+
+        await axiosInstance.delete<void>(url);
+    }
 }

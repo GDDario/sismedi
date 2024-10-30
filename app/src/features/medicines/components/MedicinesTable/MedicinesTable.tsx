@@ -9,6 +9,10 @@ import PatientsTablePagination from "../../../patients/components/PatientsTable/
 import EditPatientModal from "../../../patients/components/EditPatientModal/EditPatientModal.tsx";
 import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
 import MedicinesTablePagination from "./MedicinesTablePagination.tsx";
+import {PatientService} from "../../../patients/services/PatientService.ts";
+import {showMessage} from "../../../../store/messageSlice.ts";
+import {fetchPatients} from "../../../patients/store/patientsSlice.ts";
+import {MedicineService} from "../../services/MedicineService.ts";
 
 const columnHelper = createColumnHelper();
 
@@ -89,6 +93,15 @@ const MedicinesTable = () => {
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const deleteMedicine = async (): Promise<void> => {
+        await MedicineService.delete(deleteModal.uuid!);
+
+        dispatch(showMessage({message: 'Medicine deleted successfully!', type: 'success'}));
+        // @ts-ignore
+        dispatch(fetchMedicines({page: 1, per_page: 17}));
+        setDeleteModal({open: false, uuid: undefined});
+    }
+
     if (medicinesState.error) return <div>Error: {medicinesState.error}</div>;
 
     return (
@@ -138,8 +151,7 @@ const MedicinesTable = () => {
                 <ConfirmationMessage
                     title="Excluir medicamento"
                     loading={false}
-                    onConfirm={() => {
-                    }}
+                    onConfirm={deleteMedicine}
                     onCancel={() => setDeleteModal({uuid: undefined, open: false})}
                     visible={deleteModal.open}
                     onClose={() => setDeleteModal({uuid: undefined, open: false})}

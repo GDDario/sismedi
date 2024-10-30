@@ -29,15 +29,6 @@ const PatientsTable = () => {
         dispatch(fetchPatients({page: 1, per_page: 17}));
     }, []);
 
-    const deletePatient = async (): Promise<void> => {
-        await PatientService.delete(deleteModal.uuid!);
-
-        dispatch(showMessage({message: 'Patient deleted successfully!', type: 'success'}));
-        // @ts-ignore
-        dispatch(fetchPatients({page: 1, per_page: 17}));
-        setDeleteModal({open: false, uuid: undefined});
-    }
-
     const columns = useMemo(() => [
         columnHelper.accessor('uuid', {
             header: 'ID',
@@ -93,6 +84,15 @@ const PatientsTable = () => {
         data: patientsState.data.data,
         getCoreRowModel: getCoreRowModel(),
     });
+
+    const deletePatient = async (): Promise<void> => {
+        await PatientService.delete(deleteModal.uuid!);
+
+        dispatch(showMessage({message: 'Patient deleted successfully!', type: 'success'}));
+        // @ts-ignore
+        dispatch(fetchPatients({page: 1, per_page: 17}));
+        setDeleteModal({open: false, uuid: undefined});
+    }
 
     if (patientsState.error) return <div>Error: {patientsState.error}</div>;
 
