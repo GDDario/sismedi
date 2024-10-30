@@ -1,4 +1,4 @@
-import {CreateMedicineData, ListMedicinesResponse, SearchMedicineCategoriesResponse} from "../types.ts";
+import {CreateOrEditMedicineData, ListMedicinesResponse, SearchMedicineCategoriesResponse} from "../types.ts";
 import axiosInstance from "../../../config/axiosConfig.ts";
 
 export class MedicineCategoryService {

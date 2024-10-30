@@ -140,10 +140,10 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
             })
          }
 
-         console.log('Sending data', updatedData)
         await PatientService.update(uuid, updatedData);
 
-        dispatch(showMessage({message: "Paciente atualizado com sucesso!", type: "success"}))
+        dispatch(showMessage({message: "Paciente atualizado com sucesso!", type: "success"}));
+        onClose();
     }
 
     return (

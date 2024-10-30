@@ -8,7 +8,7 @@ export class PatientService {
         return response.data;
     }
 
-    static getPatient = async (uuid: string): Promise<GetPatientResponse> => {
+    static getByUuid = async (uuid: string): Promise<GetPatientResponse> => {
         const url = `/patient/${uuid}`;
         const response = await axiosInstance.get<GetPatientResponse>(url);
 

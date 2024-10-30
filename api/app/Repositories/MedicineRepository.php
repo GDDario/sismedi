@@ -39,7 +39,7 @@ class MedicineRepository
         }
 
         $medicine = Medicine::query()->where('uuid', $uuid)
-            ->with('category')->get();
+            ->with('category')->first();
 
         return $medicine->toArray();
     }

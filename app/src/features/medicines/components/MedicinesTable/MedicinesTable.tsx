@@ -5,14 +5,11 @@ import {OpenModal} from "../../../doctors/types.ts";
 import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchMedicines} from "../../store/medicinesSlice.ts";
-import PatientsTablePagination from "../../../patients/components/PatientsTable/PatientsTablePagination.tsx";
-import EditPatientModal from "../../../patients/components/EditPatientModal/EditPatientModal.tsx";
 import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
 import MedicinesTablePagination from "./MedicinesTablePagination.tsx";
-import {PatientService} from "../../../patients/services/PatientService.ts";
 import {showMessage} from "../../../../store/messageSlice.ts";
-import {fetchPatients} from "../../../patients/store/patientsSlice.ts";
 import {MedicineService} from "../../services/MedicineService.ts";
+import EditMedicineModal from "../EditMedicineModal/EditMedicineModal.tsx";
 
 const columnHelper = createColumnHelper();
 
@@ -43,7 +40,7 @@ const MedicinesTable = () => {
         columnHelper.accessor('concentration', {
             header: 'Concentração',
             cell: info => {
-                const value = info.getValue() as string | undefined;
+                const value = `${info.getValue()}`;
 
                 return !value ? value : `${value.replace('.', ',')}%`;
             },
@@ -55,8 +52,7 @@ const MedicinesTable = () => {
         columnHelper.accessor('price', {
             header: 'Price',
             cell: info => {
-                let value = `${info.getValue()}`;
-                value = `${value}`;
+                const value = `${info.getValue()}`;
 
                 return `R$ ${value.replace('.', ',')}`;
             },
@@ -141,7 +137,7 @@ const MedicinesTable = () => {
                 <MedicinesTablePagination/>
 
                 {editModal.open && (
-                    <EditPatientModal
+                    <EditMedicineModal
                         uuid={editModal.uuid!}
                         visible={editModal.open}
                         onClose={() => setEditModal({uuid: undefined, open: false})}

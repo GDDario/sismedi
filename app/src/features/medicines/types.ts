@@ -10,7 +10,7 @@ export type ListMedicinesResponse = {
     to: number;
 };
 
-export type CreateMedicineData = {
+export type CreateOrEditMedicineData = {
     name: string,
     quantity: number
     expiration_date: string;
@@ -32,3 +32,31 @@ export type MedicineCategorySearch = {
 export type SearchMedicineCategoriesResponse = {
     data: MedicineCategorySearch[];
 }
+
+export type MedicineResponse = {
+    uuid: string;
+    name: string;
+    quantity: number
+    expiration_date: string;
+    manufacturer: string;
+    batch_number: string;
+    price: number;
+    category_uuid: string;
+    dosage?: string;
+    concentration?: number;
+    prescription?: string;
+    description?: string;
+    created_at: string;
+    updated_at: string;
+    category: {
+        uuid: string;
+        name: string;
+        description: string;
+        created_at: string;
+        updated_at: string;
+    }
+}
+
+export type GetMedicineResponse = {
+    data: MedicineResponse
+};

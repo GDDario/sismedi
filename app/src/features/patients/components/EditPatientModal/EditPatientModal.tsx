@@ -22,11 +22,11 @@ const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
     }, [uuid]);
 
     const getPatientData = async (uuid: string): Promise<void> => {
-        await PatientService.getPatient(uuid).then((response: GetPatientResponse) => {
+        await PatientService.getByUuid(uuid).then((response: GetPatientResponse) => {
             setPatientData(response.data);
             setLoading(false);
         }).catch(err => {
-            dispatch(showMessage({message: 'Error on getting the patient data!', type: 'error'}));
+            dispatch(showMessage({message: 'Erro ao tentar carregar os dados do paciente!', type: 'error'}));
             console.error(err);
             onClose();
         });
