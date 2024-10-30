@@ -26,9 +26,10 @@ type EditPatientSchema = z.infer<typeof schema>;
 type EditPatientFormProps = {
     uuid: string;
     onClose: () => void;
+    patientData: any;
 };
 
-const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
+const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => {
     const {
         register,
         handleSubmit,
@@ -50,7 +51,7 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
 
     useEffect(() => {
         loadPatientData();
-    }, [uuid]);
+    }, [patientData]);
 
     useEffect(() => {
         if (birthDate) {
@@ -59,8 +60,8 @@ const EditPatientForm = ({uuid, onClose}: EditPatientFormProps) => {
     }, [birthDate]);
 
     const loadPatientData = async (): Promise<void> => {
-        const data = await PatientService.getPatient(uuid);
-        const patientData = data.data;
+        // const data = await PatientService.getPatient(uuid);
+        // const patientData = data.data;
 
         setValue('patient.name', patientData.patient.name);
         setValue('patient.birth_date', patientData.patient.birth_date);
