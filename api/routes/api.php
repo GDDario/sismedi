@@ -31,11 +31,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{uuid}', [PatientController::class, 'delete']);
     });
 
-    Route::prefix('state')->group(function() {
+    Route::prefix('state')->group(function () {
         Route::get('search', [StateController::class, 'search']);
     });
 
-    Route::prefix('city')->group(function() {
+    Route::prefix('city')->group(function () {
         Route::get('search', [CityController::class, 'search']);
     });
 
@@ -55,5 +55,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('medicine-category')->group(function () {
         Route::get('search', [MedicineCategoryController::class, 'search']);
+    });
+
+    Route::prefix('assistants')->group(function () {
+//        Route::get('', [MedicineController::class, 'index']);
+//        Route::get('/{uuid}', [MedicineController::class, 'show']);
+//        Route::put('/{uuid}', [MedicineController::class, 'update']);
+//        Route::post('', [MedicineController::class, 'create']);
+//        Route::delete('/{uuid}', [MedicineController::class, 'delete']);
     });
 });
