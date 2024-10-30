@@ -17,6 +17,7 @@ class AssistantSeeder extends Seeder
             'name' => 'Jhin Doe',
             'cpf' => '64509859090'
         ])->create([
+            'uuid' => 'e0e42710-af59-37c4-bdfd-031d6d4bcaa0',
             'level' => 1
         ]);
 

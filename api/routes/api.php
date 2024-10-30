@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StateController;
-use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticationController::class, 'login']);
@@ -57,11 +58,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('search', [MedicineCategoryController::class, 'search']);
     });
 
-    Route::prefix('assistants')->group(function () {
-//        Route::get('', [MedicineController::class, 'index']);
-//        Route::get('/{uuid}', [MedicineController::class, 'show']);
-//        Route::put('/{uuid}', [MedicineController::class, 'update']);
-//        Route::post('', [MedicineController::class, 'create']);
-//        Route::delete('/{uuid}', [MedicineController::class, 'delete']);
+    Route::prefix('assistant')->group(function () {
+        Route::get('', [AssistantController::class, 'index']);
+        Route::get('/{uuid}', [AssistantController::class, 'show']);
+        Route::put('/{uuid}', [AssistantController::class, 'update']);
+        Route::post('', [AssistantController::class, 'create']);
+        Route::delete('/{uuid}', [AssistantController::class, 'delete']);
     });
 });
