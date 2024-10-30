@@ -1,18 +1,32 @@
-type InputFieldProps = {
+type TextFieldProps = {
     label: string;
     name: string;
     register: any;
+    rows?: number;
+    cols?: number;
     className?: string;
     error?: any;
     placeholder?: string;
     type?: 'text' | 'password' | 'email' | 'date' | 'number';
-    step?: string;
     variant?: 'default';
     fullWidth?: boolean;
     disabled?: boolean;
 };
 
-const InputField = ({label, type = 'text', step, placeholder, name, error, register, variant, fullWidth, disabled = false, className}: InputFieldProps) => {
+const TextAreaField = ({
+                           label,
+                           type = 'text',
+                           placeholder,
+                           name,
+                           error,
+                           rows,
+                           cols,
+                           className,
+                           register,
+                           variant,
+                           fullWidth,
+                           disabled = false,
+                       }: TextFieldProps) => {
     const id: string = label + "_" + name;
 
     const styleClasses = () => {
@@ -37,7 +51,7 @@ const InputField = ({label, type = 'text', step, placeholder, name, error, regis
     return (
         <div>
             <label htmlFor={id}>{label}</label>
-            <input
+            <textarea
                 id={id}
                 placeholder={placeholder}
                 aria-placeholder={placeholder}
@@ -45,11 +59,13 @@ const InputField = ({label, type = 'text', step, placeholder, name, error, regis
                 {...register(name)}
                 className={styleClasses()}
                 disabled={disabled}
-                step={step}
-            />
+                rows={rows}
+                cols={cols}
+            >
+        </textarea>
             {error && <p className="mt-0.5 text-[#ff4e4e]">{error?.message}</p>}
         </div>
     );
 };
 
-export default InputField;
+export default TextAreaField;

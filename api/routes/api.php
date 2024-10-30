@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StateController;
@@ -50,5 +51,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{uuid}', [MedicineController::class, 'update']);
         Route::post('', [MedicineController::class, 'create']);
         Route::delete('/{uuid}', [MedicineController::class, 'delete']);
+    });
+
+    Route::prefix('medicine-category')->group(function () {
+        Route::get('search', [MedicineCategoryController::class, 'search']);
     });
 });

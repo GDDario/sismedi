@@ -1,11 +1,13 @@
 import DoctorsTable from "../components/DoctorsTable/DoctorsTable.tsx";
-import DoctorsTableFilter from "../components/DoctorsTable/DoctorsTableFilter.tsx";
+import TableFilter from "../../../shared-components/Table/TableFilter.tsx";
+import {DoctorsFilters} from "../constants.ts";
+import {fetchDoctors} from "../store/doctorsSlice.ts";
 
 const DoctorsPage = () => {
     return (
         <>
-            <DoctorsTableFilter />
-            <DoctorsTable />
+            <TableFilter filters={DoctorsFilters} fetchFunction={fetchDoctors}/>
+            <DoctorsTable/>
         </>
     );
 };

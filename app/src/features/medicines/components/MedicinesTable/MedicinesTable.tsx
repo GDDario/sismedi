@@ -1,32 +1,27 @@
 import {useEffect, useMemo, useState} from "react";
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
-// @ts-ignore
-import {patientsMockData} from "../../../../../.jest/mocks/patientsMock.ts";
-import EditPatientModal from "../EditPatientModal/EditPatientModal.tsx";
-import AppointsButton from "./AppointsButton.tsx";
-import {format, isValid} from "date-fns";
-import {OpenModal} from "../../types.ts";
-import {useDispatch, useSelector} from "react-redux";
-import PatientsTablePagination from "./PatientsTablePagination.tsx";
-import {fetchPatients} from "../../store/patientsSlice.ts";
-import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
-import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
-import {PatientService} from "../../services/PatientService.ts";
-import {showMessage} from "../../../../store/messageSlice.ts";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
+import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+import {OpenModal} from "../../../doctors/types.ts";
+import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchMedicines} from "../../store/medicinesSlice.ts";
+import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
+import MedicinesTablePagination from "./MedicinesTablePagination.tsx";
+import {showMessage} from "../../../../store/messageSlice.ts";
+import {MedicineService} from "../../services/MedicineService.ts";
+import EditMedicineModal from "../EditMedicineModal/EditMedicineModal.tsx";
 
 const columnHelper = createColumnHelper();
 
-const PatientsTable = () => {
+const MedicinesTable = () => {
     const [editModal, setEditModal] = useState<OpenModal>({open: false, uuid: undefined});
-    const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({open: false, uuid: undefined});
     const [deleteModal, setDeleteModal] = useState<OpenModal>({open: false, uuid: undefined});
-    const patientsState = useSelector((state: any) => state.patients);
+    const medicinesState = useSelector((state: any) => state.medicines);
     const dispatch = useDispatch();
 
     useEffect(() => {
         // @ts-ignore
-        dispatch(fetchPatients({page: 1, per_page: 17}));
+        dispatch(fetchMedicines({page: 1, per_page: 17}));
     }, []);
 
     const columns = useMemo(() => [
@@ -38,39 +33,48 @@ const PatientsTable = () => {
             header: 'Nome',
             cell: info => info.getValue(),
         }),
-        columnHelper.accessor('cpf', {
-            header: 'CPF',
+        columnHelper.accessor('category', {
+            header: 'Categoria',
             cell: info => info.getValue(),
         }),
-        columnHelper.accessor('cns', {
-            header: 'CNS',
-            cell: info => info.getValue(),
-        }),
-        columnHelper.accessor('email', {
-            header: 'Email',
-            cell: info => info.getValue(),
-        }),
-        columnHelper.accessor('created_at', {
-            header: 'Data de cadastro',
+        columnHelper.accessor('concentration', {
+            header: 'Concentração',
             cell: info => {
-                const value = info.getValue();
-                if (!isValid(value)) {
-                    return value;
-                }
+                const value = `${info.getValue()}`;
 
-                return format(value, 'd/MM/y H:m');
+                return !value ? value : `${value.replace('.', ',')}%`;
+            },
+        }),
+        columnHelper.accessor('quantity', {
+            header: 'Quantidade',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor('price', {
+            header: 'Price',
+            cell: info => {
+                const value = `${info.getValue()}`;
+
+                return `R$ ${value.replace('.', ',')}`;
+            },
+
+        }),
+        columnHelper.accessor('expiration_date', {
+            header: 'Data de expiração',
+            cell: info => {
+                const value = `${info.getValue()}`;
+
+                return `${value.substring(8, 10)}/${value.substring(5, 7)}/${value.substring(0, 4)}`;
             },
         }),
         columnHelper.accessor('action', {
             header: 'Ações',
             cell: info => {
-                // @ts-ignore
-                const uuid = info.row.original.uuid; // Pega o UUID da linha atual
+                const original = info.row.original as any;
+                const uuid = original.uuid; // Pega o UUID da linha atual
 
                 return (
                     <>
                         <EditButton onClick={() => setEditModal({open: true, uuid})}/>
-                        <AppointsButton onClick={() => setOpenAppointsModal({open: true, uuid})}/>
                         <DeleteButton onClick={() => setDeleteModal({open: true, uuid})}/>
                     </>
                 );
@@ -81,26 +85,26 @@ const PatientsTable = () => {
     const table = useReactTable({
         // @ts-ignore
         columns,
-        data: patientsState.data.data,
+        data: medicinesState.data.data,
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const deletePatient = async (): Promise<void> => {
-        await PatientService.delete(deleteModal.uuid!);
+    const deleteMedicine = async (): Promise<void> => {
+        await MedicineService.delete(deleteModal.uuid!);
 
-        dispatch(showMessage({message: 'Patient deleted successfully!', type: 'success'}));
+        dispatch(showMessage({message: 'Medicine deleted successfully!', type: 'success'}));
         // @ts-ignore
-        dispatch(fetchPatients({page: 1, per_page: 17}));
+        dispatch(fetchMedicines({page: 1, per_page: 17}));
         setDeleteModal({open: false, uuid: undefined});
     }
 
-    if (patientsState.error) return <div>Error: {patientsState.error}</div>;
+    if (medicinesState.error) return <div>Error: {medicinesState.error}</div>;
 
     return (
         <section>
             <div className="w-full">
                 <div className="relative h-[631px]">
-                    {patientsState.loading && (<div
+                    {medicinesState.loading && (<div
                         className="absolute top-0 left-0 bg-black bg-opacity-30 w-full h-full flex items-center justify-center">
                         <span className="font-bold text-white">Carregando...</span>
                     </div>)}
@@ -130,31 +134,29 @@ const PatientsTable = () => {
                     </table>
                 </div>
 
-                <PatientsTablePagination/>
+                <MedicinesTablePagination/>
 
                 {editModal.open && (
-                    <EditPatientModal
+                    <EditMedicineModal
                         uuid={editModal.uuid!}
                         visible={editModal.open}
                         onClose={() => setEditModal({uuid: undefined, open: false})}
                     />
                 )}
-                {/*<p>Open appoints modal to patient {openAppointsModal.uuid}</p>*/}
 
                 <ConfirmationMessage
-                    title="Excluir paciente"
+                    title="Excluir medicamento"
                     loading={false}
-                    onConfirm={() => deletePatient()}
+                    onConfirm={deleteMedicine}
                     onCancel={() => setDeleteModal({uuid: undefined, open: false})}
                     visible={deleteModal.open}
                     onClose={() => setDeleteModal({uuid: undefined, open: false})}
                 >
-                    Tem <b>certeza</b> que deseja excluir esse paciente? Essa ação <b>não</b> poderá ser desfeita.
+                    Tem <b>certeza</b> que deseja excluir esse medicamento do sistema? Essa ação <b>não</b> poderá ser desfeita.
                 </ConfirmationMessage>
             </div>
         </section>
-    )
-        ;
-}
+    );
+};
 
-export default PatientsTable;
+export default MedicinesTable;

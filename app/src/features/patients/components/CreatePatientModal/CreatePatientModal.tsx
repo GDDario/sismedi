@@ -2,12 +2,12 @@ import BaseModal from "../../../../shared-components/Modal/BaseModal.tsx";
 import {useState} from "react";
 import CreatePatientForm from "./CreatePatientForm.tsx";
 
-type EditPatientModalProps = {
+type CreatePatientModalProps = {
     visible: boolean;
     onClose: () => void;
 }
 
-const CreatePatientModal = ({visible, onClose}: EditPatientModalProps) => {
+const CreatePatientModal = ({visible, onClose}: CreatePatientModalProps) => {
     const [loading, setLoading] = useState(false);
 
     return (

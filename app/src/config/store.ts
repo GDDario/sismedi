@@ -4,6 +4,7 @@ import pageReducer from '../store/pageSlice';
 import messageReducer from '../store/messageSlice';
 import patientsReducer from '../features/patients/store/patientsSlice';
 import doctorsReducer from '../features/doctors/store/doctorsSlice';
+import medicinesReducer from '../features/medicines/store/medicinesSlice';
 
 export const store = configureStore(
     {
@@ -12,7 +13,8 @@ export const store = configureStore(
             page: pageReducer,
             message: messageReducer,
             patients: patientsReducer,
-            doctors: doctorsReducer
+            doctors: doctorsReducer,
+            medicines: medicinesReducer
         }
     }
 );

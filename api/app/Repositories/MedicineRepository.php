@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\CreateMedicineDTO;
+use App\DTO\UpdateMedicineDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Medicine;
 use App\Models\MedicineCategory;
@@ -20,14 +21,28 @@ class MedicineRepository
     {
         $query = Medicine::query()
             ->join('medicine_categories', 'medicines.category_id', '=', 'medicine_categories.id')
-            ->select('medicines.uuid', 'medicines.name', 'medicines.quantity', 'medicines.expiration_date',
-                'medicines.manufacturer', 'medicines.batch_number', 'medicine_categories.name as category');
+            ->select('medicines.uuid', 'medicines.name', 'medicine_categories.name as category',
+                'medicines.concentration', 'medicines.quantity', 'medicines.price', 'medicines.expiration_date');
 
         $query = $this->filterQueryByFields($query, $parameters);
 
         return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
     }
 
+    /**
+     * @throws NotFoundException
+     */
+    public function findByUuid(string $uuid)
+    {
+        if (!Medicine::query()->where('uuid', $uuid)->exists()) {
+            throw new NotFoundException("Patient with uuid $uuid not found.");
+        }
+
+        $medicine = Medicine::query()->where('uuid', $uuid)
+            ->with('category')->first();
+
+        return $medicine->toArray();
+    }
 
     /**
      * @throws NotFoundException
@@ -35,7 +50,7 @@ class MedicineRepository
     public function insert(CreateMedicineDTO $dto): ?Medicine
     {
         if (!$category = MedicineCategory::query()->where('uuid', $dto->categoryUuid)->first()) {
-            throw new NotFoundException("Medicine with uuid {$dto->categoryUuid} not found.");
+            throw new NotFoundException("Medicine category with uuid {$dto->categoryUuid} not found.");
         }
 
         $medicine = Medicine::query()->create([
@@ -60,16 +75,44 @@ class MedicineRepository
     /**
      * @throws NotFoundException
      */
-    public function findByUuid(string $uuid)
+    public function update(UpdateMedicineDTO $dto): ?Medicine
     {
-        if (!Medicine::query()->where('uuid', $uuid)->exists()) {
-            throw new NotFoundException("Patient with uuid $uuid not found.");
+        if (!$category = MedicineCategory::query()->where('uuid', $dto->categoryUuid)->first()) {
+            throw new NotFoundException("Medicine with uuid {$dto->categoryUuid} not found.");
         }
 
-        $medicine = Medicine::query()->where('uuid', $uuid)
-            ->with('category')->get();
+        if (!$medicine = Medicine::query()->where('uuid', $dto->uuid)->first()) {
+            throw new NotFoundException("Medicine with uuid {$dto->uuid} not found.");
+        }
 
-        return $medicine->toArray();
+        $medicine->update([
+            'name' => $dto->name,
+            'quantity' => $dto->quantity,
+            'dosage' => $dto->dosage,
+            'concentration' => $dto->concentration,
+            'expiration_date' => $dto->expirationDate,
+            'manufacturer' => $dto->manufacturer,
+            'batch_number' => $dto->batchNumber,
+            'price' => $dto->price,
+            'category_id' => $category->id,
+            'prescription' => $dto->prescription,
+            'description' => $dto->description
+        ]);
+        $medicine->refresh();
+
+        return Medicine::query()->where('id', $medicine->id)->with('category')->first();
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function destroy(string $uuid): bool
+    {
+        if (!$medicine = Medicine::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("Medicine with uuid $uuid not found.");
+        }
+
+        return $medicine->delete();
     }
 
     private function filterQueryByFields(Builder $query, array $parameters): Builder

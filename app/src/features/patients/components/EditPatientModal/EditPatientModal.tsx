@@ -14,20 +14,19 @@ type EditPatientModalProps = {
 
 const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
     const [loading, setLoading] = useState(true);
-    const [patientData, setPatientData] = useState<any>(undefined);
     const dispatch = useDispatch();
+    const [patientData, setPatientData] = useState<any>(undefined);
 
     useEffect(() => {
         getPatientData(uuid);
     }, [uuid]);
 
     const getPatientData = async (uuid: string): Promise<void> => {
-        await PatientService.getPatient(uuid).then((response: GetPatientResponse) => {
-            console.log('Response', response)
+        await PatientService.getByUuid(uuid).then((response: GetPatientResponse) => {
             setPatientData(response.data);
             setLoading(false);
         }).catch(err => {
-            dispatch(showMessage({message: 'Error on getting the patient data!', type: 'error'}));
+            dispatch(showMessage({message: 'Erro ao tentar carregar os dados do paciente!', type: 'error'}));
             console.error(err);
             onClose();
         });
@@ -36,7 +35,7 @@ const EditPatientModal = ({uuid, visible, onClose}: EditPatientModalProps) => {
     return (
         <BaseModal title="Editar/visualizar paciente" visible={visible} loading={loading} onClose={onClose}
                    className="h-[70%]">
-            <EditPatientForm uuid={uuid} onClose={onClose}/>
+            <EditPatientForm uuid={uuid} onClose={onClose} patientData={patientData}/>
         </BaseModal>
     );
 }

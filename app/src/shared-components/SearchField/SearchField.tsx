@@ -14,6 +14,7 @@ type InputFieldProps = {
     variant?: 'default';
     fullWidth?: boolean;
     disabled?: boolean;
+    className?: string;
 };
 
 const SearchField = ({
@@ -28,7 +29,8 @@ const SearchField = ({
                          disabled = false,
                          onSearch,
                          onSelect,
-                         value: valueInput
+                         value: valueInput,
+                        className
                      }: InputFieldProps) => {
     const id: string = label + "_" + name;
     const [debounceTimeout, setDebounceTimeout] = useState<number | null>(null);
@@ -61,7 +63,7 @@ const SearchField = ({
             classes += " w-full";
         }
 
-        return classes;
+        return classes + " " + className;
     };
 
     const handleChange = async (event: ChangeEvent): Promise<void> => {

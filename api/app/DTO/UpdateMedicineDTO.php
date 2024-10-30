@@ -2,9 +2,10 @@
 
 namespace App\DTO;
 
-class CreateMedicineDTO
+class UpdateMedicineDTO
 {
     public function __construct(
+        public string  $uuid,
         public string  $name,
         public int     $quantity,
         public string  $expirationDate,

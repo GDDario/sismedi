@@ -27,6 +27,7 @@ class Medicine extends Model
 
     protected $casts = [
         'price' => 'double',
+        'concentration' => 'double',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

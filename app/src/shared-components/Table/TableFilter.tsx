@@ -1,14 +1,17 @@
-import Button from "../../../../shared-components/Button/Button.tsx";
-import {useState} from "react";
-import {DoctorsFilters} from "../../constants.ts";
-import {FilterType} from "../../../../types.ts";
+import {useEffect, useState} from "react";
 import {useFieldArray, useForm} from "react-hook-form";
-import FilterField from "../../../../shared-components/FilterField.tsx";
-import {showMessage} from "../../../../store/messageSlice.ts";
 import {useDispatch} from "react-redux";
-import {fetchDoctors} from "../../store/doctorsSlice.ts";
+import Button from "../Button/Button.tsx";
+import {FilterType} from "../../types.ts";
+import {showMessage} from "../../store/messageSlice.ts";
+import FilterField from "./FilterField.tsx";
 
-const DoctorsTableFilter = () => {
+type TableFilterProps = {
+    filters: FilterType[],
+    fetchFunction: (page: number, per_page: number, queryParams: any[]) => any;
+}
+
+const TableFilter = ({filters, fetchFunction}: TableFilterProps) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const dispatch = useDispatch();
     const {control, register, handleSubmit} = useForm();
@@ -17,8 +20,43 @@ const DoctorsTableFilter = () => {
         name: "filters",
     });
 
+    useEffect(() => {
+        const handleWindowKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setMenuOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleWindowKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleWindowKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as HTMLLIElement;
+
+            if (
+                menuOpen &&
+                !target.classList.contains('menu') &&
+                !target.classList.contains('filter-item')
+            ) {
+                console.log('Target classList', target.classList)
+                setMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mouseup', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mouseup', handleClickOutside);
+        };
+    }, [menuOpen]);
+
     const handleMenuOpen = () => {
-        if (fields.length >= DoctorsFilters.length) {
+        if (fields.length >= filters.length) {
             dispatch(showMessage({message: 'Não existem mais filtros disponíveis para essa tabela.', type: 'info'}))
             return;
         }
@@ -49,10 +87,8 @@ const DoctorsTableFilter = () => {
             });
         }
 
-        console.log('Query params', queryParams)
-
         // @ts-ignore
-        dispatch(fetchDoctors({page: 1, per_page: 17, ...queryParams}));
+        dispatch(fetchFunction({page: 1, per_page: 17, ...queryParams}));
     }
 
     return (
@@ -76,13 +112,13 @@ const DoctorsTableFilter = () => {
                     {
                         menuOpen &&
                         <div
-                            className="absolute top-[36px] left-0 w-[164px] h-[200px] bg-mainDarkBlue rounded-xl z-10 shadow-black shadow-sm text-white">
+                            className="menu absolute top-[36px] left-0 w-[164px] h-max bg-mainDarkBlue rounded-xl z-10 shadow-black shadow-sm text-white">
 
                             <ul>
-                                {Object.values(DoctorsFilters).map((doctorFilter: FilterType) => {
+                                {Object.values(filters).map((filter: FilterType) => {
                                     let canRender = true;
                                     fields.forEach((item: any) => {
-                                        if (item.name == doctorFilter.name) {
+                                        if (item.name == filter.name) {
                                             canRender = false;
                                         }
                                     })
@@ -91,11 +127,11 @@ const DoctorsTableFilter = () => {
 
                                     return (
                                         <li
-                                            className="px-2 py-1 border-b-[1px] border-white hover:bg-white hover:bg-opacity-10 cursor-pointer"
-                                            key={doctorFilter.name}
-                                            onClick={() => handleSelectFilter(doctorFilter)}
+                                            className="filter-item px-2 py-1 [&:not(:last-child)]:border-b-[1px] border-white hover:bg-white hover:bg-opacity-10 cursor-pointer"
+                                            key={filter.name}
+                                            onClick={() => handleSelectFilter(filter)}
                                         >
-                                            {doctorFilter.label}
+                                            {filter.label}
                                         </li>
                                     );
                                 })}
@@ -113,4 +149,4 @@ const DoctorsTableFilter = () => {
     );
 };
 
-export default DoctorsTableFilter;
+export default TableFilter;

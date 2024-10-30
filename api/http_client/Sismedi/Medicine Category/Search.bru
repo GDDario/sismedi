@@ -1,0 +1,19 @@
+meta {
+  name: Search
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/medicine-category/search?query=Vaso
+  body: none
+  auth: bearer
+}
+
+params:query {
+  query: Vaso
+}
+
+auth:bearer {
+  token: {{token}}
+}
