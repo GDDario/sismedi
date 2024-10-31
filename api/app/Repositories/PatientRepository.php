@@ -17,6 +17,21 @@ use Ramsey\Uuid\Uuid;
 class PatientRepository
 {
     /**
+     * @param array $parameters
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate(array $parameters): LengthAwarePaginator
+    {
+        $query = Patient::query()->join('users', 'patients.user_id', '=', 'users.id')
+            ->select('patients.uuid', 'users.name', 'users.cpf', 'users.email',
+                'patients.cns', 'patients.created_at');
+
+        $query = $this->filterQueryByFields($query, $parameters);
+
+        return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
+    }
+
+    /**
      * @throws NotFoundException
      */
     public function findByUuid(string $uuid): Patient
@@ -43,21 +58,6 @@ class PatientRepository
             ->first();
 
         return $patient;
-    }
-
-    /**
-     * @param array $parameters
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function paginate(array $parameters): LengthAwarePaginator
-    {
-        $query = Patient::query()->join('users', 'patients.user_id', '=', 'users.id')
-            ->select('patients.uuid', 'users.name', 'users.cpf', 'users.email',
-                'patients.cns', 'patients.created_at');
-
-        $query = $this->filterQueryByFields($query, $parameters);
-
-        return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
     }
 
     /**
