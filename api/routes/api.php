@@ -27,8 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('patient')->group(function () {
         Route::get('', [PatientController::class, 'index']);
         Route::get('{uuid}', [PatientController::class, 'show']);
-        Route::put('{uuid}', [PatientController::class, 'update']);
         Route::post('', [PatientController::class, 'create']);
+        Route::put('{uuid}', [PatientController::class, 'update']);
         Route::delete('{uuid}', [PatientController::class, 'delete']);
     });
 
@@ -49,8 +49,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('medicine')->group(function () {
         Route::get('', [MedicineController::class, 'index']);
         Route::get('/{uuid}', [MedicineController::class, 'show']);
-        Route::put('/{uuid}', [MedicineController::class, 'update']);
         Route::post('', [MedicineController::class, 'create']);
+        Route::put('/{uuid}', [MedicineController::class, 'update']);
         Route::delete('/{uuid}', [MedicineController::class, 'delete']);
     });
 
@@ -61,8 +61,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('assistant')->group(function () {
         Route::get('', [AssistantController::class, 'index']);
         Route::get('/{uuid}', [AssistantController::class, 'show']);
-        Route::put('/{uuid}', [AssistantController::class, 'update']);
         Route::post('', [AssistantController::class, 'create']);
+        Route::put('/{uuid}', [AssistantController::class, 'update']);
         Route::delete('/{uuid}', [AssistantController::class, 'delete']);
     });
 });

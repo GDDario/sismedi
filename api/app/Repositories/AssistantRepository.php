@@ -2,10 +2,13 @@
 
 namespace App\Repositories;
 
+use App\DTO\CreateAssistantDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Assistant;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Ramsey\Uuid\Uuid;
 
 class AssistantRepository
 {
@@ -22,6 +25,44 @@ class AssistantRepository
         $query = $this->filterQueryByFields($query, $parameters);
 
         return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function findByUuid(string $uuid): Assistant
+    {
+        if (!Assistant::query()->where('uuid', $uuid)->exists()) {
+            throw new NotFoundException("Patient with uuid $uuid not found.");
+        }
+
+        $patient = Assistant::query()
+            ->where('uuid', $uuid)
+            ->with([
+                'user:id,name,email,cpf,email_verified_at'
+            ])
+            ->first();
+
+        return $patient;
+    }
+
+    public function insert(CreateAssistantDTO $dto): ?Assistant
+    {
+        $user = User::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'name' => $dto->name,
+            'cpf' => $dto->cpf,
+            'email' => $dto->email,
+            'password' => $dto->password
+        ]);
+
+        $assistant = Assistant::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'level' => $dto->level,
+            'user_id' => $user->id
+        ]);
+
+        return $assistant;
     }
 
     private function filterQueryByFields(Builder $query, array $parameters): Builder
@@ -46,24 +87,5 @@ class AssistantRepository
         }
 
         return $query;
-    }
-
-    /**
-     * @throws NotFoundException
-     */
-    public function findByUuid(string $uuid): Assistant
-    {
-        if (!Assistant::query()->where('uuid', $uuid)->exists()) {
-            throw new NotFoundException("Patient with uuid $uuid not found.");
-        }
-
-        $patient = Assistant::query()
-            ->where('uuid', $uuid)
-            ->with([
-                'user:id,name,email,cpf,email_verified_at'
-            ])
-            ->first();
-
-        return $patient;
     }
 }

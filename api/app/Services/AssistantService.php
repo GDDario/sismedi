@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\DTO\CreateAssistantDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Assistant;
 use App\Repositories\AssistantRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AssistantService
 {
@@ -24,6 +26,18 @@ class AssistantService
         $pageData = PaginationUtil::extractData($paginator);
 
         return new Response($pageData, Response::HTTP_OK);
+    }
+
+    // TODO: Implement level check on assistants
+    public function create(CreateAssistantDTO $dto)
+    {
+        $assistant = $this->repository->insert($dto);
+
+        if (is_null($assistant)) {
+            return new Response(['message' => 'Could not create the assistant.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            return new Response($this->arrangeAssistantData($assistant), Response::HTTP_OK);
+        }
     }
 
     public function getByUuid(string $uuid)
@@ -50,8 +64,7 @@ class AssistantService
             'email_verified_at' => $assistant->user->email_verified_at,
             'created_at' => $assistant->created_at,
             'updated_at' => $assistant->updated_at,
-            'deleted_at' => $assistant->deleted_at,
-
+            'deleted_at' => $assistant->deleted_at
         ];
     }
 }

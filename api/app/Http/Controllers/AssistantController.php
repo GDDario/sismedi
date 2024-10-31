@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateMedicineRequest;
+use App\DTO\CreateAssistantDTO;
+use App\Http\Requests\CreateAssistantRequest;
 use App\Http\Requests\UpdateMedicineRequest;
 use App\Services\AssistantService;
 use Illuminate\Http\Request;
@@ -35,9 +36,17 @@ class AssistantController extends Controller
         return $this->service->getByUuid($request->route('uuid'));
     }
 
-    public function create(CreateMedicineRequest $request): Response
+    public function create(CreateAssistantRequest $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->create(
+            new CreateAssistantDTO(
+                name: $request->get('name'),
+                email: $request->get('email'),
+                cpf: $request->get('cpf'),
+                level: $request->get('level'),
+                password: $request->get('password')
+            )
+        );
     }
 
     public function update(UpdateMedicineRequest $request): Response
