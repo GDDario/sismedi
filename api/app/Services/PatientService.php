@@ -42,6 +42,21 @@ class PatientService
         }
     }
 
+    public function create(CreatePatientDTO $dto)
+    {
+        try {
+            $patient = $this->repository->insert($dto);
+        } catch (NotFoundException $e) {
+            return new Response(['message' => 'Invalid city uuid.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (is_null($patient)) {
+            return new Response(['message' => 'Could not create the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
+        }
+    }
+
     public function update(UpdatePatientDTO $dto): Response
     {
         try {
@@ -54,17 +69,6 @@ class PatientService
             }
         } catch (NotFoundException $e) {
             return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
-        }
-    }
-
-    public function create(CreatePatientDTO $dto)
-    {
-        $patient = $this->repository->insert($dto);
-
-        if (is_null($patient)) {
-            return new Response(['message' => 'Could not create the patient.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } else {
-            return new Response($this->arrangePatientData($patient), Response::HTTP_OK);
         }
     }
 

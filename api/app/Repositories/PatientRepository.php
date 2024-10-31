@@ -150,7 +150,6 @@ class PatientRepository
 
         $patient = Patient::query()->create([
             'uuid' => Uuid::uuid4(),
-            'name' => $dto->patient['name'],
             'cns' => $dto->patient['cns'],
             'rg' => $dto->patient['rg'],
             'birth_date' => $dto->patient['birth_date'],
