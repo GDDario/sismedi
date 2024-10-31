@@ -26,6 +26,11 @@ class Assistant extends Model
         'deleted_at' => 'datetime'
     ];
 
+    protected $hidden = [
+        'id',
+        'user_id'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

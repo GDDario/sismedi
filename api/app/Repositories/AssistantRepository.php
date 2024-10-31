@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Assistant;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,5 +46,24 @@ class AssistantRepository
         }
 
         return $query;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function findByUuid(string $uuid): Assistant
+    {
+        if (!Assistant::query()->where('uuid', $uuid)->exists()) {
+            throw new NotFoundException("Patient with uuid $uuid not found.");
+        }
+
+        $patient = Assistant::query()
+            ->where('uuid', $uuid)
+            ->with([
+                'user:id,name,email,cpf,email_verified_at'
+            ])
+            ->first();
+
+        return $patient;
     }
 }

@@ -32,7 +32,7 @@ class AssistantController extends Controller
 
     public function show(Request $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->getByUuid($request->route('uuid'));
     }
 
     public function create(CreateMedicineRequest $request): Response
