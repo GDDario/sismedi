@@ -231,12 +231,14 @@ const CreateDoctorForm = ({onClose}: CreateDoctorFormProps) => {
                                                 name={`cellphones.${index}.number`}
                                                 label="Telefone"
                                                 register={register}
+                                                // @ts-ignore
                                                 error={errors?.cellphones?.[index]?.number}
                                             />
                                             <InputField
                                                 name={`cellphones.${index}.description`}
                                                 label="Descrição"
                                                 register={register}
+                                                // @ts-ignore
                                                 error={errors?.cellphones?.[index]?.description}
                                                 className="w-[300px]"
                                             />

@@ -129,7 +129,7 @@ class DoctorService
             if (is_null($doctor)) {
                 return new Response(['message' => 'Could not update the doctor.'], Response::HTTP_INTERNAL_SERVER_ERROR);
             } else {
-                return new Response($this->arrangeDoctorData($doctor), Response::HTTP_OK);
+                return new Response(['message' => 'Doctor updated successfully.'], Response::HTTP_OK);
             }
         } catch (NotFoundException $e) {
             return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);

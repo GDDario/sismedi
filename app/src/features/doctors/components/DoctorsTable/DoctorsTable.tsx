@@ -138,7 +138,10 @@ const DoctorsTable = () => {
                     <EditDoctorModal
                         uuid={editModal.uuid!}
                         visible={editModal.open}
-                        onClose={() => setEditModal({uuid: undefined, open: false})}
+                        onClose={() => {
+                        setEditModal({uuid: undefined, open: false});
+                        dispatch(fetchDoctors({page: 1, per_page: 17}));
+                        }}
                     />
                 )}
 

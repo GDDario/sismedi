@@ -144,6 +144,8 @@ const EditDoctorForm = ({uuid, onClose}: EditDoctorFormProps) => {
         await DoctorService.update(uuid, updatedData);
 
         dispatch(showMessage({message: "Médico atualizado com sucesso!", type: "success"}))
+
+        onClose();
     }
 
     return (

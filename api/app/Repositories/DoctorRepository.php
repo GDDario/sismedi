@@ -238,12 +238,6 @@ class DoctorRepository
             'city_id' => $city->id,
         ]);
 
-        if (!$state) {
-            DB::rollBack();
-            throw new NotFoundException("Doctor with uuid {$dto->doctorUuid} not updated.");
-            return null;
-        }
-
         $doctor->cellphones()->delete();
 
         foreach ($dto->cellphones as $cellphone) {

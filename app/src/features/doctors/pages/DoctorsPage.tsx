@@ -13,10 +13,12 @@ const DoctorsPage = ({}: DoctorsPageProps) => {
 
     useEffect(() => {
         dispatch(setTitle('Gerenciar médicos'));
+        document.title = "Sismedi - Médicos";
     }, []);
 
     return (
         <>
+            
             <Button text="Cadastrar novo médico +" onClick={() => setOpenCreateModal(true)}/>
             <DoctorsTableFilter/>
             <DoctorsTable/>

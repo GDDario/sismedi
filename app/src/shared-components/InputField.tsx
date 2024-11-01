@@ -6,7 +6,7 @@ type InputFieldProps = {
     error?: any;
     placeholder?: string;
     type?: 'text' | 'password' | 'email' | 'date';
-    variant?: 'default';
+    variant?: 'default' | 'bordered';
     fullWidth?: boolean;
     disabled?: boolean;
 };
