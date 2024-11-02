@@ -18,9 +18,9 @@ class DoctorFactory extends Factory
 
         return [
             'uuid' => fake()->uuid(),
-            'crm' => $this->generateRG(),
+            'crm' => "{$sequencial}-{$uf}",
             'user_id' => User::factory(),
-            'rg' => "{$sequencial}-{$uf}",
+            'rg' => $this->generateRG(),
             'birth_date' => $this->faker->date('Y-m-d', '2001-01-01')
         ];
     }

@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundException;
 use App\DTO\CreateDoctorDTO;
 use App\DTO\UpdateDoctorDTO;
+use App\Exceptions\NotFoundException;
+use App\Models\Cellphone;
 use App\Models\Doctor;
-use App\Models\Agenda;
 use App\Repositories\DoctorRepository;
 use App\Util\PaginationUtil;
+use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
 class DoctorService
@@ -65,9 +67,9 @@ class DoctorService
                 'crm' => $DoctorsData->crm,
                 'birth_date' => $DoctorsData->birth_date,
                 'email_verified_at' => $DoctorsData->email_verified_at,
-                'created_at' => $DoctorsData->created_at,
-                'updated_at' => $DoctorsData->updated_at,
-                'deleted_at' => $DoctorsData->deleted_at
+                'created_at' => date('d/m/Y H:i', strtotime($DoctorsData->created_at)),
+                'updated_at' => date('d/m/Y H:i', strtotime($DoctorsData->updated_at)),
+                'deleted_at' => $DoctorsData->deleted_at ? date('d/m/Y H:i', strtotime($DoctorsData->deleted_at)) : null
             ],
             'address' => [
                 'street_address' => $DoctorsData->address->street_address,
@@ -82,11 +84,11 @@ class DoctorService
                 'state_code' => $DoctorsData->address->state_code,
                 'state_ibge_code' => $DoctorsData->address->state_ibge_code
             ],
-            'cellphones' => $DoctorsData->cellphones instanceof Collection ? $this->arrangeCellphones($DoctorsData->cellphones) : []
+            'cellphones' => $this->arrangeCellphones($DoctorsData->cellphones)
         ];
     }
 
-    private function arrangeCellphones(Collections $cellphones): array
+    private function arrangeCellphones(Collection $cellphones): array
     {
         return $cellphones->map(function (Cellphone $cellphone) {
             return [

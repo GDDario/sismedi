@@ -81,9 +81,9 @@ const EditDoctorForm = ({uuid, onClose}: EditDoctorFormProps) => {
         setValue('address.neighborhood', doctorData.address.neighborhood);
         setValue('address.address_line_2', doctorData.address.address_line_2);
 
-        //doctorData.cellphones.forEach((cellphone: Cellphone) => {
-        //    append(cellphone);
-        //});
+        doctorData.cellphones.forEach((cellphone: Cellphone) => {
+            append(cellphone);
+        });
     }
 
     const handleStateSearch = async (text: string): Promise<any> => {
@@ -254,12 +254,14 @@ const EditDoctorForm = ({uuid, onClose}: EditDoctorFormProps) => {
                                                 name={`cellphones.${index}.number`}
                                                 label="Telefone"
                                                 register={register}
+                                                //@ts-ignore
                                                 error={errors?.cellphones?.[index]?.number}
                                             />
                                             <InputField
                                                 name={`cellphones.${index}.description`}
                                                 label="Descrição"
                                                 register={register}
+                                                //@ts-ignore
                                                 error={errors?.cellphones?.[index]?.description}
                                                 className="w-[300px]"
                                             />
@@ -278,7 +280,7 @@ const EditDoctorForm = ({uuid, onClose}: EditDoctorFormProps) => {
 
 
                 </div>
-                <Button className="mt-2 w-[180px]" text="Adicionar número +" type="button" onClick={() => handleAddCellphoneNumber()}/>
+                <Button className="mt-2 w-[190px]" text="Adicionar número +" type="button" onClick={() => handleAddCellphoneNumber()} />
             </section>
 
             <section className="mt-2 flex gap-2">

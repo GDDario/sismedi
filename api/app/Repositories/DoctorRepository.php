@@ -43,7 +43,7 @@ class DoctorRepository
         $cellphoneQuery = Cellphone::query()
             ->select('uuid','number','description','user_id')
             ->where('user_id', $doctor->user_id);
-        $cellphone = $cellphoneQuery->first();
+        $cellphone = $cellphoneQuery->get();
 
         if (!$cellphone) {
             $doctor->cellphones = (object) [
@@ -177,7 +177,8 @@ class DoctorRepository
                 'uuid' => Uuid::uuid4(),
                 'number' => $cellphone['number'],
                 'description' => $cellphone['number'],
-                'is_primary' => $cellphone['is_primary']
+                'is_primary' => $cellphone['is_primary'],
+                'user_id' => $user->id
             ]);
         }
 

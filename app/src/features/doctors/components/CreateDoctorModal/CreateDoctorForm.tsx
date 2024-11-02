@@ -257,7 +257,7 @@ const CreateDoctorForm = ({onClose}: CreateDoctorFormProps) => {
 
 
                 </div>
-                <Button className="mt-2 w-[180px]" text="Adicionar número +" type="button"
+                <Button className="mt-2 w-[190px]" text="Adicionar número +" type="button"
                         onClick={() => handleAddCellphoneNumber()}/>
             </section>
 

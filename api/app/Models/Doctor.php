@@ -32,7 +32,7 @@ class Doctor extends Model
 
     public function cellphones(): HasMany
     {
-        return $this->hasMany(Cellphone::class, 'user_id', 'id');
+        return $this->hasMany(Cellphone::class, 'user_id', 'user_id');
     }
 
     public function address(): HasOne

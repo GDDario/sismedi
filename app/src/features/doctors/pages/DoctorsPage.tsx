@@ -24,7 +24,10 @@ const DoctorsPage = ({}: DoctorsPageProps) => {
             <DoctorsTable/>
             <CreateDoctorModal
                 visible={openCreateModal}
-                onClose={() => setOpenCreateModal(false)}
+                onClose={() => {
+                    setOpenCreateModal(false);
+                    window.location.reload();
+                }}
             />
         </>
     );

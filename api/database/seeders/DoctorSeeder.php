@@ -19,6 +19,7 @@ class DoctorSeeder extends Seeder
 
         Doctor::factory()->count(10)->create()->each(function ($doctor) {
             Address::factory()->create(['user_id' => $doctor->user_id]);
+            Cellphone::factory()->create(['user_id' => $doctor->user_id]);
         });
     }
 
