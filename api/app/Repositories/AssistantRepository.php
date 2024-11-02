@@ -3,11 +3,14 @@
 namespace App\Repositories;
 
 use App\DTO\CreateAssistantDTO;
+use App\DTO\UpdateAssistantDTO;
+use App\DTO2\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Assistant;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class AssistantRepository
@@ -61,6 +64,43 @@ class AssistantRepository
             'level' => $dto->level,
             'user_id' => $user->id
         ]);
+
+        return $assistant;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function update(UpdateAssistantDTO $dto): ?Assistant
+    {
+        if (!$assistant = Assistant::query()->where('uuid', $dto->uuid)->first()) {
+            throw new NotFoundException("Assistint with uuid {$dto->uuid} not found.");
+        }
+
+        DB::beginTransaction();
+
+        $state = $assistant->update([
+            'level' => $dto->level
+        ]);
+
+        if (!$state) {
+            DB::rollBack();
+            return null;
+        }
+
+        $state = $assistant->user()->update([
+            'name' => $dto->name,
+            'cpf' => $dto->cpf,
+            'email' => $dto->email
+        ]);
+
+        if (!$state) {
+            DB::rollBack();
+            return null;
+        }
+
+        DB::commit();
+        $assistant->refresh();
 
         return $assistant;
     }

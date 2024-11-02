@@ -47,7 +47,7 @@ class PatientService
         try {
             $patient = $this->repository->insert($dto);
         } catch (NotFoundException $e) {
-            return new Response(['message' => 'Invalid city uuid.'], Response::HTTP_BAD_REQUEST);
+            return new Response(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
         if (is_null($patient)) {

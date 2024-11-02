@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\DTO\CreateAssistantDTO;
+use App\DTO\UpdateAssistantDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Assistant;
 use App\Repositories\AssistantRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class AssistantService
 {
@@ -28,8 +28,21 @@ class AssistantService
         return new Response($pageData, Response::HTTP_OK);
     }
 
+    public function getByUuid(string $uuid): Response
+    {
+        try {
+            $assistant = $this->repository->findByUuid($uuid);
+
+            $assistantData = $this->arrangeAssistantData($assistant);
+
+            return new Response(['data' => $assistantData], Response::HTTP_OK);
+        } catch (NotFoundException $e) {
+            return new Response(['message' => 'Assistant not found.'], Response::HTTP_NOT_FOUND);
+        }
+    }
+
     // TODO: Implement level check on assistants
-    public function create(CreateAssistantDTO $dto)
+    public function create(CreateAssistantDTO $dto): Response
     {
         $assistant = $this->repository->insert($dto);
 
@@ -40,16 +53,18 @@ class AssistantService
         }
     }
 
-    public function getByUuid(string $uuid)
+    public function update(UpdateAssistantDTO $dto): Response
     {
         try {
-            $assistant = $this->repository->findByUuid($uuid);
+            $assistant = $this->repository->update($dto);
 
-            $assistantData = $this->arrangeAssistantData($assistant);
-
-            return new Response(['data' => $assistantData], Response::HTTP_OK);
+            if (is_null($assistant)) {
+                return new Response(['message' => 'Could not update the assistant.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                return new Response($this->arrangeAssistantData($assistant), Response::HTTP_OK);
+            }
         } catch (NotFoundException $e) {
-            return new Response(['message' => 'Assistant not found.'], Response::HTTP_NOT_FOUND);
+            return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
 

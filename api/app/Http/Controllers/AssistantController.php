@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DTO\CreateAssistantDTO;
+use App\DTO\UpdateAssistantDTO;
 use App\Http\Requests\CreateAssistantRequest;
-use App\Http\Requests\UpdateMedicineRequest;
+use App\Http\Requests\UpdateAssistantRequest;
 use App\Services\AssistantService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -49,9 +50,17 @@ class AssistantController extends Controller
         );
     }
 
-    public function update(UpdateMedicineRequest $request): Response
+    public function update(UpdateAssistantRequest $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->update(
+            new UpdateAssistantDTO(
+                uuid: $request->route('uuid'),
+                name: $request->get('name'),
+                email: $request->get('email'),
+                cpf: $request->get('cpf'),
+                level: $request->get('level')
+            )
+        );
     }
 
     public function delete(Request $request): Response
