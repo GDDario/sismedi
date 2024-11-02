@@ -3,16 +3,16 @@ import axiosInstance from "../../../config/axiosConfig.ts";
 
 export class PatientService {
     static listPatients = async (params: any): Promise<ListPatientsResponse> => {
-        const response = await axiosInstance.get<ListPatientsResponse>('/patient', {params});
+        const response = await axiosInstance.get<ListPatientsResponse>('/patient', params);
 
-        return response.data;
+        return response.data as ListPatientsResponse;
     }
 
     static getByUuid = async (uuid: string): Promise<GetPatientResponse> => {
         const url = `/patient/${uuid}`;
         const response = await axiosInstance.get<GetPatientResponse>(url);
 
-        return response.data;
+        return response.data as GetPatientResponse;
     }
 
     static create = async (patientData: CreateOrUpdatePatientData): Promise<void> => {
