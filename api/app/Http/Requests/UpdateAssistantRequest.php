@@ -19,8 +19,8 @@ class UpdateAssistantRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'cpf' => ['required', new CPFRule, 'unique:users,cpf'],
+            'email' => 'required|email',
+            'cpf' => ['required', new CPFRule],
             'level' => 'required|integer',
             'password' => 'required|confirmed',
         ];

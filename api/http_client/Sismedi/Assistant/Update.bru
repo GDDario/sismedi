@@ -1,0 +1,26 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api_url}}/assistant/024725dd-1714-4a6d-85b9-b951a4c83590
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Joãozinho",
+    "email": "user@patient2.com",
+    "cpf": "34674644089",
+    "level": 1,
+    "password": "password",
+    "password_confirmation": "password"
+  }
+}

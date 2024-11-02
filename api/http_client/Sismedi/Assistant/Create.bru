@@ -1,0 +1,26 @@
+meta {
+  name: Create
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api_url}}/assistant
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Joãozinho",
+    "email": "joaozinho@gmail.com",
+    "cpf": "34674644089",
+    "level": 1,
+    "password": "password",
+    "password_confirmation": "password"
+  }
+}

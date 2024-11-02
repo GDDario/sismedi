@@ -8,9 +8,11 @@ use App\DTO2\UpdatePatientDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Assistant;
 use App\Models\User;
+use App\Util\UserUtil;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
 class AssistantRepository
@@ -70,11 +72,20 @@ class AssistantRepository
 
     /**
      * @throws NotFoundException
+     * @throws InvalidArgumentException
      */
     public function update(UpdateAssistantDTO $dto): ?Assistant
     {
         if (!$assistant = Assistant::query()->where('uuid', $dto->uuid)->first()) {
             throw new NotFoundException("Assistint with uuid {$dto->uuid} not found.");
+        }
+
+        if (UserUtil::emailWasAlreadyTaken($assistant->user->email, $dto->email)) {
+            throw new InvalidArgumentException('This email was already taken');
+        }
+
+        if (UserUtil::cpfWasAlreadyTaken($assistant->user->cpf, $dto->cpf)) {
+            throw new InvalidArgumentException('This CPF was already taken');
         }
 
         DB::beginTransaction();

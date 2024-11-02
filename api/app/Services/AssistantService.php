@@ -9,6 +9,7 @@ use App\Models\Assistant;
 use App\Repositories\AssistantRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
+use InvalidArgumentException;
 
 class AssistantService
 {
@@ -41,7 +42,7 @@ class AssistantService
         }
     }
 
-    // TODO: Implement level check on assistants
+    // TODO: Implement level check on assistants (can only create levels below it's own)
     public function create(CreateAssistantDTO $dto): Response
     {
         $assistant = $this->repository->insert($dto);
@@ -65,6 +66,8 @@ class AssistantService
             }
         } catch (NotFoundException $e) {
             return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        } catch (InvalidArgumentException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 

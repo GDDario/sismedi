@@ -7,13 +7,14 @@ use App\DTO\UpdateMedicineDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Patient;
 use App\Repositories\AssistantRepository;
+use App\Repositories\MedicineRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
 
 class MedicineService
 {
     public function __construct(
-        private AssistantRepository $repository
+        private MedicineRepository $repository
     )
     {
 

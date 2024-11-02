@@ -11,6 +11,7 @@ use App\Repositories\PatientRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use InvalidArgumentException;
 
 class PatientService
 {
@@ -69,6 +70,8 @@ class PatientService
             }
         } catch (NotFoundException $e) {
             return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        } catch (InvalidArgumentException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 

@@ -9,9 +9,11 @@ use App\Models\Address;
 use App\Models\City;
 use App\Models\Patient;
 use App\Models\User;
+use App\Util\UserUtil;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
 class PatientRepository
@@ -109,14 +111,21 @@ class PatientRepository
     }
 
     /**
-     * @param UpdatePatientDTO $dto
-     * @return \App\Models\Patient The updated model.
-     * @throws \App\Exceptions\NotFoundException
+     * @throws NotFoundException
+     * @throws InvalidArgumentException
      */
     public function update(UpdatePatientDTO $dto): ?Patient
     {
         if (!$patient = Patient::query()->where('uuid', $dto->patientUuid)->first()) {
             throw new NotFoundException("Patient with uuid {$dto->patientUuid} not found.");
+        }
+
+        if (UserUtil::emailWasAlreadyTaken($patient->user->email, $dto->patient['email'])) {
+            throw new InvalidArgumentException('This email was already taken');
+        }
+
+        if (UserUtil::cpfWasAlreadyTaken($patient->user->cpf, $dto->patient['cpf'])) {
+            throw new InvalidArgumentException('This CPF was already taken');
         }
 
         DB::beginTransaction();
