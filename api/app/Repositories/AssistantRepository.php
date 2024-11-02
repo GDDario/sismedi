@@ -116,6 +116,18 @@ class AssistantRepository
         return $assistant;
     }
 
+    /**
+     * @throws NotFoundException
+     */
+    public function delete(string $uuid): bool
+    {
+        if (!$assistant = Assistant::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("Assistente com uuid $uuid não encontrado.");
+        }
+
+        return $assistant->delete();
+    }
+
     private function filterQueryByFields(Builder $query, array $parameters): Builder
     {
         $blackList = ['offset', 'page', 'limit'];

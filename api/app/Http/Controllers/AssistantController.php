@@ -65,6 +65,6 @@ class AssistantController extends Controller
 
     public function delete(Request $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->delete($request->route('uuid'));
     }
 }
