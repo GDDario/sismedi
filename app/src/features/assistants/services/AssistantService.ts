@@ -24,9 +24,9 @@ export class AssistantService {
         await axiosInstance.put<GetAssistantResponse>(url, assistantData);
     }
 
-    // static delete = async (uuid: string): Promise<void> => {
-    //     const url: string = `/medicine/${uuid}`;
-    //
-    //     await axiosInstance.delete<void>(url);
-    // }
+    static delete = async (uuid: string): Promise<void> => {
+        const url: string = `/assistant/${uuid}`;
+
+        await axiosInstance.delete<void>(url);
+    }
 }

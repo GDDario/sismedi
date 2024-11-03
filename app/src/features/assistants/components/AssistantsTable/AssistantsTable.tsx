@@ -9,6 +9,7 @@ import {fetchAssistants} from "../../store/assistantsSlice.ts";
 import EditAssistantModal from "../EditAssistantModal/EditAssistantModal.tsx";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
 import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
+import {AssistantService} from "../../services/AssistantService.ts";
 
 const columnHelper = createColumnHelper();
 
@@ -72,10 +73,10 @@ const AssistantsTable = () => {
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const deleteMedicine = async (): Promise<void> => {
-        // await AssistantService.delete(deleteModal.uuid!);
+    const deleteAssistant = async (): Promise<void> => {
+        await AssistantService.delete(deleteModal.uuid!);
 
-        dispatch(showMessage({message: 'Medicine deleted successfully!', type: 'success'}));
+        dispatch(showMessage({message: 'Assistente excluído com sucesso!', type: 'success'}));
         // @ts-ignore
         dispatch(fetchAssistants({page: 1, per_page: 17}));
         setDeleteModal({open: false, uuid: undefined});
@@ -128,14 +129,14 @@ const AssistantsTable = () => {
                 )}
 
                 <ConfirmationMessage
-                    title="Excluir medicamento"
+                    title="Excluir assistente"
                     loading={false}
-                    onConfirm={deleteMedicine}
+                    onConfirm={deleteAssistant}
                     onCancel={() => setDeleteModal({uuid: undefined, open: false})}
                     visible={deleteModal.open}
                     onClose={() => setDeleteModal({uuid: undefined, open: false})}
                 >
-                    Tem <b>certeza</b> que deseja excluir esse medicamento do sistema? Essa ação <b>não</b> poderá ser
+                    Tem <b>certeza</b> que deseja excluir esse assistente do sistema? Essa ação <b>não</b> poderá ser
                     desfeita.
                 </ConfirmationMessage>
             </div>
