@@ -15,10 +15,10 @@ export class AssistantService {
     //     return reponse.data;
     // }
     //
-    // static create = async (body: CreateOrEditMedicineData): Promise<void> => {
-    //     await axiosInstance.post<void>('/medicine', body);
-    // }
-    //
+    static create = async (body: CreateOrEditAssistantData): Promise<void> => {
+        await axiosInstance.post<void>('/assistant', body);
+    }
+
     static update = async (uuid: string, medicineData: CreateOrEditAssistantData): Promise<void> => {
         const url = `/assistant/${uuid}`;
         await axiosInstance.put<GetAssistantResponse>(url, medicineData);

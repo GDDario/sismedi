@@ -6,6 +6,7 @@ import TableFilter from "../../../shared-components/Table/TableFilter.tsx";
 import {AssistantsFilters} from "../constants.ts";
 import AssistantsTable from "../components/AssistantsTable/AssistantsTable.tsx";
 import {fetchAssistants} from "../store/assistantsSlice.ts";
+import CreateAssistantModal from '../components/CreateAssistantModal/CreateAssistantModal.tsx'
 
 const AssistantsPage = () => {
     const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
@@ -17,9 +18,14 @@ const AssistantsPage = () => {
 
     return (
         <>
-            <Button text="Cadastrar novo medicamento +" onClick={() => setOpenCreateModal(true)}/>
+            <Button text="Cadastrar novo assistente +" onClick={() => setOpenCreateModal(true)}/>
             <TableFilter filters={AssistantsFilters} fetchFunction={fetchAssistants}/>
             <AssistantsTable/>
+
+            <CreateAssistantModal
+                visible={openCreateModal}
+                onClose={() => setOpenCreateModal(false)}
+            />
         </>
     );
 };

@@ -20,8 +20,10 @@ const PatientsPage = () => {
     return (
         <>
             <Button text="Cadastrar novo paciente +" onClick={() => setOpenCreateModal(true)}/>
+
             <TableFilter filters={PatientsFilters} fetchFunction={fetchPatients}/>
             <PatientsTable/>
+
             <CreatePatientModal
                 visible={openCreateModal}
                 onClose={() => setOpenCreateModal(false)}

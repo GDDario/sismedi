@@ -45,7 +45,7 @@ const AssistantsTable = () => {
             header: 'Nível',
             cell: info => info.getValue(),
         }),
-        columnHelper.accessor('price', {
+        columnHelper.accessor('created_at', {
             header: 'Criação do registro',
             cell: info => info.getValue()
 
