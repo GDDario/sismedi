@@ -50,8 +50,8 @@ const AssistantsTable = () => {
             cell: info => info.getValue()
 
         }),
-        columnHelper.accessor('created_at', {
-            header: 'Criação do registro',
+        columnHelper.accessor('action', {
+            header: 'Ações',
             cell: info => {
                 // @ts-ignore
                 const uuid = info.row.original.uuid; // Pega o UUID da linha atual
