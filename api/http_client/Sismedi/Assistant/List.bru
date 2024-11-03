@@ -1,0 +1,21 @@
+meta {
+  name: List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/assistant?page=1
+  body: none
+  auth: bearer
+}
+
+params:query {
+  page: 1
+  ~name1: name
+  ~value1: Jhin
+}
+
+auth:bearer {
+  token: {{token}}
+}

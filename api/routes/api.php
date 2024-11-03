@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StateController;
-use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticationController::class, 'login']);
@@ -26,16 +27,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('patient')->group(function () {
         Route::get('', [PatientController::class, 'index']);
         Route::get('{uuid}', [PatientController::class, 'show']);
-        Route::put('{uuid}', [PatientController::class, 'update']);
         Route::post('', [PatientController::class, 'create']);
+        Route::put('{uuid}', [PatientController::class, 'update']);
         Route::delete('{uuid}', [PatientController::class, 'delete']);
     });
 
-    Route::prefix('state')->group(function() {
+    Route::prefix('state')->group(function () {
         Route::get('search', [StateController::class, 'search']);
     });
 
-    Route::prefix('city')->group(function() {
+    Route::prefix('city')->group(function () {
         Route::get('search', [CityController::class, 'search']);
     });
 
@@ -48,12 +49,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('medicine')->group(function () {
         Route::get('', [MedicineController::class, 'index']);
         Route::get('/{uuid}', [MedicineController::class, 'show']);
-        Route::put('/{uuid}', [MedicineController::class, 'update']);
         Route::post('', [MedicineController::class, 'create']);
+        Route::put('/{uuid}', [MedicineController::class, 'update']);
         Route::delete('/{uuid}', [MedicineController::class, 'delete']);
     });
 
     Route::prefix('medicine-category')->group(function () {
         Route::get('search', [MedicineCategoryController::class, 'search']);
+    });
+
+    Route::prefix('assistant')->group(function () {
+        Route::get('', [AssistantController::class, 'index']);
+        Route::get('/{uuid}', [AssistantController::class, 'show']);
+        Route::post('', [AssistantController::class, 'create']);
+        Route::put('/{uuid}', [AssistantController::class, 'update']);
+        Route::delete('/{uuid}', [AssistantController::class, 'delete']);
     });
 });

@@ -9,13 +9,30 @@ use App\Models\Address;
 use App\Models\City;
 use App\Models\Patient;
 use App\Models\User;
+use App\Util\UserUtil;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
 class PatientRepository
 {
+    /**
+     * @param array $parameters
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate(array $parameters): LengthAwarePaginator
+    {
+        $query = Patient::query()->join('users', 'patients.user_id', '=', 'users.id')
+            ->select('patients.uuid', 'users.name', 'users.cpf', 'users.email',
+                'patients.cns', 'patients.created_at');
+
+        $query = $this->filterQueryByFields($query, $parameters);
+
+        return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
+    }
+
     /**
      * @throws NotFoundException
      */
@@ -46,29 +63,69 @@ class PatientRepository
     }
 
     /**
-     * @param array $parameters
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws NotFoundException
      */
-    public function paginate(array $parameters): LengthAwarePaginator
+    public function insert(CreatePatientDTO $dto): Patient
     {
-        $query = Patient::query()->join('users', 'patients.user_id', '=', 'users.id')
-            ->select('patients.uuid', 'users.name', 'users.cpf', 'users.email',
-                'patients.cns', 'patients.created_at');
+        if (!$city = City::query()->where('uuid', $dto->address['city_uuid'])->first()) {
+            throw new NotFoundException("City with uuid {$dto->address['city_uuid']} not found.");
+        }
 
-        $query = $this->filterQueryByFields($query, $parameters);
+        $user = User::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'name' => $dto->patient['name'],
+            'cpf' => $dto->patient['cpf'],
+            'email' => $dto->patient['email'],
+            'password' => $dto->patient['password']
+        ]);
 
-        return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
+        $patient = Patient::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'cns' => $dto->patient['cns'],
+            'rg' => $dto->patient['rg'],
+            'birth_date' => $dto->patient['birth_date'],
+            'user_id' => $user->id
+        ]);
+
+        $address = Address::query()->create([
+            'uuid' => Uuid::uuid4(),
+            'patient_id' => $patient->id,
+            'street_address' => $dto->address['street_address'],
+            'house_number' => $dto->address['house_number'],
+            'address_line_2' => $dto->address['address_line_2'],
+            'neighborhood' => $dto->address['neighborhood'],
+            'postal_code' => $dto->address['postal_code'],
+            'city_id' => $city->id
+        ]);
+
+        foreach ($dto->cellphones as $cellphone) {
+            $patient->cellphones()->create([
+                'uuid' => Uuid::uuid4(),
+                'number' => $cellphone['number'],
+                'description' => $cellphone['number'],
+                'is_primary' => $cellphone['is_primary']
+            ]);
+        }
+
+        return $patient;
     }
 
     /**
-     * @param UpdatePatientDTO $dto
-     * @return \App\DTO\UpdatePatientDTO The updated model.
-     * @throws \App\Exceptions\NotFoundException
+     * @throws NotFoundException
+     * @throws InvalidArgumentException
      */
     public function update(UpdatePatientDTO $dto): ?Patient
     {
         if (!$patient = Patient::query()->where('uuid', $dto->patientUuid)->first()) {
             throw new NotFoundException("Patient with uuid {$dto->patientUuid} not found.");
+        }
+
+        if (UserUtil::emailWasAlreadyTaken($patient->user->email, $dto->patient['email'])) {
+            throw new InvalidArgumentException('This email was already taken');
+        }
+
+        if (UserUtil::cpfWasAlreadyTaken($patient->user->cpf, $dto->patient['cpf'])) {
+            throw new InvalidArgumentException('This CPF was already taken');
         }
 
         DB::beginTransaction();
@@ -126,56 +183,6 @@ class PatientRepository
 
         DB::commit();
         $patient->refresh();
-
-        return $patient;
-    }
-
-
-    /**
-     * @throws NotFoundException
-     */
-    public function insert(CreatePatientDTO $dto): Patient
-    {
-        if (!$city = City::query()->where('uuid', $dto->address['city_uuid'])->first()) {
-            throw new NotFoundException("City with uuid {$dto->address['city_uuid']} not found.");
-        }
-
-        $user = User::query()->create([
-            'uuid' => Uuid::uuid4(),
-            'name' => $dto->patient['name'],
-            'cpf' => $dto->patient['cpf'],
-            'email' => $dto->patient['email'],
-            'password' => $dto->patient['password']
-        ]);
-
-        $patient = Patient::query()->create([
-            'uuid' => Uuid::uuid4(),
-            'name' => $dto->patient['name'],
-            'cns' => $dto->patient['cns'],
-            'rg' => $dto->patient['rg'],
-            'birth_date' => $dto->patient['birth_date'],
-            'user_id' => $user->id
-        ]);
-
-        $address = Address::query()->create([
-            'uuid' => Uuid::uuid4(),
-            'patient_id' => $patient->id,
-            'street_address' => $dto->address['street_address'],
-            'house_number' => $dto->address['house_number'],
-            'address_line_2' => $dto->address['address_line_2'],
-            'neighborhood' => $dto->address['neighborhood'],
-            'postal_code' => $dto->address['postal_code'],
-            'city_id' => $city->id
-        ]);
-
-        foreach ($dto->cellphones as $cellphone) {
-            $patient->cellphones()->create([
-                'uuid' => Uuid::uuid4(),
-                'number' => $cellphone['number'],
-                'description' => $cellphone['number'],
-                'is_primary' => $cellphone['is_primary']
-            ]);
-        }
 
         return $patient;
     }

@@ -17,11 +17,11 @@ export class AuthenticationService {
     };
 
     static async login(credentials: LoginFormSchema): Promise<AxiosResponse<LoginResponse>> {
-        return await axiosInstance.post<LoginResponse>('/login', credentials);
+        return await axiosInstance.post<LoginResponse>('/login', credentials) as AxiosResponse<LoginResponse>;
     };
 
     static async tokenLogin(): Promise<AxiosResponse<UserResponse>> {
-        return await axiosInstance.get<UserResponse>('/authenticated-user');
+        return await axiosInstance.get<UserResponse>('/authenticated-user') as AxiosResponse<UserResponse>;
     };
 
     static async logout(): Promise<void> {

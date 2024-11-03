@@ -1,20 +1,20 @@
 import {CreateOrEditMedicineData, GetMedicineResponse, ListMedicinesResponse} from "../types.ts";
 import axiosInstance from "../../../config/axiosConfig.ts";
-import {CreateOrUpdatePatientData, GetPatientResponse} from "../../patients/types.ts";
+import {GetPatientResponse} from "../../patients/types.ts";
 
 export class MedicineService {
     static listMedicines = async (params: any): Promise<ListMedicinesResponse> => {
         const response = await axiosInstance.get<ListMedicinesResponse>('/medicine', {params});
 
-        return response.data;
+        return response.data as ListMedicinesResponse;
     }
 
     static getByUuid = async (uuid: string): Promise<GetMedicineResponse> => {
         const url: string = `/medicine/${uuid}`;
-        const reponse = await axiosInstance.get<GetMedicineResponse>(url);
+        const response = await axiosInstance.get<GetMedicineResponse>(url);
 
-        return reponse.data;
-    }
+        return response.data as GetMedicineResponse;
+    };
 
     static create = async (body: CreateOrEditMedicineData): Promise<void> => {
         await axiosInstance.post<void>('/medicine', body);

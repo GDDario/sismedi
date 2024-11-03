@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CNSRule;
 use App\Rules\CPFRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class CreatePatientRequest extends FormRequest
+class CreateAssistantRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,25 +18,11 @@ class CreatePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Patient object
-            'patient.name' => 'required',
-            'patient.email' => 'required|email|unique:users,email',
-            'patient.cpf' => ['required', new CPFRule, 'unique:users,cpf'],
-            'patient.cns' => ['required', new CNSRule, 'unique:patients,cns'],
-            'patient.rg' => 'required|unique:patients,rg',
-            'patient.birth_date' => 'required|date',
-            'patient.password' => 'required|confirmed',
-
-            // Address object
-            'address.street_address' => 'required',
-            'address.house_number' => 'required',
-            'address.neighborhood' => 'required',
-            'address.postal_code' => 'required',
-            "address.city_uuid" => "required|uuid|exists:cities,uuid",
-
-            // Cellphones
-            "cellphones" => "array|min:1",
-            "cellphones.*.number" => 'required|size:11'
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'cpf' => ['required', new CPFRule, 'unique:users,cpf'],
+            'level' => 'required|integer',
+            'password' => 'required|confirmed',
         ];
     }
 
