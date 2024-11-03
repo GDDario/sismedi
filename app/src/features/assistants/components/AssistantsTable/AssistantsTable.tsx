@@ -1,15 +1,14 @@
 import {useEffect, useMemo, useState} from "react";
-import EditButton from "../../../../shared-components/Table/EditButton.tsx";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import {OpenModal} from "../../../doctors/types.ts";
-import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
 import AssistantsTablePagination from "./AssistantsTablePagination.tsx";
 import {showMessage} from "../../../../store/messageSlice.ts";
 import {fetchAssistants} from "../../store/assistantsSlice.ts";
 import EditAssistantModal from "../EditAssistantModal/EditAssistantModal.tsx";
-import {info} from "autoprefixer";
+import EditButton from "../../../../shared-components/Table/EditButton.tsx";
+import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 
 const columnHelper = createColumnHelper();
 
@@ -49,6 +48,20 @@ const AssistantsTable = () => {
             header: 'Criação do registro',
             cell: info => info.getValue()
 
+        }),
+        columnHelper.accessor('created_at', {
+            header: 'Criação do registro',
+            cell: info => {
+                // @ts-ignore
+                const uuid = info.row.original.uuid; // Pega o UUID da linha atual
+
+                return (
+                    <>
+                        <EditButton onClick={() => setEditModal({open: true, uuid})}/>
+                        <DeleteButton onClick={() => setDeleteModal({open: true, uuid})}/>
+                    </>
+                );
+            }
         })
     ], []);
 
@@ -122,7 +135,8 @@ const AssistantsTable = () => {
                     visible={deleteModal.open}
                     onClose={() => setDeleteModal({uuid: undefined, open: false})}
                 >
-                    Tem <b>certeza</b> que deseja excluir esse medicamento do sistema? Essa ação <b>não</b> poderá ser desfeita.
+                    Tem <b>certeza</b> que deseja excluir esse medicamento do sistema? Essa ação <b>não</b> poderá ser
+                    desfeita.
                 </ConfirmationMessage>
             </div>
         </section>

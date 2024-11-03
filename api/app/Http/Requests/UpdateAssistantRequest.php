@@ -21,8 +21,7 @@ class UpdateAssistantRequest extends FormRequest
             'name' => 'required',
             'email' => 'required|email',
             'cpf' => ['required', new CPFRule],
-            'level' => 'required|integer',
-            'password' => 'required|confirmed',
+            'level' => 'required|integer'
         ];
     }
 
@@ -37,8 +36,7 @@ class UpdateAssistantRequest extends FormRequest
             'patient.email' => 'Email já cadastrado.',
             'patient.cpf' => ['CPF já cadastrado.'],
             'patient.cns' => 'CNS já cadastrado.',
-            'patient.rg' => 'RG já cadastrado.',
-            'password.required' => 'O campo password é obrigatório.',
+            'patient.rg' => 'RG já cadastrado.'
         ];
     }
 

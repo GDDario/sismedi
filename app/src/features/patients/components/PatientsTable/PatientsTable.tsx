@@ -65,7 +65,7 @@ const PatientsTable = () => {
             header: 'Ações',
             cell: info => {
                 // @ts-ignore
-                const uuid = info.row.original.uuid; // Pega o UUID da linha atual
+                const uuid = info.row.original.uuid;
 
                 return (
                     <>

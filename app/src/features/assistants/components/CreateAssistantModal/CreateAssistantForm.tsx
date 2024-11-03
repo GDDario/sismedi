@@ -76,7 +76,6 @@ const CreateAssistantForm = ({onClose}: CreatePatientFormProps) => {
                 </div>
             </section>
 
-
             <section className="mt-2 flex gap-2">
                 <Button text="Cadastrar" type="submit"/>
                 <Button text="Cancelar" color="danger" type="button" onClick={onClose}/>
