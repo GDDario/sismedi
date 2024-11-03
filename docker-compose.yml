@@ -24,15 +24,15 @@ services:
     container_name: sismedi-mysql
     platform: linux/amd64
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: sismedi
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     networks:
-      sismedi-network:
-          ipv4_address: 172.25.0.10
+      - sismedi-network
+#          ipv4_address: 172.25.0.10
 
   mailpit:
     image: axllent/mailpit
@@ -66,9 +66,9 @@ services:
 networks:
   sismedi-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.25.0.0/16
+#    ipam:
+#      config:
+#        - subnet: 172.25.0.0/16
 
 volumes:
   mysql-data:

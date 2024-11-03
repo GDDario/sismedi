@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             AgendaSeeder::class,
             MedicineCategorySeeder::class,
             MedicineSeeder::class,
-            AssistantSeeder::class
+            AssistantSeeder::class,
+            ConsultationTypeSeeder::class
         ]);
     }
 }

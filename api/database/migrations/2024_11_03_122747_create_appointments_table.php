@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->uuid()->unique();
             $table->unsignedBigInteger('patient_id');
+            $table->unsignedBigInteger('consultation_type_id');
             $table->text('patient_description')->nullable();
             $table->dateTime('patient_desired_date')->nullable();
             $table->dateTime('appointment_date')->nullable();
@@ -21,10 +22,11 @@ return new class extends Migration {
             $table->dateTime('doctor_assigned_at')->nullable();
             $table->boolean('canceled')->default(false);
             $table->dateTime('completed_at')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+            $table->foreign('consultation_type_id')->references('id')->on('consultation_types')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
         });
     }

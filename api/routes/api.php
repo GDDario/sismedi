@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CityController;
@@ -64,5 +65,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [AssistantController::class, 'create']);
         Route::put('/{uuid}', [AssistantController::class, 'update']);
         Route::delete('/{uuid}', [AssistantController::class, 'delete']);
+    });
+
+    Route::prefix('appointment')->group(function () {
+//        Route::get('', [AppointmentController::class, 'index']);
+        Route::post('', [AppointmentController::class, 'create']);
     });
 });
