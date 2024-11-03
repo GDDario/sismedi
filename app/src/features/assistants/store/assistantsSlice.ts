@@ -1,17 +1,16 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {ListMedicinesResponse} from "../types.ts";
-import {MedicineService} from "../services/MedicineService.ts";
-import {redactedPatientsMockData} from "../../../../.jest/mocks/patientsMock.ts";
+import {ListAssistantsReponse} from "../types.ts";
+import {AssistantService} from "../services/AssistantService.ts";
 
-export type MedicinesStateType = {
-    data: ListMedicinesResponse | null,
+export type AssistantsStateType = {
+    data: ListAssistantsReponse | null,
     error: string | null;
     loading: boolean;
 }
 
-const initialState = {
+const initialState: AssistantsStateType = {
     data: {
-        data: redactedPatientsMockData,
+        data: [],
         current_page: 0,
         per_page: 17,
         total: 0,
@@ -23,14 +22,14 @@ const initialState = {
     loading: true
 };
 
-export const fetchMedicines = createAsyncThunk<ListMedicinesResponse, any>(
-    'medicines/fetchMedicines',
+export const fetchAssistants = createAsyncThunk<ListAssistantsReponse, any>(
+    'assistants/fetchAssistants',
     // @ts-ignore
     async (request, thunkAPI) => {
         try {
-            return await MedicineService.listMedicines(request);
+            return await AssistantService.paginate(request);
         } catch (error) {
-            return thunkAPI.rejectWithValue('Erro ao buscar os medicamentos');
+            return thunkAPI.rejectWithValue('Erro ao buscar os assistentes');
         }
     }
 );
@@ -50,7 +49,7 @@ export const nextPage = () => (dispatch: any, getState: any) => {
         per_page: state.data.per_page
     };
 
-    dispatch(fetchMedicines(params));
+    dispatch(fetchAssistants(params));
 };
 
 export const previousPage = () => (dispatch: any, getState: any) => {
@@ -68,29 +67,28 @@ export const previousPage = () => (dispatch: any, getState: any) => {
         per_page: state.data.per_page
     };
 
-    dispatch(fetchMedicines(params));
+    dispatch(fetchAssistants(params));
 };
 
-export const medicinesSlice = createSlice({
-    name: 'medicines',
+export const assistantsSlice = createSlice({
+    name: 'assistants',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchMedicines.pending, (state) => {
+            .addCase(fetchAssistants.pending, (state: AssistantsStateType) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchMedicines.fulfilled, (state, action) => {
+            .addCase(fetchAssistants.fulfilled, (state: AssistantsStateType, action) => {
                 state.loading = false;
-                // @ts-ignore
                 state.data = action.payload;
             })
-            .addCase(fetchMedicines.rejected, (state, action) => {
+            .addCase(fetchAssistants.rejected, (state: AssistantsStateType, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });
     },
 });
 
-export default medicinesSlice.reducer;
+export default assistantsSlice.reducer;

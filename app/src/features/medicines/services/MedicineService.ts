@@ -1,10 +1,10 @@
 import {CreateOrEditMedicineData, GetMedicineResponse, ListMedicinesResponse} from "../types.ts";
 import axiosInstance from "../../../config/axiosConfig.ts";
-import {CreateOrUpdatePatientData, GetPatientResponse} from "../../patients/types.ts";
+import {GetPatientResponse} from "../../patients/types.ts";
 
 export class MedicineService {
     static listMedicines = async (params: any): Promise<ListMedicinesResponse> => {
-        const response = await axiosInstance.get<ListMedicinesResponse>('/medicine', params);
+        const response = await axiosInstance.get<ListMedicinesResponse>('/medicine', {params});
 
         return response.data as ListMedicinesResponse;
     }

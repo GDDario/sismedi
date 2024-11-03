@@ -5,6 +5,7 @@ import messageReducer from '../store/messageSlice';
 import patientsReducer from '../features/patients/store/patientsSlice';
 import doctorsReducer from '../features/doctors/store/doctorsSlice';
 import medicinesReducer from '../features/medicines/store/medicinesSlice';
+import assistantsReducer from '../features/assistants/store/assistantsSlice.ts';
 
 export const store = configureStore(
     {
@@ -14,7 +15,8 @@ export const store = configureStore(
             message: messageReducer,
             patients: patientsReducer,
             doctors: doctorsReducer,
-            medicines: medicinesReducer
+            medicines: medicinesReducer,
+            assistants: assistantsReducer
         }
     }
 );

@@ -25,5 +25,5 @@
 
     "types": ["@testing-library/jest-dom"]
   },
-  "include": ["src"]
+  "include": ["src", "src/declarations.d.ts"]
 }

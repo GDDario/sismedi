@@ -1,5 +1,5 @@
 import NavigationMenu from "./NavigationMenu.tsx";
-import logo from '../../../assets/images/logovert.png'
+import logo from '../../../assets/images/logovert.png';
 import {BiSolidLogOut} from "react-icons/bi";
 import {AuthenticationService} from "../../../features/authentication/services/AuthenticationService.ts";
 import {useNavigate} from "react-router-dom";
