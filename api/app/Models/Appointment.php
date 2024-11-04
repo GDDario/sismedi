@@ -27,7 +27,7 @@ class Appointment extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => ' datetime',
-        'canceled' => 'bool',
+        'canceled' => 'bool'
     ];
 
     protected $hidden = [

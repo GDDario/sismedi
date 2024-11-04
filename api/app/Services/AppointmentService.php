@@ -41,19 +41,21 @@ class AppointmentService
         }
 
         return [
-            'uuid' => $appointmentData->uuid,
-            'patient_uuid' => $appointmentData->patient->uuid,
-            'consultation_type_uuid' => $appointmentData->consultationType->uuid,
-            'patient_description' => $appointmentData->patient_description,
-            'patient_desired_date' => $appointmentData->patient_desired_date,
-            'appointment_date' => $appointmentData->appointment_date,
-            'doctor_uuid' => $doctorUuid,
-            'doctor_assigned_at' => $appointmentData->doctor_assigned_at,
-            'canceled' => $appointmentData->canceled,
-            'completed_at' => $appointmentData->completed_at,
-            'created_at' => $appointmentData->created_at,
-            'updated_at' => $appointmentData->updated_at,
-            'deleted_at' => $appointmentData->deleted_at,
+            'data' => [
+                'uuid' => $appointmentData->uuid,
+                'patient_uuid' => $appointmentData->patient->uuid,
+                'consultation_type_uuid' => $appointmentData->consultationType->uuid,
+                'patient_description' => $appointmentData->patient_description,
+                'patient_desired_date' => $appointmentData->patient_desired_date,
+                'appointment_date' => $appointmentData->appointment_date,
+                'doctor_uuid' => $doctorUuid,
+                'doctor_assigned_at' => $appointmentData->doctor_assigned_at,
+                'canceled' => $appointmentData->canceled,
+                'completed_at' => $appointmentData->completed_at,
+                'created_at' => $appointmentData->created_at,
+                'updated_at' => $appointmentData->updated_at,
+                'deleted_at' => $appointmentData->deleted_at,
+            ]
         ];
     }
 }

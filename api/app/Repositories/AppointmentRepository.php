@@ -31,7 +31,8 @@ class AppointmentRepository
             'patient_description' => $dto->patientDescription
         ]);
         $appointment->refresh();
+        $appointment->load('patient');
 
-        return $appointment->with(['patient'])->first();
+        return $appointment;
     }
 }
