@@ -32,7 +32,7 @@ class AppointmentController extends Controller
         return $this->service->create(
             new CreateAppointmentDTO(
                 patientUuid: $request->get('patient_uuid'),
-                consultationType: $request->get('type'),
+                consultationTypeUuid: $request->get('type'),
                 patientDescription: $request->get('patient_description')
             )
         );

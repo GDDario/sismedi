@@ -20,7 +20,7 @@ class AppointmentRepository
             throw new NotFoundException('Paciente não encontrado.');
         }
 
-        if (!$consultationType = ConsultationType::query()->where('uuid', $dto->consultationType)->first()) {
+        if (!$consultationType = ConsultationType::query()->where('uuid', $dto->consultationTypeUuid)->first()) {
             throw new NotFoundException('Tipo de consulta não encontrado.');
         }
 
