@@ -73,8 +73,6 @@ class AppointmentRepository
             throw new NotFoundException('Tipo de consulta não encontrado.');
         }
 
-        dd($dto->patientDescription, $dto->patientDesiredDate);
-
         $appointment = Appointment::query()->create([
             'uuid' => Uuid::uuid4(),
             'patient_id' => $patient->id,
