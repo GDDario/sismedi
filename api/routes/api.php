@@ -72,5 +72,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{uuid}', [AppointmentController::class, 'show']);
         Route::post('', [AppointmentController::class, 'create']);
         Route::put('{uuid}', [AppointmentController::class, 'update']);
+        Route::delete('{uuid}', [AppointmentController::class, 'delete']);
     });
 });

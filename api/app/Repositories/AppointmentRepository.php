@@ -6,6 +6,7 @@ use App\DTO\CreateAppointmentDTO;
 use App\DTO\UpdateAppointmentDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
+use App\Models\Assistant;
 use App\Models\ConsultationType;
 use App\Models\Doctor;
 use App\Models\Patient;
@@ -130,6 +131,18 @@ class AppointmentRepository
         $appointment->load('doctor');
 
         return $appointment;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function delete(string $uuid): bool
+    {
+        if (!$appointment = Appointment::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("Agenda com uuid $uuid não encontrado.");
+        }
+
+        return $appointment->delete();
     }
 
     private function filterQueryByFields(Builder $query, array $parameters)

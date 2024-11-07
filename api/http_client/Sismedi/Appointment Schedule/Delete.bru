@@ -1,0 +1,15 @@
+meta {
+  name: Delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{api_url}}/appointment/12770405-4f9f-41a4-b21b-c78b3e15d1fd
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

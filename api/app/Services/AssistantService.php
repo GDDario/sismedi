@@ -71,21 +71,6 @@ class AssistantService
         }
     }
 
-    private function arrangeAssistantData(Assistant $assistant): array
-    {
-        return [
-            'uuid' => $assistant->uuid,
-            'name' => $assistant->user->name,
-            'email' => $assistant->user->email,
-            'cpf' => $assistant->user->cpf,
-            'level' => $assistant->level,
-            'email_verified_at' => $assistant->user->email_verified_at,
-            'created_at' => $assistant->created_at,
-            'updated_at' => $assistant->updated_at,
-            'deleted_at' => $assistant->deleted_at
-        ];
-    }
-
     public function delete(string $uuid): Response
     {
         try {
@@ -100,6 +85,21 @@ class AssistantService
         } catch (NotFoundException $exception) {
             return new Response(['message' => $exception->getMessage()], Response::HTTP_NOT_FOUND);
         }
+    }
+
+    private function arrangeAssistantData(Assistant $assistant): array
+    {
+        return [
+            'uuid' => $assistant->uuid,
+            'name' => $assistant->user->name,
+            'email' => $assistant->user->email,
+            'cpf' => $assistant->user->cpf,
+            'level' => $assistant->level,
+            'email_verified_at' => $assistant->user->email_verified_at,
+            'created_at' => $assistant->created_at,
+            'updated_at' => $assistant->updated_at,
+            'deleted_at' => $assistant->deleted_at
+        ];
     }
 }
 

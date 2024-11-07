@@ -75,6 +75,22 @@ class AppointmentService
         }
     }
 
+    public function delete(string $uuid): Response
+    {
+        try {
+            $deletedSuccessfully = $this->repository->delete($uuid);
+
+            if ($deletedSuccessfully) {
+                return new Response(null, Response::HTTP_NO_CONTENT);
+            } else {
+                return new Response(['message' => 'Não foi possível excluir o agendamento.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+        } catch (NotFoundException $exception) {
+            return new Response(['message' => $exception->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
     private function arrangeAppointmentData(Appointment $appointmentData): array
     {
         $doctorUuid = null;

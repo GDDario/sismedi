@@ -57,11 +57,11 @@ class AppointmentController extends Controller
                 uuid: $request->route('uuid'),
                 patientUuid: $request->get('patient_uuid'),
                 consultationTypeUuid: $request->get('type'),
+                canceled: $request->get('canceled'),
                 patientDescription: $request->get('patient_description'),
                 patientDesiredDate: $request->get('patient_desired_date'),
                 appointmentDate: $request->get('appointment_date'),
                 doctorUuid: $request->get('doctor_uuid'),
-                canceled: $request->get('canceled'),
                 canceledReason: $request->get('canceled_reason')
             )
         );
@@ -69,6 +69,6 @@ class AppointmentController extends Controller
 
     public function delete(Request $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->delete($request->route('uuid'));
     }
 }
