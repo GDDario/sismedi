@@ -68,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('appointment')->group(function () {
-//        Route::get('', [AppointmentController::class, 'index']);
+        Route::get('', [AppointmentController::class, 'index']);
         Route::post('', [AppointmentController::class, 'create']);
     });
 });

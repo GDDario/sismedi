@@ -6,6 +6,7 @@ use App\DTO\CreateAppointmentDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
+use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
 
 class AppointmentService
@@ -15,6 +16,15 @@ class AppointmentService
     )
     {
 
+    }
+
+    public function list(array $parameters): Response
+    {
+        $paginator = $this->repository->paginate($parameters);
+
+        $pageData = PaginationUtil::extractData($paginator);
+
+        return new Response($pageData, Response::HTTP_OK);
     }
 
     public function create(CreateAppointmentDTO $dto): Response
