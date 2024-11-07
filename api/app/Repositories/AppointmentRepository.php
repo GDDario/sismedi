@@ -3,9 +3,11 @@
 namespace App\Repositories;
 
 use App\DTO\CreateAppointmentDTO;
+use App\DTO\UpdateAppointmentDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
 use App\Models\ConsultationType;
+use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,11 +40,24 @@ class AppointmentRepository
 
         $query = $this->filterQueryByFields($query, $parameters);
 
-//        dd($query->toSql());
 
         return $query->paginate($parameters['per_page'], ['*'], 'page', $parameters['page']);
     }
 
+    /**
+     * @throws NotFoundException
+     */
+    public function findByUuid(string $uuid): Appointment
+    {
+        if (!$appointment = Appointment::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("Appointment with uuid $uuid not found.");
+        }
+
+        $appointment->refresh();
+        $appointment->load('patient');
+
+        return $appointment;
+    }
 
     /**
      * @throws NotFoundException
@@ -57,14 +72,62 @@ class AppointmentRepository
             throw new NotFoundException('Tipo de consulta não encontrado.');
         }
 
+        dd($dto->patientDescription, $dto->patientDesiredDate);
+
         $appointment = Appointment::query()->create([
             'uuid' => Uuid::uuid4(),
             'patient_id' => $patient->id,
             'consultation_type_id' => $consultationType->id,
-            'patient_description' => $dto->patientDescription
+            'patient_description' => $dto->patientDescription,
+            'patient_desired_date' => $dto->patientDesiredDate,
         ]);
         $appointment->refresh();
         $appointment->load('patient');
+
+        return $appointment;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function update(UpdateAppointmentDTO $dto): ?Appointment
+    {
+        $doctorAssignedAt = null;
+
+        if (!$appointment = Appointment::query()->where('uuid', $dto->uuid)->first()) {
+            throw new NotFoundException("Appointment with uuid $dto->uuid not found.");
+        }
+
+        if (!$patient = Patient::query()->where('uuid', $dto->patientUuid)->first()) {
+            throw new NotFoundException("Patient with uuid $dto->patientUuid not found.");
+        }
+
+        if ($dto->doctorUuid && !$doctor = Doctor::query()->where('uuid', $dto->doctorUuid)->first()) {
+            throw new NotFoundException("Doctor with uuid $dto->patientUuid not found.");
+        }
+
+        if (!$consultationType = ConsultationType::query()->where('uuid', $dto->consultationTypeUuid)->first()) {
+            throw new NotFoundException('Tipo de consulta não encontrado.');
+        }
+
+        if ($dto->doctorUuid) {
+            $doctorAssignedAt = now();
+        }
+
+        $appointment->update([
+            'patient_id' => $patient->id,
+            'consultation_type_id' => $consultationType->id,
+            'patient_description' => $dto->patientDescription,
+            'patient_desired_date' => $dto->patientDesiredDate,
+            'appointment_date' => $dto->appointmentDate,
+            'doctor_id' => $dto->doctorUuid ? $doctor->id : null,
+            'doctor_assigned_at' => $doctorAssignedAt,
+            'canceled' => $dto->canceled,
+            'canceled_reason' => $dto->canceled ? $dto->canceledReason : null
+        ]);
+        $appointment->refresh();
+        $appointment->load('patient');
+        $appointment->load('doctor');
 
         return $appointment;
     }
@@ -115,5 +178,4 @@ class AppointmentRepository
 
         return $query;
     }
-
 }

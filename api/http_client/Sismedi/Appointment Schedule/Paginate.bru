@@ -1,0 +1,15 @@
+meta {
+  name: Paginate
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/appointment
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

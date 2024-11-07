@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CPFRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class CreateAppointmentRequest extends FormRequest
+class UpdateAppointmentRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,21 +18,11 @@ class CreateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_uuid' => 'required|exists:patients,uuid',
             'type' => 'required|exists:consultation_types,uuid',
-            'patient_desired_date' => 'date_format:Y-m-d H:i:s|after:' . date(DATE_ATOM)
-        ];
-    }
-
-    /**
-     * Get the custom messages for validator errors.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'patient_uuid' => 'O uuid do paciente está inválido ou não foi passado.',
+            'patient_desired_date' => 'date_format:Y-m-d H:i:s|after:' . date(DATE_ATOM),
+            'appointment_date' => 'date_format:Y-m-d H:i:s|after:' . date(DATE_ATOM),
+            'doctor_uuid' => 'nullable|uuid|exists:doctors,uuid',
+            'canceled' => 'required|boolean'
         ];
     }
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DTO\CreateAppointmentDTO;
+use App\DTO\UpdateAppointmentDTO;
 use App\Http\Requests\CreateAppointmentRequest;
+use App\Http\Requests\UpdateAppointmentRequest;
 use App\Http\Requests\UpdateAssistantRequest;
 use App\Services\AppointmentService;
 use Illuminate\Http\Request;
@@ -33,7 +35,7 @@ class AppointmentController extends Controller
 
     public function show(Request $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->getByUuid($request->route('uuid'));
     }
 
     public function create(CreateAppointmentRequest $request): Response
@@ -42,14 +44,27 @@ class AppointmentController extends Controller
             new CreateAppointmentDTO(
                 patientUuid: $request->get('patient_uuid'),
                 consultationTypeUuid: $request->get('type'),
-                patientDescription: $request->get('patient_description')
+                patientDescription: $request->get('patient_description'),
+                patientDesiredDate: $request->get('patient_desired_date')
             )
         );
     }
 
-    public function update(UpdateAssistantRequest $request): Response
+    public function update(UpdateAppointmentRequest $request): Response
     {
-        return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        return $this->service->update(
+            new UpdateAppointmentDTO(
+                uuid: $request->route('uuid'),
+                patientUuid: $request->get('patient_uuid'),
+                consultationTypeUuid: $request->get('type'),
+                patientDescription: $request->get('patient_description'),
+                patientDesiredDate: $request->get('patient_desired_date'),
+                appointmentDate: $request->get('appointment_date'),
+                doctorUuid: $request->get('doctor_uuid'),
+                canceled: $request->get('canceled'),
+                canceledReason: $request->get('canceled_reason')
+            )
+        );
     }
 
     public function delete(Request $request): Response

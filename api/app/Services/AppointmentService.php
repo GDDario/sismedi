@@ -3,11 +3,14 @@
 namespace App\Services;
 
 use App\DTO\CreateAppointmentDTO;
+use App\DTO\UpdateAppointmentDTO;
+use App\DTO\UpdateAssistantDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
+use InvalidArgumentException;
 
 class AppointmentService
 {
@@ -27,6 +30,19 @@ class AppointmentService
         return new Response($pageData, Response::HTTP_OK);
     }
 
+    public function getByUuid(string $uuid)
+    {
+        try {
+            $appointment = $this->repository->findByUuid($uuid);
+
+            $appointmentData = $this->arrangeAppointmentData($appointment);
+
+            return new Response($appointmentData, Response::HTTP_OK);
+        } catch (NotFoundException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
     public function create(CreateAppointmentDTO $dto): Response
     {
         try {
@@ -39,6 +55,23 @@ class AppointmentService
             }
         } catch (NotFoundException $exception) {
             return new Response(['message' => $exception->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function update(UpdateAppointmentDTO $dto): Response
+    {
+        try {
+            $assistant = $this->repository->update($dto);
+
+            if (is_null($assistant)) {
+                return new Response(['message' => 'Could not update the appointment.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                return new Response($this->arrangeAppointmentData($assistant), Response::HTTP_OK);
+            }
+        } catch (NotFoundException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        } catch (InvalidArgumentException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -61,6 +94,7 @@ class AppointmentService
                 'doctor_uuid' => $doctorUuid,
                 'doctor_assigned_at' => $appointmentData->doctor_assigned_at,
                 'canceled' => $appointmentData->canceled,
+                'canceled_reason' => $appointmentData->canceled_reason,
                 'completed_at' => $appointmentData->completed_at,
                 'created_at' => $appointmentData->created_at,
                 'updated_at' => $appointmentData->updated_at,

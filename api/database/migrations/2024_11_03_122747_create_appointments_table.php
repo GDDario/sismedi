@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('doctor_id')->nullable();
             $table->dateTime('doctor_assigned_at')->nullable();
             $table->boolean('canceled')->default(false);
+            $table->string('canceled_reason')->nullable();
             $table->dateTime('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

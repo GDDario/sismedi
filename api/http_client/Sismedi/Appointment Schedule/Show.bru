@@ -1,0 +1,15 @@
+meta {
+  name: Show
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{api_url}}/appointment/8632d2f7-299d-45c7-8972-8c3d0b507945
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
