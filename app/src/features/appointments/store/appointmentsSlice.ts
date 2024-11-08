@@ -36,7 +36,7 @@ export const fetchAppointments = createAsyncThunk<ListAssistantsReponse, any>(
 );
 
 export const nextPage = () => (dispatch: any, getState: any) => {
-    const state = getState().medicines;
+    const state = getState().appointments;
 
     const nextPage = state.data.current_page + 1;
 
@@ -54,7 +54,7 @@ export const nextPage = () => (dispatch: any, getState: any) => {
 };
 
 export const previousPage = () => (dispatch: any, getState: any) => {
-    const state = getState().medicines;
+    const state = getState().appointments;
 
     const previousPage = state.data.current_page - 1;
 

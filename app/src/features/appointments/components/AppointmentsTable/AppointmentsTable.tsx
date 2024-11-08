@@ -9,6 +9,7 @@ import {fetchAppointments} from "../../store/appointmentsSlice.ts";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
 import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {AppointmentService} from "../../services/AppointmentService.ts";
+import {DateUtil} from "../../../../util/DateUtil.ts";
 
 const columnHelper = createColumnHelper();
 
@@ -34,19 +35,19 @@ const AppointmentsTable = () => {
         }),
         columnHelper.accessor('doctor_name', {
             header: 'Médico',
-            cell: info => info.getValue() ?? 'Indefinido',
+            cell: info => info.getValue() ?? '-',
         }),
         columnHelper.accessor('patient_desired_date', {
             header: 'Desejada',
-            cell: info => info.getValue() ?? '-'
+            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
         }),
         columnHelper.accessor('appointment_date', {
             header: 'Data marcada',
-            cell: info => info.getValue() ?? '-',
+            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
         }),
         columnHelper.accessor('created_at', {
             header: 'Criação do registro',
-            cell: info => info.getValue() ?? '-'
+            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
 
         }),
         columnHelper.accessor('action', {

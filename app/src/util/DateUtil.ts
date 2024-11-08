@@ -1,3 +1,5 @@
+import {format, isValid, parseISO} from "date-fns";
+
 export class DateUtil {
     static calculateAgeFromBirthDate = (birthDate: Date): number => {
         const today = new Date();
@@ -18,8 +20,16 @@ export class DateUtil {
         return age;
     }
 
-    static formatValidDate = (date: string): string => {
-        return '';
+    static formatValidDate = (date: string | null): string | nul => {
+        if (!date) {
+            return null;
+        }
+
+        if (!isValid(parseISO(date))) {
+            return date;
+        }
+
+        return format(date, 'dd/MM/yyyy HH:mm');
     }
 }
 

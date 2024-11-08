@@ -5,9 +5,14 @@ meta {
 }
 
 get {
-  url: {{api_url}}/appointment
+  url: {{api_url}}/appointment?name1=patient_name&value1=Jh
   body: none
   auth: bearer
+}
+
+params:query {
+  name1: patient_name
+  value1: Jh
 }
 
 auth:bearer {
