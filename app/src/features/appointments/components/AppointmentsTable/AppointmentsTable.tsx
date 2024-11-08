@@ -1,33 +1,26 @@
 import {useEffect, useMemo, useState} from "react";
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
-// @ts-ignore
-import {patientsMockData} from "../../../../../.jest/mocks/patientsMock.ts";
-import EditPatientModal from "../EditPatientModal/EditPatientModal.tsx";
-import AppointsButton from "./AppointsButton.tsx";
-import {format, isValid} from "date-fns";
-import {OpenModal} from "../../types.ts";
+import {OpenModal} from "../../../doctors/types.ts";
 import {useDispatch, useSelector} from "react-redux";
-import PatientsTablePagination from "./PatientsTablePagination.tsx";
-import {fetchPatients} from "../../store/patientsSlice.ts";
 import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
-import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
-import {PatientService} from "../../services/PatientService.ts";
+import AssistantsTablePagination from "./AppointmentsTablePagination.tsx";
 import {showMessage} from "../../../../store/messageSlice.ts";
+import {fetchAppointments} from "../../store/appointmentsSlice.ts";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
-import {DateUtil} from "../../../../util/DateUtil.ts";
+import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
+import {AppointmentService} from "../../services/AppointmentService.ts";
 
 const columnHelper = createColumnHelper();
 
-const PatientsTable = () => {
+const AppointmentsTable = () => {
     const [editModal, setEditModal] = useState<OpenModal>({open: false, uuid: undefined});
-    const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({open: false, uuid: undefined});
     const [deleteModal, setDeleteModal] = useState<OpenModal>({open: false, uuid: undefined});
-    const patientsState = useSelector((state: any) => state.patients);
+    const assistantsState = useSelector((state: any) => state.appointments);
     const dispatch = useDispatch();
 
     useEffect(() => {
         // @ts-ignore
-        dispatch(fetchPatients({page: 1, per_page: 17}));
+        dispatch(fetchAppointments({page: 1, per_page: 17}));
     }, []);
 
     const columns = useMemo(() => [
@@ -35,66 +28,66 @@ const PatientsTable = () => {
             header: 'ID',
             cell: info => info.getValue(),
         }),
-        columnHelper.accessor('name', {
-            header: 'Nome',
+        columnHelper.accessor('patient_name', {
+            header: 'Paciente',
             cell: info => info.getValue(),
         }),
-        columnHelper.accessor('cpf', {
-            header: 'CPF',
-            cell: info => info.getValue(),
+        columnHelper.accessor('doctor_name', {
+            header: 'Médico',
+            cell: info => info.getValue() ?? 'Indefinido',
         }),
-        columnHelper.accessor('cns', {
-            header: 'CNS',
-            cell: info => info.getValue(),
+        columnHelper.accessor('patient_desired_date', {
+            header: 'Desejada',
+            cell: info => info.getValue() ?? '-'
         }),
-        columnHelper.accessor('email', {
-            header: 'Email',
-            cell: info => info.getValue(),
+        columnHelper.accessor('appointment_date', {
+            header: 'Data marcada',
+            cell: info => info.getValue() ?? '-',
         }),
         columnHelper.accessor('created_at', {
-            header: 'Data de cadastro',
-            cell: info => DateUtil.formatValidDate(info.getValue()),
+            header: 'Criação do registro',
+            cell: info => info.getValue() ?? '-'
+
         }),
         columnHelper.accessor('action', {
             header: 'Ações',
             cell: info => {
                 // @ts-ignore
-                const uuid = info.row.original.uuid;
+                const uuid = info.row.original.uuid; // Pega o UUID da linha atual
 
                 return (
                     <>
                         <EditButton onClick={() => setEditModal({open: true, uuid})}/>
-                        <AppointsButton onClick={() => setOpenAppointsModal({open: true, uuid})}/>
                         <DeleteButton onClick={() => setDeleteModal({open: true, uuid})}/>
                     </>
                 );
             }
-        }),
+        })
     ], []);
 
     const table = useReactTable({
         // @ts-ignore
         columns,
-        data: patientsState.data.data,
+        data: assistantsState.data.data,
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const deletePatient = async (): Promise<void> => {
-        await PatientService.delete(deleteModal.uuid!);
+    const deleteAssistant = async (): Promise<void> => {
+        await AppointmentService.delete(deleteModal.uuid!);
 
-        dispatch(showMessage({message: 'Patient deleted successfully!', type: 'success'}));
+        dispatch(showMessage({message: 'Assistente excluído com sucesso!', type: 'success'}));
         // @ts-ignore
-        dispatch(fetchPatients({page: 1, per_page: 17}));
+        dispatch(fetchAppointments({page: 1, per_page: 17}));
         setDeleteModal({open: false, uuid: undefined});
     }
 
-    if (patientsState.error) return <div>Error: {patientsState.error}</div>;
+    if (assistantsState.error) return <div>Error: {assistantsState.error}</div>;
 
     return (
         <section>
             <div className="w-full">
                 <div className="relative h-[631px]">
-                    {patientsState.loading && (<div
+                    {assistantsState.loading && (<div
                         className="absolute top-0 left-0 bg-black bg-opacity-30 w-full h-full flex items-center justify-center">
                         <span className="font-bold text-white">Carregando...</span>
                     </div>)}
@@ -124,31 +117,30 @@ const PatientsTable = () => {
                     </table>
                 </div>
 
-                <PatientsTablePagination/>
+                <AssistantsTablePagination/>
 
-                {editModal.open && (
-                    <EditPatientModal
-                        uuid={editModal.uuid!}
-                        visible={editModal.open}
-                        onClose={() => setEditModal({uuid: undefined, open: false})}
-                    />
-                )}
-                {/*<p>Open appoints modal to patient {openAppointsModal.uuid}</p>*/}
+                {/*{editModal.open && (*/}
+                {/*    <EditAssistantModal*/}
+                {/*        uuid={editModal.uuid!}*/}
+                {/*        visible={editModal.open}*/}
+                {/*        onClose={() => setEditModal({uuid: undefined, open: false})}*/}
+                {/*    />*/}
+                {/*)}*/}
 
                 <ConfirmationMessage
-                    title="Excluir paciente"
+                    title="Excluir agendamento de consulta"
                     loading={false}
-                    onConfirm={() => deletePatient()}
+                    onConfirm={deleteAssistant}
                     onCancel={() => setDeleteModal({uuid: undefined, open: false})}
                     visible={deleteModal.open}
                     onClose={() => setDeleteModal({uuid: undefined, open: false})}
                 >
-                    Tem <b>certeza</b> que deseja excluir esse paciente? Essa ação <b>não</b> poderá ser desfeita.
+                    Tem <b>certeza</b> que deseja excluir esse agendamento do sistema? Essa ação <b>não</b> poderá ser
+                    desfeita.
                 </ConfirmationMessage>
             </div>
         </section>
-    )
-        ;
-}
+    );
+};
 
-export default PatientsTable;
+export default AppointmentsTable;

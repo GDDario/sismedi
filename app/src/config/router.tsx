@@ -8,6 +8,7 @@ import PatientsPage from "../features/patients/pages/PatientsPage.tsx";
 import DoctorsPage from "../features/doctors/pages/DoctorsPage.tsx";
 import MedicinesPage from "../features/medicines/pages/MedicinesPage.tsx";
 import AssistantsPage from "../features/assistants/pages/AssistantsPage.tsx";
+import AppointmentsPage from "../features/appointments/pages/AppointmentsPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "/assistants",
                 element: <AssistantsPage/>
+            },
+            {
+                path: "/appointments",
+                element: <AppointmentsPage/>
             }
         ],
     },
