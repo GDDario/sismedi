@@ -6,7 +6,6 @@ use App\DTO\CreateAppointmentDTO;
 use App\DTO\UpdateAppointmentDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
-use App\Models\Assistant;
 use App\Models\ConsultationType;
 use App\Models\Doctor;
 use App\Models\Patient;
