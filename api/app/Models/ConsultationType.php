@@ -14,12 +14,14 @@ class ConsultationType extends Model
         'uuid',
         'name',
         'description',
-        'created'
+        'created_at',
+        'updated_at'
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
     ];
 
     protected $hidden = [

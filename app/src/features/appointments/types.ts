@@ -27,11 +27,9 @@ export type GetAssistantResponse = {
     data: AssistantResponse;
 };
 
-export type CreateOrEditAssistantData = {
-    name: string,
-    email: string;
-    cpf: string;
-    level: number;
-    password: string;
-    password_confirmation: string;
+export type CreateAppointmentByPatient = {
+    patientUuid: string;
+    type: string;
+    patient_desired_date?: string;
+    patient_description?: string;
 }

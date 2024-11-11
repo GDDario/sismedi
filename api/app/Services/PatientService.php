@@ -38,10 +38,24 @@ class PatientService
             $patientData = $this->arrangePatientData($patient);
 
             return new Response($patientData, Response::HTTP_OK);
-        } catch (NotFoundException $e) {
-            return new Response(['message' => 'Patient not found.'], Response::HTTP_NOT_FOUND);
+        } catch (NotFoundException $exception) {
+            return new Response(['message' => $exception->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
+
+    public function getByUserUuid(string $uuid): Response
+    {
+        try {
+            $patient = $this->repository->findByUserUuid($uuid);
+
+            $patientData = $this->arrangePatientData($patient);
+
+            return new Response($patientData, Response::HTTP_OK);
+        } catch (NotFoundException $exception) {
+            return new Response(['message' => $exception->getMessage()], Response::HTTP_NOT_FOUND);
+        }
+    }
+
 
     public function create(CreatePatientDTO $dto)
     {

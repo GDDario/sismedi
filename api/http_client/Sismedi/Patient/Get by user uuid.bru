@@ -1,0 +1,15 @@
+meta {
+  name: Get by user uuid
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{api_url}}/patient/user/9c520639-e3b3-3d78-ab29-8b42f8a89c91
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

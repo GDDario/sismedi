@@ -15,6 +15,13 @@ export class PatientService {
         return response.data as GetPatientResponse;
     }
 
+    static getByUserUuid = async (userUuid: string): Promise<GetPatientResponse> => {
+        const url = `/patient/user/${userUuid}`;
+        const response = await axiosInstance.get<GetPatientResponse>(url);
+
+        return response.data as GetPatientResponse;
+    }
+
     static create = async (patientData: CreateOrUpdatePatientData): Promise<void> => {
         await axiosInstance.post<GetPatientResponse>('/patient', patientData);
     }

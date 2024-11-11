@@ -3,10 +3,10 @@ import {useDispatch} from "react-redux";
 import {setTitle} from "../../../store/pageSlice.ts";
 import Button from "../../../shared-components/Button/Button.tsx";
 import TableFilter from "../../../shared-components/Table/TableFilter.tsx";
-import {fetchAssistants} from "../../assistants/store/assistantsSlice.ts";
 import {AppointmentsFilters} from "../constants.ts";
 import AppointmentsTable from "../components/AppointmentsTable/AppointmentsTable.tsx";
 import {fetchAppointments} from "../store/appointmentsSlice.ts";
+import CreateAppointmentModal from "../components/CreateAppointmentModal/CreateAppointmentModal.tsx";
 
 const AppointmentsPage = () => {
     const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
@@ -23,10 +23,10 @@ const AppointmentsPage = () => {
             <AppointmentsTable />
             {/*<AssistantsTable/>*/}
 
-            {/*<CreateAssistantModal*/}
-            {/*    visible={openCreateModal}*/}
-            {/*    onClose={() => setOpenCreateModal(false)}*/}
-            {/*/>*/}
+            <CreateAppointmentModal
+                visible={openCreateModal}
+                onClose={() => setOpenCreateModal(false)}
+            />
         </>
     );
 };

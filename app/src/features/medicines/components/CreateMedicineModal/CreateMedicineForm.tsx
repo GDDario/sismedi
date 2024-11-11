@@ -43,7 +43,7 @@ const CreateMedicineForm = ({onClose}: CreateMedicineFormProps) => {
         });
     }
 
-    const handleSelectState = (category: any) => {
+    const handleSelectMedicineCategory = (category: any) => {
         setValue('category_uuid', category.uuid);
     }
 
@@ -70,7 +70,7 @@ const CreateMedicineForm = ({onClose}: CreateMedicineFormProps) => {
                         label="Categoria"
                         register={register}
                         error={errors.state}
-                        onSelect={handleSelectState}
+                        onSelect={handleSelectMedicineCategory}
                         onSearch={handleMedicineCategorySearch}
                         value={medicineCategory}
                     />
@@ -110,10 +110,10 @@ const CreateMedicineForm = ({onClose}: CreateMedicineFormProps) => {
 
                 <TextAreaField name="prescription" label="Prescrição" register={register}
                                error={errors.prescription}
-                               fullWidth rows={5}/>
+                               fullWidth rows={4}/>
 
                 <TextAreaField name="description" label="Descrição" register={register} error={errors.description}
-                               fullWidth rows={3}/>
+                               fullWidth rows={4}/>
             </section>
 
             <section className="mt-2 flex gap-2">
