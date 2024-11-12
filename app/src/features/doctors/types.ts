@@ -14,3 +14,10 @@ export type ListDoctorsResponse = {
     from: number;
     to: number;
 }
+
+export type SearchDoctorsByNameResponse = {
+    data: {
+        uuid: string;
+        name: string;
+    }[];
+}

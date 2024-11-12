@@ -17,9 +17,8 @@ import {ConsultationType} from "../../../consultations/models/consultationType.t
 import {useEffect, useState} from "react";
 import {selectUser} from "../../../authentication/store/userSlice.ts";
 import SearchField from "../../../../shared-components/SearchField/SearchField.tsx";
-import {StateService} from "../../../patients/services/StateService.ts";
-import {State} from "../../../patients/models/state.ts";
 import CheckboxField from "../../../../shared-components/CheckboxField.tsx";
+import {DoctorService} from "../../../doctors/services/DoctorService.ts";
 
 const schema = z.any({});
 
@@ -35,7 +34,8 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
         register,
         handleSubmit,
         formState: {errors},
-        setValue
+        setValue,
+        watch
     } = useForm<EditAppointmentSchema>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -45,8 +45,8 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
     const dispatch = useDispatch();
     const [medicineCategory, setMedicineCategory] = useState<string>('');
     const [consultationTypes, setConsultationTypes] = useState<SelectOptionType[]>([]);
-    const [doctor, setDoctor] = useState<string>();
-    const user = useSelector(selectUser);
+    const [doctor, setDoctor] = useState<string>('');
+    const canceled = watch("canceled");
 
     useEffect(() => {
         fetchCategories();
@@ -66,39 +66,43 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
         setValue('type', consultationTypes[0].name)
     }
 
-    const handleStateSearch = async (text: string): Promise<any> => {
-        const states = await StateService.searchByName(text);
+    const handleDoctorsSearch = async (text: string): Promise<any> => {
+        const response = await DoctorService.searchByName(text);
 
-        return states.data.map((state: State) => {
-            const labelText = `${state.name} - ${state.code}`;
-
+        return response.data.map((doctor: { uuid: string; name: string }) => {
             return {
-                uuid: state.uuid,
-                label: labelText
+                uuid: doctor.uuid,
+                label: doctor.name
             };
         });
     }
 
-    const handleSelectState = (state: any) => {
-        setValue('address.state_uuid', state.uuid);
-        // setStateUuid(state.uuid);
+    const handleSelectDoctor = (doctor: any) => {
+        setValue('doctor_uuid', doctor.uuid);
     }
 
-    const onSubmit = async (data: CreateAppointmentSchema) => {
-        const response = await PatientService.getByUserUuid(user.uuid);
-
-        const newData = {
-            ...data,
-            patient_uuid: response.data.patient.uuid
+    const mapDataFromSubmit = (data: EditAppointmentSchema) => {
+        return {
+            "patient_uuid": data.patient_uuid,
+            "type": data.type,
+            "patient_description": data.patient_description,
+            "patient_desired_date": data.patient_desired_date,
+            "canceled": data.canceled,
+            "canceled_reason": data.canceled_reason,
+            "doctor_uuid": data.doctor_uuid
         };
+    }
 
-        if (newData.patient_desired_date == '') {
+    const onSubmit = async (data: EditAppointmentSchema) => {
+        const newData = mapDataFromSubmit(data);
+
+        if (newData.patient_desired_date == '' || newData.patient_desired_date === null) {
             delete newData.patient_desired_date;
         }
 
-        await AppointmentService.create(newData);
+        await AppointmentService.update(data.uuid, newData);
 
-        dispatch(showMessage({message: "Pedido de agendamento cadastrado com sucesso!", type: "success"}))
+        dispatch(showMessage({message: "Pedido de agendamento editado com sucesso!", type: "success"}))
         onClose();
     }
 
@@ -142,8 +146,8 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
                         label="Médico"
                         register={register}
                         error={errors.doctor}
-                        onSelect={handleSelectState}
-                        onSearch={handleStateSearch}
+                        onSelect={handleSelectDoctor}
+                        onSearch={handleDoctorsSearch}
                         value={doctor}
                     />
                 </div>
@@ -158,10 +162,19 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
                 />
 
                 <CheckboxField label="Cancelado" name="canceled" register={register}/>
+
+                <TextAreaField
+                    label="Motivo do cancelamento"
+                    name="canceled_reason"
+                    register={register}
+                    fullWidth
+                    rows={4}
+                    disabled={!canceled}
+                />
             </section>
 
             <section className="mt-2 flex gap-2">
-                <Button text="Cadastrar" type="submit"/>
+                <Button text="Salvar" type="submit"/>
                 <Button text="Cancelar" color="danger" type="button" onClick={onClose}/>
             </section>
         </form>

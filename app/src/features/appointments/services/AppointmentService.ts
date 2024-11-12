@@ -1,5 +1,5 @@
 import axiosInstance from "../../../config/axiosConfig.ts";
-import {CreateAppointmentByPatient, GetAppointmentResponse, ListAppointmentsReponse} from "../types.ts";
+import {UpdateAppointmentData, GetAppointmentResponse, ListAppointmentsReponse} from "../types.ts";
 
 export class AppointmentService {
     static paginate = async (params: any): Promise<ListAppointmentsReponse> => {
@@ -15,13 +15,13 @@ export class AppointmentService {
         return reponse.data;
     }
 
-    static create = async (body: CreateAppointmentByPatient): Promise<void> => {
-        await axiosInstance.post<void>('/appointment', body);
+    static create = async (body: UpdateAppointmentData): Promise<void> => {
+        await axiosInstance.post<GetAppointmentResponse>('/appointment', body);
     }
 
-    static update = async (uuid: string, assistantData: CreateOrEditAssistantData): Promise<void> => {
-        const url = `/assistant/${uuid}`;
-        await axiosInstance.put<GetAssistantResponse>(url, assistantData);
+    static update = async (uuid: string, appointmentData: UpdateAppointmentData): Promise<void> => {
+        const url = `/appointment/${uuid}`;
+        await axiosInstance.put<GetAppointmentResponse>(url, appointmentData);
     }
 
     static delete = async (uuid: string): Promise<void> => {

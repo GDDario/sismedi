@@ -39,3 +39,13 @@ export type AppointmentResponse = Appointment;
 export type GetAppointmentResponse = {
     data: Appointment;
 };
+
+export type UpdateAppointmentData = {
+    patient_uuid: string;
+    type: string;
+    canceled: boolean;
+    patient_description?: string;
+    patient_desired_date?: string;
+    canceled_reason?: string;
+    doctor_uuid?: string;
+}
