@@ -1,0 +1,19 @@
+meta {
+  name: Search
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/doctors/search?query=J
+  body: none
+  auth: bearer
+}
+
+params:query {
+  query: J
+}
+
+auth:bearer {
+  token: {{token}}
+}

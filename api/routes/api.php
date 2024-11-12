@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('doctor')->group(function () {
         Route::get('', [DoctorController::class, 'index']);
+        Route::get('/search', [DoctorController::class, 'search']);
         Route::get('/{uuid}', [DoctorController::class, 'show']);
         Route::get('/agenda/{id}', [DoctorController::class, 'getAgenda']);
     });
