@@ -58,7 +58,7 @@ const PatientsTable = () => {
         columnHelper.accessor('action', {
             header: 'Ações',
             cell: info => {
-                // @ts-ignore
+                // @ts-ignore       
                 const uuid = info.row.original.uuid;
 
                 return (

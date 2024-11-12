@@ -33,3 +33,9 @@ export type CreateAppointmentByPatient = {
     patient_desired_date?: string;
     patient_description?: string;
 }
+
+export type AppointmentResponse = Appointment;
+
+export type GetAppointmentResponse = {
+    data: Appointment;
+};

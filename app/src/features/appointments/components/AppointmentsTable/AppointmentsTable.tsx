@@ -10,6 +10,7 @@ import EditButton from "../../../../shared-components/Table/EditButton.tsx";
 import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {AppointmentService} from "../../services/AppointmentService.ts";
 import {DateUtil} from "../../../../util/DateUtil.ts";
+import EditAppointmentModal from "../EditAppointmentModal/EditAppointmentModal.tsx";
 
 const columnHelper = createColumnHelper();
 
@@ -120,13 +121,13 @@ const AppointmentsTable = () => {
 
                 <AssistantsTablePagination/>
 
-                {/*{editModal.open && (*/}
-                {/*    <EditAssistantModal*/}
-                {/*        uuid={editModal.uuid!}*/}
-                {/*        visible={editModal.open}*/}
-                {/*        onClose={() => setEditModal({uuid: undefined, open: false})}*/}
-                {/*    />*/}
-                {/*)}*/}
+                {editModal.open && (
+                    <EditAppointmentModal
+                        uuid={editModal.uuid!}
+                        visible={editModal.open}
+                        onClose={() => setEditModal({uuid: undefined, open: false})}
+                    />
+                )}
 
                 <ConfirmationMessage
                     title="Excluir agendamento de consulta"
