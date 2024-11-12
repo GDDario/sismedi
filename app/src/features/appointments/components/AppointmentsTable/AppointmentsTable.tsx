@@ -74,10 +74,10 @@ const AppointmentsTable = () => {
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const deleteAssistant = async (): Promise<void> => {
+    const deleteAppointment = async (): Promise<void> => {
         await AppointmentService.delete(deleteModal.uuid!);
 
-        dispatch(showMessage({message: 'Assistente excluído com sucesso!', type: 'success'}));
+        dispatch(showMessage({message: 'Agendamento excluído com sucesso!', type: 'success'}));
         // @ts-ignore
         dispatch(fetchAppointments({page: 1, per_page: 17}));
         setDeleteModal({open: false, uuid: undefined});
@@ -132,7 +132,7 @@ const AppointmentsTable = () => {
                 <ConfirmationMessage
                     title="Excluir agendamento de consulta"
                     loading={false}
-                    onConfirm={deleteAssistant}
+                    onConfirm={deleteAppointment}
                     onCancel={() => setDeleteModal({uuid: undefined, open: false})}
                     visible={deleteModal.open}
                     onClose={() => setDeleteModal({uuid: undefined, open: false})}

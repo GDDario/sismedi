@@ -25,7 +25,7 @@ export class AppointmentService {
     }
 
     static delete = async (uuid: string): Promise<void> => {
-        const url: string = `/assistant/${uuid}`;
+        const url: string = `/appointment/${uuid}`;
 
         await axiosInstance.delete<void>(url);
     }
