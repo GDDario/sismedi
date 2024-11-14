@@ -10,6 +10,7 @@ import EditAssistantModal from "../EditAssistantModal/EditAssistantModal.tsx";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
 import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {AssistantService} from "../../services/AssistantService.ts";
+import {DateUtil} from "../../../../util/DateUtil.ts";
 
 const columnHelper = createColumnHelper();
 
@@ -47,7 +48,7 @@ const AssistantsTable = () => {
         }),
         columnHelper.accessor('created_at', {
             header: 'Criação do registro',
-            cell: info => info.getValue()
+            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
 
         }),
         columnHelper.accessor('action', {

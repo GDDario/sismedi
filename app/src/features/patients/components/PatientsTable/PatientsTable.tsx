@@ -14,6 +14,7 @@ import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {PatientService} from "../../services/PatientService.ts";
 import {showMessage} from "../../../../store/messageSlice.ts";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
+import {DateUtil} from "../../../../util/DateUtil.ts";
 
 const columnHelper = createColumnHelper();
 
@@ -52,19 +53,12 @@ const PatientsTable = () => {
         }),
         columnHelper.accessor('created_at', {
             header: 'Data de cadastro',
-            cell: info => {
-                const value = info.getValue();
-                if (!isValid(value)) {
-                    return value;
-                }
-
-                return format(value, 'd/MM/y H:m');
-            },
+            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-',
         }),
         columnHelper.accessor('action', {
             header: 'Ações',
             cell: info => {
-                // @ts-ignore
+                // @ts-ignore       
                 const uuid = info.row.original.uuid;
 
                 return (

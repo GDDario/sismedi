@@ -28,7 +28,7 @@ const CreateAssistantForm = ({onClose}: CreatePatientFormProps) => {
     const onSubmit = async (data: CreateAssistantSchema) => {
         await AssistantService.create(data);
 
-        dispatch(showMessage({message: "Assistente atualizado com sucesso!", type: "success"}))
+        dispatch(showMessage({message: "Assistente cadastrado com sucesso!", type: "success"}))
         reset();
         onClose();
     }

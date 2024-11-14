@@ -10,6 +10,7 @@ import {OpenModal} from "../../types.ts";
 import {useDispatch, useSelector} from "react-redux";
 import DoctorsTablePagination from "./DoctorsTablePagination.tsx";
 import {fetchDoctors} from "../../store/doctorsSlice.ts";
+import {DateUtil} from "../../../../util/DateUtil.ts";
 
 const columnHelper = createColumnHelper();
 
@@ -47,14 +48,7 @@ const DoctorsTable = () => {
         }),
         columnHelper.accessor('created_at', {
             header: 'Data de cadastro',
-            cell: info => {
-                const value = info.getValue();
-                if (!isValid(value)) {
-                    return value;
-                }
-
-                return format(value, 'd/MM/y H:m');
-            },
+            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-',
         }),
         columnHelper.accessor('action', {
             header: 'Ações',

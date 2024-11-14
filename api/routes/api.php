@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ConsultationTypeController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MedicineCategoryController;
@@ -26,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('patient')->group(function () {
         Route::get('', [PatientController::class, 'index']);
+        Route::get('user/{user_uuid}', [PatientController::class, 'getByUserUuid']);
         Route::get('{uuid}', [PatientController::class, 'show']);
         Route::post('', [PatientController::class, 'create']);
         Route::put('{uuid}', [PatientController::class, 'update']);
@@ -42,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('doctor')->group(function () {
         Route::get('', [DoctorController::class, 'index']);
+        Route::get('/search', [DoctorController::class, 'search']);
         Route::get('/{uuid}', [DoctorController::class, 'show']);
         Route::get('/agenda/{id}', [DoctorController::class, 'getAgenda']);
     });
@@ -64,5 +68,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [AssistantController::class, 'create']);
         Route::put('/{uuid}', [AssistantController::class, 'update']);
         Route::delete('/{uuid}', [AssistantController::class, 'delete']);
+    });
+
+    Route::prefix('appointment')->group(function () {
+        Route::get('', [AppointmentController::class, 'index']);
+        Route::get('{uuid}', [AppointmentController::class, 'show']);
+        Route::post('', [AppointmentController::class, 'create']);
+        Route::put('{uuid}', [AppointmentController::class, 'update']);
+        Route::delete('{uuid}', [AppointmentController::class, 'delete']);
+    });
+
+    Route::prefix('consultation-type')->group(function () {
+        Route::get('', [ConsultationTypeController::class, 'index']);
+        Route::get('search', [ConsultationTypeController::class, 'search']);
     });
 });

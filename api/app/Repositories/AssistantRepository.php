@@ -19,7 +19,7 @@ class AssistantRepository
 {
     /**
      * @param array $parameters
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function paginate(array $parameters): LengthAwarePaginator
     {

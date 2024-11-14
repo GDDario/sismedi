@@ -6,6 +6,7 @@ import patientsReducer from '../features/patients/store/patientsSlice';
 import doctorsReducer from '../features/doctors/store/doctorsSlice';
 import medicinesReducer from '../features/medicines/store/medicinesSlice';
 import assistantsReducer from '../features/assistants/store/assistantsSlice.ts';
+import appointmentsReducer from '../features/appointments/store/appointmentsSlice.ts';
 
 export const store = configureStore(
     {
@@ -16,7 +17,8 @@ export const store = configureStore(
             patients: patientsReducer,
             doctors: doctorsReducer,
             medicines: medicinesReducer,
-            assistants: assistantsReducer
+            assistants: assistantsReducer,
+            appointments: appointmentsReducer,
         }
     }
 );

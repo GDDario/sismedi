@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Exceptions\NotFoundException;
 use App\Models\Doctor;
-use App\Models\Agenda;
 use App\Repositories\DoctorRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
@@ -28,6 +27,17 @@ class DoctorService
         } catch (NotFoundException $e) {
             return new Response(['message' => 'Doctor not found.'], Response::HTTP_NOT_FOUND);
         }
+    }
+
+    public function search(string $search): Response
+    {
+        if ($search === '') {
+            return new Response(['data' => []], 200);
+        }
+
+        $states = $this->repository->findByName($search, 'asc');
+
+        return new Response(['data' => $states], 200);
     }
 
     //Serviço para buscar a agenda de X médico pela ID

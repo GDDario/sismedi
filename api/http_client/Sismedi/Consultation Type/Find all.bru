@@ -1,0 +1,15 @@
+meta {
+  name: Find all
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/consultation-type
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

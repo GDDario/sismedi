@@ -37,6 +37,10 @@ class PatientController extends Controller
         return $this->service->getByUuid($request->route('uuid'));
     }
 
+    public function getByUserUuid(Request $request): Response {
+        return $this->service->getByUserUuid($request->route('user_uuid'));
+    }
+
     public function create(CreatePatientRequest $request)
     {
         $patient = $request->get('patient');

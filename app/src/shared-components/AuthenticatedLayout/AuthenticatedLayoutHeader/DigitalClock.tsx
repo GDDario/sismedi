@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {pad} from "../../../util/numberUtil.ts";
+import {NumberUtil} from "../../../util/NumberUtil.ts";
 
 const DigitalClock = () => {
     const [date, setDate] = useState<string | undefined>(undefined);
@@ -15,12 +15,12 @@ const DigitalClock = () => {
 
     const runClock = () => {
         const date = new Date();
-        const day = pad(date.getDate());
-        const month = pad(date.getMonth() + 1);
+        const day = NumberUtil.pad(date.getDate());
+        const month = NumberUtil.pad(date.getMonth() + 1);
         const year = date.getFullYear();
-        const hours = pad(date.getHours());
-        const minutes = pad(date.getMinutes());
-        const seconds = pad(date.getSeconds());
+        const hours = NumberUtil.pad(date.getHours());
+        const minutes = NumberUtil.pad(date.getMinutes());
+        const seconds = NumberUtil.pad(date.getSeconds());
 
         setDate(`${day}/${month}/${year}`);
         setHours(`${hours}:${minutes}:${seconds}`);

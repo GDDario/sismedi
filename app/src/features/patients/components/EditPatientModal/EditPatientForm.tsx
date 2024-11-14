@@ -15,7 +15,7 @@ import {Cellphone} from "../../models/cellphone.ts";
 import {MdDelete} from "react-icons/md";
 import {v4 as uuidv4} from 'uuid';
 import FormSectionHeading from "../../../../shared-components/FormSectionHeading.tsx";
-import {calculateAgeFromBirthDate} from "../../../../util/dateUtil.ts";
+import {DateUtil} from "../../../../util/DateUtil.ts";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../../store/messageSlice.ts";
 
@@ -55,7 +55,7 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
 
     useEffect(() => {
         if (birthDate) {
-            setAge(calculateAgeFromBirthDate(new Date(birthDate)));
+            setAge(DateUtil.calculateAgeFromBirthDate(new Date(birthDate)));
         }
     }, [birthDate]);
 

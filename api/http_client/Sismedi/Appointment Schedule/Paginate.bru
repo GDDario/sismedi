@@ -1,0 +1,20 @@
+meta {
+  name: Paginate
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/appointment?name1=patient_name&value1=Jh
+  body: none
+  auth: bearer
+}
+
+params:query {
+  name1: patient_name
+  value1: Jh
+}
+
+auth:bearer {
+  token: {{token}}
+}

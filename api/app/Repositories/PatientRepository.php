@@ -65,6 +65,39 @@ class PatientRepository
     /**
      * @throws NotFoundException
      */
+    public function findByUserUuid(string $uuid): Patient
+    {
+        if (!$user = User::query()->where('uuid', $uuid)->first()) {
+            throw new NotFoundException("User with uuid $uuid not found.");
+        }
+
+        $patient = Patient::query()
+            ->where('user_id', $user->id)
+            ->with([
+                'user:id,name,email,cpf,email_verified_at',
+                'cellphones:uuid,number,description,patient_id',
+                'address' => function ($query) {
+                    $query->select(
+                        'uuid', 'street_address', 'house_number', 'address_line_2',
+                        'neighborhood', 'postal_code', 'city_id', 'patient_id'
+                    )->with([
+                        'city:id,uuid,name,ibge_code,state_id',
+                        'city.state:id,uuid,name,code,ibge_code,ddd'
+                    ]);
+                }
+            ])
+            ->first();
+
+        if (!$patient) {
+            throw new NotFoundException("This user is not a patient.");
+        }
+
+        return $patient;
+    }
+
+    /**
+     * @throws NotFoundException
+     */
     public function insert(CreatePatientDTO $dto): Patient
     {
         if (!$city = City::query()->where('uuid', $dto->address['city_uuid'])->first()) {

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\NotFoundException;
 use App\Models\Doctor;
 use App\Models\Agenda;
+use App\Models\MedicineCategory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +40,18 @@ class DoctorRepository
             ->first();
 
         return $doctor;
+    }
+
+    public function findByName(string $search, string $order): array
+    {
+        $doctors = Doctor::query()
+            ->join('users', 'doctors.user_id', '=', 'users.id')
+            ->select('doctors.uuid', 'name')
+            ->whereLike('name', "$search%")
+            ->orderBy('name', $order)
+            ->get();
+
+        return $doctors->toArray();
     }
 
     /**
