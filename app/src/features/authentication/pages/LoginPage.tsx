@@ -38,7 +38,13 @@ const LoginPage = () => {
             dispatch(showMessage({message: 'Logado com sucesso!', type: 'success'}));
             navigate('/patients');
         }).catch((error) => {
-            console.log('Login error!', error)
+            let message: string = 'Houve um erro ao realizar o login, tente novamente mais tarde.';
+
+            if (error.status === 401) {
+                message = error.response.data.message;
+            }
+
+            dispatch(showMessage({message, type: 'error'}));
         }).finally(() => {
             setLoading(false);
         });
