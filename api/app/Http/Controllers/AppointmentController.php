@@ -6,15 +6,15 @@ use App\DTO\CreateAppointmentDTO;
 use App\DTO\UpdateAppointmentDTO;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
-use App\Http\Requests\UpdateAssistantRequest;
 use App\Services\AppointmentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
     public function __construct(
-        private AppointmentService $service
+        private readonly AppointmentService $service
     )
     {
     }
@@ -58,8 +58,6 @@ class AppointmentController extends Controller
                 patientUuid: $request->get('patient_uuid'),
                 consultationTypeUuid: $request->get('type'),
                 canceled: $request->get('canceled'),
-                patientDescription: $request->get('patient_description'),
-                patientDesiredDate: $request->get('patient_desired_date'),
                 appointmentDate: $request->get('appointment_date'),
                 doctorUuid: $request->get('doctor_uuid'),
                 canceledReason: $request->get('canceled_reason')

@@ -48,7 +48,7 @@ const AssistantsTable = () => {
         }),
         columnHelper.accessor('created_at', {
             header: 'Criação do registro',
-            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
+            cell: info => DateUtil.formatValidDateTime(info.getValue()) ?? '-'
 
         }),
         columnHelper.accessor('action', {

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\DTO\CreateAppointmentDTO;
 use App\DTO\UpdateAppointmentDTO;
-use App\DTO\UpdateAssistantDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
@@ -94,9 +93,11 @@ class AppointmentService
     private function arrangeAppointmentData(Appointment $appointmentData): array
     {
         $doctorUuid = null;
+        $doctorName = null;
 
         if ($appointmentData->doctor) {
             $doctorUuid = $appointmentData->doctor->uuid;
+            $doctorName = $appointmentData->doctor->user->name;
         }
 
         return [
@@ -108,6 +109,7 @@ class AppointmentService
                 'patient_desired_date' => $appointmentData->patient_desired_date,
                 'appointment_date' => $appointmentData->appointment_date,
                 'doctor_uuid' => $doctorUuid,
+                'doctor_name' => $doctorName,
                 'doctor_assigned_at' => $appointmentData->doctor_assigned_at,
                 'canceled' => $appointmentData->canceled,
                 'canceled_reason' => $appointmentData->canceled_reason,

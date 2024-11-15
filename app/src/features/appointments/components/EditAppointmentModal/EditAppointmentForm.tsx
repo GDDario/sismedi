@@ -6,7 +6,7 @@ import Button from "../../../../shared-components/Button/Button.tsx";
 import FormSectionHeading from "../../../../shared-components/FormSectionHeading.tsx";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../../store/messageSlice.ts";
-import {AppointmentResponse} from "../../types.ts";
+import {AppointmentResponse, UpdateAppointmentData} from "../../types.ts";
 import {AppointmentService} from "../../services/AppointmentService.ts";
 import TextAreaField from "../../../../shared-components/TextAreaField.tsx";
 import SelectField, {SelectOptionType} from "../../../../shared-components/SelectField/SelectField.tsx";
@@ -18,7 +18,37 @@ import SearchField from "../../../../shared-components/SearchField/SearchField.t
 import CheckboxField from "../../../../shared-components/CheckboxField.tsx";
 import {DoctorService} from "../../../doctors/services/DoctorService.ts";
 
-const schema = z.any({});
+const schema = z.object({
+    type: z.string({required_error: "Campo obrigatório!"}).uuid({message: "Campo inválido!"}),
+    appointment_date: z
+        .string({message: "Data do agendamento é obrigatória!"})
+        .regex(/^\d{4}-\d{2}-\d{2}$/, "Data deve estar no formato yyyy-mm-dd")
+        .refine((date) => {
+            const today = new Date().toISOString().split("T")[0];
+            return date >= today;
+        }, "Você não pode marcar uma consulta para o passado!"),
+    appointment_time: z
+        .string()
+        .regex(/^\d{2}:\d{2}$/, "Horário deve estar no formato HH:mm")
+        .refine((time) => {
+            const [hours, minutes] = time.split(":").map(Number);
+            const totalMinutes = hours * 60 + minutes; // Converter para minutos totais
+            const minTime = 8 * 60; // 08:00 em minutos
+            const maxTime = 18 * 60; // 18:00 em minutos
+            return totalMinutes >= minTime && totalMinutes <= maxTime;
+        }, "Horário deve estar entre 08:00 e 18:00"),
+    canceled: z.boolean(),
+    canceled_reason: z.string().nullable().optional(),
+    doctor_uuid: z.string({message: "Campo obrigatório!"}).uuid({message: "Campo inválido!"})
+}).superRefine((data, ctx) => {
+    if (data.canceled && !data.canceled_reason) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Motivo do cancelamento é obrigatório quando marcado como cancelado.",
+            path: ["canceled_reason"],
+        });
+    }
+});
 
 type EditAppointmentSchema = z.infer<typeof schema>;
 
@@ -35,20 +65,36 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
         setValue,
         watch
     } = useForm<EditAppointmentSchema>({
-        resolver: zodResolver(schema),
-        defaultValues: {
-            ...appointmentData
-        }
+        resolver: zodResolver(schema)
     });
     const dispatch = useDispatch();
-    const [medicineCategory, setMedicineCategory] = useState<string>('');
     const [consultationTypes, setConsultationTypes] = useState<SelectOptionType[]>([]);
-    const [doctor, setDoctor] = useState<string>('');
+    const [patientDesiredDate, setPatientDesiredDate] = useState<string | null>('');
+    const [patientDescription, setPatientDescription] = useState<string | null>('');
+    const [doctorName, setDoctorName] = useState<string | null>('');
     const canceled = watch("canceled");
 
     useEffect(() => {
         fetchCategories();
+
+        loadFields();
     }, []);
+
+    const loadFields = () => {
+        if (appointmentData.appointment_date) {
+            const splitedDateTime = appointmentData.appointment_date.split(' ');
+            setValue('appointment_date', splitedDateTime[0]!);
+            setValue('appointment_time', splitedDateTime[1].substring(0, 5));
+        }
+
+        setValue('type', appointmentData.consultation_type_uuid);
+        setPatientDesiredDate(appointmentData.patient_desired_date);
+        setPatientDescription(appointmentData.patient_description);
+        setValue('doctor_uuid', appointmentData.doctor_uuid!);
+        setDoctorName(appointmentData.doctor_name)
+        setValue('canceled', appointmentData.canceled!);
+        setValue('canceled_reason', appointmentData.canceled_reason)
+    };
 
     const fetchCategories = async (): Promise<void> => {
         const response: GetAllConsultationTypesResponse = await ConsultationTypeService.getAll();
@@ -61,7 +107,6 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
         });
 
         setConsultationTypes(consultationTypes);
-        setValue('type', consultationTypes[0].name)
     }
 
     const handleDoctorsSearch = async (text: string): Promise<any> => {
@@ -79,33 +124,44 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
         setValue('doctor_uuid', doctor.uuid);
     }
 
-    const mapDataFromSubmit = (data: EditAppointmentSchema) => {
-        return {
-            "patient_uuid": data.patient_uuid,
+    const mapDataFromSubmit = (data: EditAppointmentSchema): UpdateAppointmentData => {
+        // console.log('Doctor uuid', data.doctor_uuid);
+        // return;
+        const appointmentDate = `${data.appointment_date} ${data.appointment_time}:00`;
+
+        const mappedData: UpdateAppointmentData = {
+            "patient_uuid": appointmentData.patient_uuid,
             "type": data.type,
-            "patient_description": data.patient_description,
-            "patient_desired_date": data.patient_desired_date,
             "canceled": data.canceled,
-            "canceled_reason": data.canceled_reason,
-            "doctor_uuid": data.doctor_uuid
+            "canceled_reason": null,
+            "doctor_uuid": data.doctor_uuid,
+            appointment_date: appointmentDate
         };
+
+        if (data.canceled) {
+            // @ts-ignore
+            mappedData['canceled_reason'] = data.canceled_reason;
+        }
+
+        return mappedData;
     }
 
     const onSubmit = async (data: EditAppointmentSchema) => {
         const newData = mapDataFromSubmit(data);
+        console.log('Sending', newData)
 
-        if (newData.patient_desired_date == '' || newData.patient_desired_date === null) {
-            delete newData.patient_desired_date;
-        }
-
-        await AppointmentService.update(data.uuid, newData);
+        await AppointmentService.update(appointmentData.uuid, newData);
 
         dispatch(showMessage({message: "Pedido de agendamento editado com sucesso!", type: "success"}))
         onClose();
     }
 
+    const onInvalid = (errors: any) => {
+        console.log(errors)
+    }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-4">
             <section className="flex flex-col gap-2">
                 <FormSectionHeading text="Dados do agendamento"/>
 
@@ -115,38 +171,54 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
                         name="type"
                         label="Tipo da consulta"
                         register={register}
-                        error={errors.state}
-                        value={medicineCategory}
+                        error={errors.type}
                         options={consultationTypes}
+                        value={watch('type')}
+                        required
                     />
 
                     <InputField
                         name="patient_desired_date"
-                        label="Data desejada"
+                        label="Data desejada pelo paciente"
                         register={register}
-                        error={errors.patient_desired_date}
+                        error={null}
+                        value={patientDesiredDate}
+                        disabled
                         type="date"
+                        className="w-[205px]"
                     />
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-wrap">
                     <InputField
-                        name="patient_desired_date"
-                        label="Data desejada"
+                        name="appointment_date"
+                        label="Data da consulta"
                         register={register}
-                        error={errors.patient_desired_date}
+                        error={errors.appointment_date}
                         type="date"
                         className="w-[230px]"
+                        required
+                    />
+
+                    <InputField
+                        name="appointment_time"
+                        label="Hora da consulta"
+                        register={register}
+                        error={errors.appointment_time}
+                        type="time"
+                        className="w-[130px]"
+                        required
                     />
 
                     <SearchField
                         name="doctor_uuid"
                         label="Médico"
                         register={register}
-                        error={errors.doctor}
+                        error={errors.doctor_uuid}
                         onSelect={handleSelectDoctor}
                         onSearch={handleDoctorsSearch}
-                        value={doctor}
+                        value={doctorName!}
+                        required
                     />
                 </div>
 
@@ -157,9 +229,14 @@ const EditAppointmentForm = ({onClose, appointmentData}: EditAppointmentFormProp
                     fullWidth
                     rows={4}
                     disabled={true}
+                    value={patientDescription!}
                 />
 
-                <CheckboxField label="Cancelado" name="canceled" register={register}/>
+                <CheckboxField
+                    label="Cancelado"
+                    name="canceled"
+                    register={register}
+                />
 
                 <TextAreaField
                     label="Motivo do cancelamento"

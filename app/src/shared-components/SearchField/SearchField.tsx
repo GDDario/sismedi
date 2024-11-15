@@ -9,6 +9,7 @@ type InputFieldProps = {
     onSearch: (text: string) => any;
     onSelect: (text: string) => void;
     value: string;
+    required?: boolean;
     placeholder?: string;
     type?: 'text' | 'password' | 'email';
     variant?: 'default';
@@ -24,13 +25,14 @@ const SearchField = ({
                          name,
                          error,
                          register,
+                         required = false,
                          variant,
                          fullWidth,
                          disabled = false,
                          onSearch,
                          onSelect,
                          value: valueInput,
-                        className
+                         className
                      }: InputFieldProps) => {
     const id: string = label + "_" + name;
     const [debounceTimeout, setDebounceTimeout] = useState<number | null>(null);
@@ -109,7 +111,7 @@ const SearchField = ({
 
     return (
         <div className="relative">
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>{label} {required && '*'}</label>
             <input
                 ref={inputRef}
                 id={id}

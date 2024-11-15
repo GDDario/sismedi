@@ -24,9 +24,10 @@ const schema = z.object({
         .union([
             z.string()
                 .regex(/^\d{4}-\d{2}-\d{2}$/, "Data deve estar no formato yyyy-mm-dd")
-                .refine((date) => date >= today, "Você não pode marcar consultas para ontem!"),
+                .refine((date) => date >= today, "Você não pode marcar uma consulta para o passado!"),
             z.null(),
-        ])
+        ]),
+    patient_description: z.string().nullable()
 });
 
 type CreateAppointmentSchema = z.infer<typeof schema>;
@@ -127,6 +128,7 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
                     label="Descrição"
                     name="patient_description"
                     register={register}
+                    error={errors.patient_description}
                     fullWidth
                     rows={4}
                 />

@@ -20,7 +20,7 @@ export class DateUtil {
         return age;
     }
 
-    static formatValidDate = (date: string | null): string | nul => {
+    static formatValidDateTime = (date: string | null): string | nul => {
         if (!date) {
             return null;
         }
@@ -30,6 +30,18 @@ export class DateUtil {
         }
 
         return format(date, 'dd/MM/yyyy HH:mm');
+    }
+
+    static formatValidDate = (date: string | null): string | nul => {
+        if (!date) {
+            return null;
+        }
+
+        if (!isValid(parseISO(date))) {
+            return date;
+        }
+
+        return format(date, 'dd/MM/yyyy');
     }
 }
 

@@ -48,7 +48,7 @@ const DoctorsTable = () => {
         }),
         columnHelper.accessor('created_at', {
             header: 'Data de cadastro',
-            cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-',
+            cell: info => DateUtil.formatValidDateTime(info.getValue()) ?? '-',
         }),
         columnHelper.accessor('action', {
             header: 'Ações',

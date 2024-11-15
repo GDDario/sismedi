@@ -1,4 +1,3 @@
-import {Assistant} from "./models/assistant.ts";
 import {Appointment} from "./models/appointment.ts";
 
 export type ListAppointmentsReponse = {
@@ -31,7 +30,7 @@ export type CreateAppointmentByPatient = {
     patient_uuid: string;
     type: string;
     patient_desired_date: string | null;
-    patient_description?: string;
+    patient_description: string | null;
 }
 
 export type AppointmentResponse = Appointment;
@@ -44,8 +43,7 @@ export type UpdateAppointmentData = {
     patient_uuid: string;
     type: string;
     canceled: boolean;
-    patient_description?: string;
-    patient_desired_date?: string;
-    canceled_reason?: string;
-    doctor_uuid?: string;
+    appointment_date: string;
+    doctor_uuid: string;
+    canceled_reason: string | null;
 }

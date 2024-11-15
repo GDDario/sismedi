@@ -19,10 +19,10 @@ class UpdateAppointmentRequest extends FormRequest
     {
         return [
             'type' => 'required|exists:consultation_types,uuid',
-            'patient_desired_date' => 'date_format:Y-m-d H:i:s|after:' . date(DATE_ATOM),
             'appointment_date' => 'date_format:Y-m-d H:i:s|after:' . date(DATE_ATOM),
             'doctor_uuid' => 'nullable|uuid|exists:doctors,uuid',
-            'canceled' => 'required|boolean'
+            'canceled' => 'required|boolean',
+            'canceled_reason' => 'nullable|string'
         ];
     }
 

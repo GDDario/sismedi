@@ -2,6 +2,7 @@ type TextFieldProps = {
     label: string;
     name: string;
     register: any;
+    value?: string;
     rows?: number;
     cols?: number;
     className?: string;
@@ -18,6 +19,7 @@ const TextAreaField = ({
                            type = 'text',
                            placeholder,
                            name,
+                           value,
                            error,
                            rows,
                            cols,
@@ -61,6 +63,7 @@ const TextAreaField = ({
                 disabled={disabled}
                 rows={rows}
                 cols={cols}
+                value={value}
             >
         </textarea>
             {error && <p className="mt-0.5 text-[#ff4e4e]">{error?.message}</p>}

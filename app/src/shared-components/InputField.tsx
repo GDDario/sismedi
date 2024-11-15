@@ -2,11 +2,12 @@ type InputFieldProps = {
     label: string;
     name: string;
     register: any;
+    value?: string | null;
     required?: boolean;
     className?: string;
     error?: any;
     placeholder?: string;
-    type?: 'text' | 'password' | 'email' | 'date' | 'number';
+    type?: 'text' | 'password' | 'email' | 'date' | 'time' | 'number';
     step?: string;
     variant?: 'default';
     fullWidth?: boolean;
@@ -17,6 +18,7 @@ const InputField = ({
                         label,
                         type = 'text',
                         step,
+                        value = undefined,
                         required = false,
                         placeholder,
                         name,
@@ -35,9 +37,6 @@ const InputField = ({
         switch (variant) {
             case undefined:
             case "default":
-                break;
-            case "bordered":
-                classes += "border border-black";
                 break;
         }
 
@@ -60,6 +59,7 @@ const InputField = ({
                 className={styleClasses()}
                 disabled={disabled}
                 step={step}
+                value={value}
             />
             {error && <p className="mt-0.5 text-[#ff4e4e]">{error?.message}</p>}
         </div>

@@ -11,6 +11,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class AppointmentRepository
@@ -116,8 +117,6 @@ class AppointmentRepository
         $appointment->update([
             'patient_id' => $patient->id,
             'consultation_type_id' => $consultationType->id,
-            'patient_description' => $dto->patientDescription,
-            'patient_desired_date' => $dto->patientDesiredDate,
             'appointment_date' => $dto->appointmentDate,
             'doctor_id' => $dto->doctorUuid ? $doctor->id : null,
             'doctor_assigned_at' => $doctorAssignedAt,
@@ -125,6 +124,7 @@ class AppointmentRepository
             'canceled_reason' => $dto->canceled ? $dto->canceledReason : null
         ]);
         $appointment->refresh();
+
         $appointment->load('patient');
         $appointment->load('doctor');
 

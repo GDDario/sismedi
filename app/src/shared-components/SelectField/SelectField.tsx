@@ -1,4 +1,4 @@
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 
 export type SelectOptionType = {
     label: string; // Is the shown part
@@ -11,6 +11,7 @@ type InputFieldProps = {
     register: any;
     error: any;
     options: SelectOptionType[];
+    value?: string;
     required?: boolean;
     variant?: 'default';
     fullWidth?: boolean;
@@ -24,6 +25,7 @@ const SelectField = ({
                          error,
                          register,
                          variant,
+                         value: inputValue = '',
                          required = false,
                          fullWidth,
                          disabled = false,
@@ -32,6 +34,12 @@ const SelectField = ({
                      }: InputFieldProps) => {
     const id: string = label + "_" + name;
     const [value, setValue] = useState<string>('');
+
+    useEffect(() => {
+        if (inputValue) {
+            setValue(inputValue);
+        }
+    }, [inputValue]);
 
     const styleClasses = () => {
         let classes = "text-black p-1 bg-white rounded block border-mainDarkBlue border ";
