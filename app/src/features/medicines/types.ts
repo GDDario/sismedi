@@ -18,9 +18,9 @@ export type CreateOrEditMedicineData = {
     batch_number: string;
     price: number;
     category_uuid: string;
-    dosage?: string;
-    concentration?: number;
-    prescription?: string;
+    dosage: string;
+    concentration: number;
+    prescription: string;
     description?: string;
 }
 

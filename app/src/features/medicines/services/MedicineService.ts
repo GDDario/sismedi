@@ -1,6 +1,7 @@
 import {CreateOrEditMedicineData, GetMedicineResponse, ListMedicinesResponse} from "../types.ts";
 import axiosInstance from "../../../config/axiosConfig.ts";
 import {GetPatientResponse} from "../../patients/types.ts";
+import {CreateMedicineSchema} from "../components/CreateMedicineModal/CreateMedicineForm.tsx";
 
 export class MedicineService {
     static listMedicines = async (params: any): Promise<ListMedicinesResponse> => {
@@ -16,7 +17,7 @@ export class MedicineService {
         return response.data as GetMedicineResponse;
     };
 
-    static create = async (body: CreateOrEditMedicineData): Promise<void> => {
+    static create = async (body: CreateMedicineSchema): Promise<void> => {
         await axiosInstance.post<void>('/medicine', body);
     }
 

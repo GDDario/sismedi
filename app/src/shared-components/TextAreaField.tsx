@@ -2,6 +2,7 @@ type TextFieldProps = {
     label: string;
     name: string;
     register: any;
+    required?: boolean;
     value?: string;
     rows?: number;
     cols?: number;
@@ -17,6 +18,7 @@ type TextFieldProps = {
 const TextAreaField = ({
                            label,
                            type = 'text',
+                           required = false,
                            placeholder,
                            name,
                            value,
@@ -38,9 +40,6 @@ const TextAreaField = ({
             case undefined:
             case "default":
                 break;
-            case "bordered":
-                classes += "border border-black";
-                break;
         }
 
         if (fullWidth) {
@@ -52,7 +51,7 @@ const TextAreaField = ({
 
     return (
         <div>
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>{label} {required && '*'}</label>
             <textarea
                 id={id}
                 placeholder={placeholder}

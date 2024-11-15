@@ -14,7 +14,32 @@ import {MedicineService} from "../../services/MedicineService.ts";
 import TextAreaField from "../../../../shared-components/TextAreaField.tsx";
 import CopyableInput from "../../../../shared-components/CopyableInput.tsx";
 
-const schema = z.any({});
+const schema = z.object({
+    name: z.string().min(1, "O nome é obrigatório."),
+    category_uuid: z.string().uuid({message: 'Valor inválido.'}),
+    manufacturer: z.string().min(1, "O fabricante é obrigatório."),
+    batch_number: z.string().min(1, "O lote é obrigatório."),
+    dosage: z.string().min(1, "A dosagem é obrigatória."),
+    concentration: z.coerce.number().nonnegative("A concentração não pode ser negativa."),
+    expiration_date: z
+        .string()
+        .regex(
+            /^\d{4}-\d{2}-\d{2}$/,
+            "A data de validade deve estar no formato yyyy-mm-dd."
+        )
+        .refine(
+            (date) => new Date(date) > new Date(),
+            "A data de validade deve ser uma data futura."
+        ),
+    quantity: z
+        .coerce
+        .number()
+        .int("A quantidade deve ser um número inteiro.")
+        .nonnegative("A quantidade não pode ser negativa."),
+    price: z.coerce.number().nonnegative("O preço não pode ser negativo."),
+    prescription: z.string().min(1, "A prescrição é obrigatória."),
+    description: z.string().optional()
+});
 
 type EditMedicineSchema = z.infer<typeof schema>;
 
@@ -28,8 +53,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
         register,
         handleSubmit,
         formState: {errors},
-        setValue,
-        reset
+        setValue
     } = useForm<EditMedicineSchema>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -83,15 +107,20 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField className="w-[347px]" name="name" label="Nome" register={register}
-                                error={errors.name}/>
+                    <InputField
+                        className="w-[347px]"
+                        name="name"
+                        label="Nome"
+                        register={register}
+                        error={errors.name}
+                    />
 
                     <SearchField
                         className="w-[347px]"
                         name="category_uuid"
                         label="Categoria"
                         register={register}
-                        error={errors.state}
+                        error={errors.category_uuid}
                         onSelect={handleSelectState}
                         onSearch={handleMedicineCategorySearch}
                         value={category}
@@ -99,18 +128,38 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField className="w-[347px]" name="manufacturer" label="Fabricante" register={register}
-                                error={errors.manufacturer}/>
+                    <InputField
+                        className="w-[347px]"
+                        name="manufacturer"
+                        label="Fabricante"
+                        register={register}
+                        error={errors.manufacturer}
+                    />
 
-                    <InputField name="batch_number" label="Lote" register={register} error={errors.batch_number}/>
+                    <InputField
+                        name="batch_number"
+                        label="Lote"
+                        register={register}
+                        error={errors.batch_number}
+                    />
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField className="w-[136px]" name="dosage" label="Dosagem" register={register}
-                                error={errors.dosage}/>
+                    <InputField
+                        className="w-[136px]"
+                        name="dosage"
+                        label="Dosagem"
+                        register={register}
+                        error={errors.dosage}
+                    />
 
-                    <InputField className="w-[150px]" name="concentration" label="Concentração" register={register}
-                                error={errors.concentration}/>
+                    <InputField
+                        className="w-[150px]"
+                        name="concentration"
+                        label="Concentração"
+                        register={register}
+                        error={errors.concentration}
+                    />
 
                     <InputField
                         name="expiration_date"
@@ -123,24 +172,47 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField name="quantity" label="Quantidade" register={register} error={errors.quantity}
-                                type="number"/>
+                    <InputField
+                        name="quantity"
+                        label="Quantidade"
+                        register={register}
+                        error={errors.quantity}
+                        type="number"/>
 
-                    <InputField name="price" label="Preço" register={register} error={errors.price}
-                                type="number" step="0.01"/>
+                    <InputField
+                        name="price" label="Preço"
+                        register={register}
+                        error={errors.price}
+                        type="number"
+                        step="0.01"
+                    />
                 </div>
 
-                <TextAreaField name="prescription" label="Prescrição" register={register}
-                               error={errors.prescription}
-                               fullWidth rows={5}/>
+                <TextAreaField
+                    name="prescription"
+                    label="Prescrição"
+                    register={register}
+                    error={errors.prescription}
+                    fullWidth rows={5}
+                />
 
-                <TextAreaField name="description" label="Descrição" register={register} error={errors.description}
-                               fullWidth rows={3}/>
+                <TextAreaField
+                    name="description"
+                    label="Descrição"
+                    register={register}
+                    error={errors.description}
+                    fullWidth rows={3}
+                />
             </section>
 
             <section className="mt-2 flex gap-2">
                 <Button text="Salvar" type="submit"/>
-                <Button text="Cancelar" color="danger" type="button" onClick={onClose}/>
+                <Button
+                    text="Cancelar"
+                    color="danger"
+                    type="button"
+                    onClick={onClose}
+                />
             </section>
         </form>
     );
