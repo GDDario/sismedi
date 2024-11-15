@@ -16,7 +16,18 @@ import {GetAllConsultationTypesResponse} from "../../../consultations/types.ts";
 import {selectUser} from "../../../authentication/store/userSlice.ts";
 import {PatientService} from "../../../patients/services/PatientService.ts";
 
-const schema = z.any({});
+const today = new Date().toISOString().split("T")[0];
+
+const schema = z.object({
+    type: z.string({required_error: "Campo obrigatório!"}).uuid({message: "Campo inválido!"}),
+    patient_desired_date: z
+        .union([
+            z.string()
+                .regex(/^\d{4}-\d{2}-\d{2}$/, "Data deve estar no formato yyyy-mm-dd")
+                .refine((date) => date >= today, "Você não pode marcar consultas para ontem!"),
+            z.null(),
+        ])
+});
 
 type CreateAppointmentSchema = z.infer<typeof schema>;
 
@@ -30,12 +41,18 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
         handleSubmit,
         formState: {errors},
         setValue,
-        reset
-    } = useForm<CreateAppointmentSchema>({resolver: zodResolver(schema)});
+        reset,
+        watch
+    } = useForm<CreateAppointmentSchema>({
+        resolver: zodResolver(schema), defaultValues: {
+            patient_desired_date: null
+        }
+    });
     const dispatch = useDispatch();
     const [medicineCategory, setMedicineCategory] = useState<string>('');
     const [consultationTypes, setConsultationTypes] = useState<SelectOptionType[]>([]);
     const user = useSelector(selectUser);
+    const desiredDate = watch('patient_desired_date');
 
     useEffect(() => {
         fetchCategories();
@@ -55,6 +72,10 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
         setValue('type', consultationTypes[0].name)
     }
 
+    const resetPatientDesiredDate = () => {
+        setValue('patient_desired_date', null);
+    }
+
     const onSubmit = async (data: CreateAppointmentSchema) => {
         const response = await PatientService.getByUserUuid(user.uuid);
 
@@ -63,7 +84,7 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
             patient_uuid: response.data.patient.uuid
         };
 
-        if (newData.patient_desired_date == '') {
+        if (newData.patient_desired_date == '' || newData.patient_desired_date === null) {
             delete newData.patient_desired_date;
         }
 
@@ -79,24 +100,33 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
             <section className="flex flex-col gap-2">
                 <FormSectionHeading text="Dados do agendamento"/>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-wrap">
                     <SelectField
                         className="w-[347px]"
                         name="type"
                         label="Tipo da consulta"
                         register={register}
-                        error={errors.state}
+                        error={errors.type}
                         value={medicineCategory}
                         options={consultationTypes}
+                        required
                     />
 
-                    <InputField
-                        name="patient_desired_date"
-                        label="Data desejada"
-                        register={register}
-                        error={errors.patient_desired_date}
-                        type="date"
-                    />
+                    <div className="flex gap-2 items-end">
+                        <InputField
+                            name="patient_desired_date"
+                            label="Data desejada"
+                            register={register}
+                            error={errors.patient_desired_date}
+                            type="date"
+                        />
+
+                        <Button
+                            text="Limpar data"
+                            onClick={() => resetPatientDesiredDate()}
+                            disabled={desiredDate === null}
+                        />
+                    </div>
                 </div>
 
                 <TextAreaField

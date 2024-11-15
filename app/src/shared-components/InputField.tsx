@@ -2,6 +2,7 @@ type InputFieldProps = {
     label: string;
     name: string;
     register: any;
+    required?: boolean;
     className?: string;
     error?: any;
     placeholder?: string;
@@ -12,7 +13,20 @@ type InputFieldProps = {
     disabled?: boolean;
 };
 
-const InputField = ({label, type = 'text', step, placeholder, name, error, register, variant, fullWidth, disabled = false, className}: InputFieldProps) => {
+const InputField = ({
+                        label,
+                        type = 'text',
+                        step,
+                        required = false,
+                        placeholder,
+                        name,
+                        error,
+                        register,
+                        variant,
+                        fullWidth,
+                        disabled = false,
+                        className
+                    }: InputFieldProps) => {
     const id: string = label + "_" + name;
 
     const styleClasses = () => {
@@ -36,7 +50,7 @@ const InputField = ({label, type = 'text', step, placeholder, name, error, regis
 
     return (
         <div>
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>{label} {required && '*'}</label>
             <input
                 id={id}
                 placeholder={placeholder}

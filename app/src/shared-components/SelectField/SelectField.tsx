@@ -13,6 +13,7 @@ type InputFieldProps = {
     error: any;
     value: string;
     options: SelectOptionType[];
+    required?: boolean;
     variant?: 'default';
     fullWidth?: boolean;
     disabled?: boolean;
@@ -25,6 +26,7 @@ const SelectField = ({
                          error,
                          register,
                          variant,
+                         required = false,
                          fullWidth,
                          disabled = false,
                          value: valueInput,
@@ -75,7 +77,7 @@ const SelectField = ({
 
     return (
         <div className="relative">
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>{label} {required && '*'}</label>
             <select
                 id={id}
                 {...register(name)}
