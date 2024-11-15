@@ -34,6 +34,7 @@ class AppointmentRepository
                 'consultation_types.name',
                 'patient_users.name as patient_name',
                 'doctor_users.name as doctor_name',
+                'appointments.canceled',
                 'appointments.created_at'
             );
 

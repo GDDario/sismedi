@@ -46,6 +46,10 @@ const AppointmentsTable = () => {
             header: 'Data marcada',
             cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
         }),
+        columnHelper.accessor('canceled', {
+            header: 'Cancelada',
+            cell: info => info.getValue() ? 'Sim' : 'Não'
+        }),
         columnHelper.accessor('created_at', {
             header: 'Criação do registro',
             cell: info => DateUtil.formatValidDate(info.getValue()) ?? '-'
