@@ -1,5 +1,6 @@
 import axiosInstance from "../../../config/axiosConfig.ts";
 import {CreateOrEditAssistantData, GetAssistantResponse, ListAssistantsReponse} from "../types.ts";
+import {EditAssistantSchema} from "../components/EditAssistantModal/EditAssistantForm.tsx";
 
 export class AssistantService {
     static paginate = async (params: any): Promise<ListAssistantsReponse> => {
@@ -19,7 +20,7 @@ export class AssistantService {
         await axiosInstance.post<void>('/assistant', body);
     }
 
-    static update = async (uuid: string, assistantData: CreateOrEditAssistantData): Promise<void> => {
+    static update = async (uuid: string, assistantData: EditAssistantSchema): Promise<void> => {
         const url = `/assistant/${uuid}`;
         await axiosInstance.put<GetAssistantResponse>(url, assistantData);
     }

@@ -113,6 +113,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         label="Nome"
                         register={register}
                         error={errors.name}
+                        required
                     />
 
                     <SearchField
@@ -124,6 +125,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         onSelect={handleSelectState}
                         onSearch={handleMedicineCategorySearch}
                         value={category}
+                        required
                     />
                 </div>
 
@@ -134,6 +136,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         label="Fabricante"
                         register={register}
                         error={errors.manufacturer}
+                        required
                     />
 
                     <InputField
@@ -141,6 +144,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         label="Lote"
                         register={register}
                         error={errors.batch_number}
+                        required
                     />
                 </div>
 
@@ -151,6 +155,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         label="Dosagem"
                         register={register}
                         error={errors.dosage}
+                        required
                     />
 
                     <InputField
@@ -159,6 +164,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         label="Concentração"
                         register={register}
                         error={errors.concentration}
+                        required
                     />
 
                     <InputField
@@ -168,6 +174,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         error={errors.expiration_date}
                         type="date"
                         className="w-[150px]"
+                        required
                     />
                 </div>
 
@@ -177,7 +184,9 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         label="Quantidade"
                         register={register}
                         error={errors.quantity}
-                        type="number"/>
+                        type="number"
+                        required
+                    />
 
                     <InputField
                         name="price" label="Preço"
@@ -185,6 +194,7 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                         error={errors.price}
                         type="number"
                         step="0.01"
+                        required
                     />
                 </div>
 
@@ -193,7 +203,9 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                     label="Prescrição"
                     register={register}
                     error={errors.prescription}
-                    fullWidth rows={5}
+                    fullWidth
+                    rows={5}
+                    required
                 />
 
                 <TextAreaField
@@ -201,7 +213,8 @@ const EditMedicineForm = ({onClose, medicineData}: EditPatientFormProps) => {
                     label="Descrição"
                     register={register}
                     error={errors.description}
-                    fullWidth rows={3}
+                    fullWidth
+                    rows={3}
                 />
             </section>
 

@@ -8,10 +8,10 @@ type CreatePatientModalProps = {
 }
 
 const CreateAssistantModal = ({visible, onClose}: CreatePatientModalProps) => {
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     return (
-        <BaseModal title="Cadastrar paciente" visible={visible} loading={loading} onClose={onClose} className="h-[70%]">
+        <BaseModal title="Cadastrar assistente" visible={visible} loading={false} onClose={onClose} className="h-[70%]">
             <CreateAssistantForm onClose={onClose}/>
         </BaseModal>
     );

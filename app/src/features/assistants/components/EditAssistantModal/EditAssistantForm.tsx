@@ -9,9 +9,21 @@ import {showMessage} from "../../../../store/messageSlice.ts";
 import {AssistantResponse} from "../../types.ts";
 import {AssistantService} from "../../services/AssistantService.ts";
 
-const schema = z.any({});
+const schema = z.object({
+    name: z.string().min(1, "O nome é obrigatório."),
+    cpf: z
+        .string()
+        .regex(/^\d{11}$/, "O CPF deve conter exatamente 11 dígitos numéricos."),
+    email: z.string().email("O email deve ser válido."),
+    level: z
+        .coerce
+        .number()
+        .int("O nível deve ser um número inteiro.")
+        .min(1, "O nível deve ser no mínimo 1.")
+        .max(10, "O nível deve ser no máximo 10.")
+});
 
-type EditAssistantSchema = z.infer<typeof schema>;
+export type EditAssistantSchema = z.infer<typeof schema>;
 
 type EditPatientFormProps = {
     onClose: () => void;
@@ -44,16 +56,33 @@ const EditAssistantForm = ({onClose, assitantData}: EditPatientFormProps) => {
                 <FormSectionHeading text="Dados pessoais"/>
 
                 <div className="flex gap-4">
-                    <InputField className="w-[347px]" name="name" label="Nome" register={register}
-                                error={errors.name}/>
+                    <InputField
+                        className="w-[347px]"
+                        name="name"
+                        label="Nome"
+                        register={register}
+                        error={errors.name}
+                        required
+                    />
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField name="cpf" label="CPF" register={register} error={errors.cpf}/>
+                    <InputField
+                        name="cpf"
+                        label="CPF"
+                        register={register}
+                        error={errors.cpf}
+                    />
                 </div>
 
-                <InputField className="w-[347px]" name="email" label="Email" register={register}
-                            error={errors.email}/>
+                <InputField
+                    className="w-[347px]"
+                    name="email"
+                    label="Email"
+                    register={register}
+                    error={errors.email}
+                    required
+                />
 
                 <InputField
                     label="Nível"
@@ -62,6 +91,7 @@ const EditAssistantForm = ({onClose, assitantData}: EditPatientFormProps) => {
                     register={register}
                     error={errors.level}
                     className="w-[100px]"
+                    required
                 />
             </section>
 
