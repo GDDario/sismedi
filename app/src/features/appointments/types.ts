@@ -28,9 +28,9 @@ export type GetAssistantResponse = {
 };
 
 export type CreateAppointmentByPatient = {
-    patientUuid: string;
+    patient_uuid: string;
     type: string;
-    patient_desired_date?: string;
+    patient_desired_date: string | null;
     patient_description?: string;
 }
 

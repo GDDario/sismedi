@@ -19,7 +19,7 @@ class CreateAppointmentRequest extends FormRequest
         return [
             'patient_uuid' => 'required|exists:patients,uuid',
             'type' => 'required|exists:consultation_types,uuid',
-            'patient_desired_date' => 'date_format:Y-m-d|after:' . date(DATE_ATOM)
+            'patient_desired_date' => 'nullable|date_format:Y-m-d|after:' . date(DATE_ATOM)
         ];
     }
 

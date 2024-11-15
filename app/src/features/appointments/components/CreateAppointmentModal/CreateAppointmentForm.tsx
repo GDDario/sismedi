@@ -49,7 +49,6 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
         }
     });
     const dispatch = useDispatch();
-    const [medicineCategory, setMedicineCategory] = useState<string>('');
     const [consultationTypes, setConsultationTypes] = useState<SelectOptionType[]>([]);
     const user = useSelector(selectUser);
     const desiredDate = watch('patient_desired_date');
@@ -84,10 +83,6 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
             patient_uuid: response.data.patient.uuid
         };
 
-        if (newData.patient_desired_date == '' || newData.patient_desired_date === null) {
-            delete newData.patient_desired_date;
-        }
-
         await AppointmentService.create(newData);
 
         dispatch(showMessage({message: "Pedido de agendamento cadastrado com sucesso!", type: "success"}))
@@ -107,7 +102,6 @@ const CreateAppointmentForm = ({onClose}: CreateAppointmentFormProps) => {
                         label="Tipo da consulta"
                         register={register}
                         error={errors.type}
-                        value={medicineCategory}
                         options={consultationTypes}
                         required
                     />

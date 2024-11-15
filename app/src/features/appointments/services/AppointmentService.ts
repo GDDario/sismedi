@@ -1,5 +1,10 @@
 import axiosInstance from "../../../config/axiosConfig.ts";
-import {UpdateAppointmentData, GetAppointmentResponse, ListAppointmentsReponse} from "../types.ts";
+import {
+    UpdateAppointmentData,
+    GetAppointmentResponse,
+    ListAppointmentsReponse,
+    CreateAppointmentByPatient
+} from "../types.ts";
 
 export class AppointmentService {
     static paginate = async (params: any): Promise<ListAppointmentsReponse> => {
@@ -15,7 +20,7 @@ export class AppointmentService {
         return reponse.data;
     }
 
-    static create = async (body: UpdateAppointmentData): Promise<void> => {
+    static create = async (body: CreateAppointmentByPatient): Promise<void> => {
         await axiosInstance.post<GetAppointmentResponse>('/appointment', body);
     }
 
