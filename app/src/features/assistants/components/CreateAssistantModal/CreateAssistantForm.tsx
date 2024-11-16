@@ -19,11 +19,10 @@ const schema = z.object({
         .number()
         .int("O nível deve ser um número inteiro.")
         .min(1, "O nível deve ser no mínimo 1.")
-        .max(10, "O nível deve ser no máximo 10."),
+        .max(10, "O nível deve ser no máximo 3."),
     password: z
         .string()
-        .min(6, "A senha deve ter no mínimo 6 caracteres.")
-        .max(50, "A senha deve ter no máximo 50 caracteres."),
+        .min(6, "A senha deve ter no mínimo 6 caracteres."),
     password_confirmation: z.string(),
 }).refine((data) => data.password === data.password_confirmation, {
     path: ["password_confirmation"],

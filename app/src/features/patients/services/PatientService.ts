@@ -1,5 +1,7 @@
-import {GetPatientResponse, ListPatientsResponse, CreateOrUpdatePatientData} from "../types.ts";
+import {GetPatientResponse, ListPatientsResponse} from "../types.ts";
 import axiosInstance from "../../../config/axiosConfig.ts";
+import {CreatePatientSchema} from "../components/CreatePatientModal/CreatePatientForm.tsx";
+import {EditPatientSchema} from "../components/EditPatientModal/EditPatientForm.tsx";
 
 export class PatientService {
     static listPatients = async (params: any): Promise<ListPatientsResponse> => {
@@ -22,11 +24,11 @@ export class PatientService {
         return response.data as GetPatientResponse;
     }
 
-    static create = async (patientData: CreateOrUpdatePatientData): Promise<void> => {
+    static create = async (patientData: CreatePatientSchema): Promise<void> => {
         await axiosInstance.post<GetPatientResponse>('/patient', patientData);
     }
 
-    static update = async (uuid: string, patientData: CreateOrUpdatePatientData): Promise<void> => {
+    static update = async (uuid: string, patientData: EditPatientSchema): Promise<void> => {
         const url = `/patient/${uuid}`;
         await axiosInstance.put<GetPatientResponse>(url, patientData);
     }
