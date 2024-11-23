@@ -10,65 +10,25 @@ import {State} from "../../models/state.ts";
 import {CityService} from "../../services/CityService.ts";
 import {CitySearch} from "../../types.ts";
 import CopyableInput from "../../../../shared-components/CopyableInput.tsx";
-import {PatientService} from "../../services/PatientService.ts";
+import {DoctorService} from "../../services/DoctorService.ts";
 import {Cellphone} from "../../models/cellphone.ts";
 import {MdDelete} from "react-icons/md";
 import {v4 as uuidv4} from 'uuid';
 import FormSectionHeading from "../../../../shared-components/FormSectionHeading.tsx";
-import {DateUtil} from "../../../../util/DateUtil.ts";
 import {useDispatch} from "react-redux";
 import {showMessage} from "../../../../store/messageSlice.ts";
+import {DateUtil} from "../../../../util/DateUtil.ts";
 
-const schema = z.object({
-    patient: z.object({
-        name: z.string().min(1, "O nome é obrigatório."),
-        birth_date: z
-            .string()
-            .regex(/^\d{4}-\d{2}-\d{2}$/, "A data de nascimento deve estar no formato yyyy-mm-dd."),
-        cpf: z
-            .string()
-            .regex(/^\d{11}$/, "O CPF deve conter exatamente 11 dígitos numéricos."),
-        rg: z
-            .string()
-            .regex(/^\d{1,20}$/, "O RG deve conter apenas números (até 20 caracteres)."),
-        cns: z
-            .string()
-            .regex(/^\d{15}$/, "O CNS deve conter exatamente 15 dígitos."),
-        email: z.string().email("O email deve ser válido."),
-    }),
-    address: z.object({
-        postal_code: z
-            .string()
-            .regex(/^\d{8}$/, "O CEP deve conter exatamente 8 dígitos."),
-        state_uuid: z.string().uuid("O estado selecionado é inválido."),
-        city_uuid: z.string().uuid("A cidade selecionada é inválida."),
-        street_address: z.string().min(1, "A rua é obrigatória."),
-        house_number: z
-            .string().min(1, "O número é obrigatório."),
-        neighborhood: z.string().min(1, "O bairro é obrigatório."),
-        address_line_2: z.string().nullable().optional(),
-    }),
-    cellphones: z
-        .array(
-            z.object({
-                number: z
-                    .string()
-                    .regex(/^\d{10,11}$/, "O telefone deve conter 10 ou 11 dígitos."),
-                description: z.string().min(1, "A descrição é obrigatória."),
-            })
-        )
-        .min(1, "É necessário informar pelo menos um número de telefone."),
-});
+const schema = z.any({});
 
-export type EditPatientSchema = z.infer<typeof schema>;
+type EditDoctorSchema = z.infer<typeof schema>;
 
-type EditPatientFormProps = {
+type EditDoctorFormProps = {
     uuid: string;
     onClose: () => void;
-    patientData: any;
 };
 
-const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => {
+const EditDoctorForm = ({uuid, onClose}: EditDoctorFormProps) => {
     const {
         register,
         handleSubmit,
@@ -76,21 +36,21 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
         setValue,
         control,
         watch
-    } = useForm<EditPatientSchema>({resolver: zodResolver(schema)});
+    } = useForm<EditDoctorSchema>({resolver: zodResolver(schema)});
     const [stateUuid, setStateUuid] = useState<string | undefined>(undefined);
     const [state, setState] = useState<string>('');
     const [city, setCity] = useState<string>('');
     const [age, setAge] = useState<number | string>('...');
     const dispatch = useDispatch();
-    const birthDate = watch("patient.birth_date");
+    const birthDate = watch("doctor.birth_date");
     const {fields, append, remove} = useFieldArray({
         control,
         name: "cellphones"
     });
 
     useEffect(() => {
-        loadPatientData();
-    }, [patientData]);
+        loadDoctorData();
+    }, [uuid]);
 
     useEffect(() => {
         if (birthDate) {
@@ -98,31 +58,29 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
         }
     }, [birthDate]);
 
-    const loadPatientData = async (): Promise<void> => {
-        // const data = await PatientService.getPatient(uuid);
-        // const patientData = data.data;
-        // console.log('Patient data', data);
+    const loadDoctorData = async (): Promise<void> => {
+        const data = await DoctorService.getDoctor(uuid);
+        const doctorData = data;
 
-        setValue('patient.name', patientData.patient.name);
-        setValue('patient.birth_date', patientData.patient.birth_date);
-        setValue('patient.cpf', patientData.patient.cpf);
-        setValue('patient.rg', patientData.patient.rg);
-        setValue('patient.cns', patientData.patient.cns);
-        setValue('patient.email', patientData.patient.email);
+        setValue('doctor.name', doctorData.doctor.name); 
+        setValue('doctor.birth_date', doctorData.doctor.birth_date);
+        setValue('doctor.cpf', doctorData.doctor.cpf);
+        setValue('doctor.rg', doctorData.doctor.rg);
+        setValue('doctor.crm', doctorData.doctor.crm);
+        setValue('doctor.email', doctorData.doctor.email);
 
-        setValue('address.postal_code', patientData.address.postal_code);
-        setCity(patientData.address.city_name);
-        setState(patientData.address.state_name);
-        setStateUuid(patientData.address.state_uuid);
-        setValue('address.state_uuid', patientData.address.state_uuid);
-        setValue('address.city_uuid', patientData.address.city_uuid);
-        setValue('address.street_address', patientData.address.street_address);
-        setValue('address.house_number', patientData.address.house_number);
-        setValue('address.neighborhood', patientData.address.neighborhood);
-        setValue('address.address_line_2', patientData.address.address_line_2);
+        setValue('address.postal_code', doctorData.address.postal_code);
+        setCity(doctorData.address.city_name);
+        setState(doctorData.address.state_name);
+        setStateUuid(doctorData.address.state_uuid);
+        setValue('address.state_uuid', doctorData.address.state_uuid);
+        setValue('address.city_uuid', doctorData.address.city_uuid);
+        setValue('address.street_address', doctorData.address.street_address);
+        setValue('address.house_number', doctorData.address.house_number);
+        setValue('address.neighborhood', doctorData.address.neighborhood);
+        setValue('address.address_line_2', doctorData.address.address_line_2);
 
-        patientData.cellphones.forEach((cellphone: Cellphone) => {
-            // @ts-ignore
+        doctorData.cellphones.forEach((cellphone: Cellphone) => {
             append(cellphone);
         });
     }
@@ -173,7 +131,7 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
         append(newNumber);
     }
 
-    const onSubmit = async (data: EditPatientSchema) => {
+    const onSubmit = async (data: EditDoctorSchema) => {
         const updatedData = {
             ...data,
             cellphones: data.cellphones.map((cellphone: any, index: number) => {
@@ -182,9 +140,11 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
          }
 
          console.log('Sending data', updatedData)
-        await PatientService.update(uuid, updatedData);
+        await DoctorService.update(uuid, updatedData);
 
-        dispatch(showMessage({message: "Paciente atualizado com sucesso!", type: "success"}))
+        dispatch(showMessage({message: "Médico atualizado com sucesso!", type: "success"}))
+
+        onClose();
     }
 
     return (
@@ -200,21 +160,15 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField
-                        className="w-[347px]"
-                        name="patient.name"
-                        label="Nome do paciente"
-                        register={register}
-                        error={errors?.patient?.name}
-                        required
-                    />
+                    <InputField className="w-[347px]" name="doctor.name" label="Nome do médico" register={register}
+                                error={errors.name}/>
 
                     <div className="flex gap-2 items-end">
                         <InputField
-                            name="patient.birth_date"
+                            name="doctor.birth_date"
                             label="Data de nascimento"
                             register={register}
-                            error={errors?.patient?.birth_date}
+                            error={errors.birth_date}
                             type="date"
                             className="w-[150px]"
                         />
@@ -223,58 +177,28 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField
-                        name="patient.cpf"
-                        label="CPF"
-                        register={register}
-                        error={errors?.patient?.cpf}
-                        required
-                    />
-                    <InputField
-                        className="w-[136px]"
-                        name="patient.rg"
-                        label="RG"
-                        register={register}
-                        error={errors?.patient?.rg}
-                        required
-                    />
-                    <InputField
-                        className="w-[150px]"
-                        name="patient.cns" label="CNS"
-                        register={register}
-                        error={errors?.patient?.cns}
-                        required
-                    />
+                    <InputField name="doctor.cpf" label="CPF" register={register} error={errors.cpf}/>
+                    <InputField className="w-[136px]" name="doctor.rg" label="RG" register={register}
+                                error={errors.rg}/>
+                    <InputField className="w-[150px]" name="doctor.crm" label="CRM" register={register}
+                                error={errors.crm}/>
                 </div>
 
-                <InputField
-                    className="w-[347px]"
-                    name="patient.email"
-                    label="Email"
-                    register={register}
-                    error={errors?.patient?.email}
-                    required
-                />
+                <InputField className="w-[347px]" name="doctor.email" label="Email" register={register}
+                            error={errors.email}/>
             </section>
 
             <section className="flex flex-col gap-2">
                 <FormSectionHeading text="Endereço"/>
 
                 <div className="flex gap-4">
-                    <InputField
-                        name="address.postal_code"
-                        label="CEP"
-                        register={register}
-                        error={errors?.address?.postal_code}
-                        required
-                    />
+                    <InputField name="address.postal_code" label="CEP" register={register} error={errors.postal_code}/>
 
                     <SearchField
                         name="address.state_uuid"
                         label="Estado"
                         register={register}
-                        error={errors?.address?.state_uuid}
-                        required
+                        error={errors.state}
                         onSelect={handleSelectState}
                         onSearch={handleStateSearch}
                         value={state}
@@ -284,48 +208,32 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
                         name="address.city_uuid"
                         label="Cidade"
                         register={register}
-                        error={errors?.address?.city_uuid}
+                        error={errors.city}
                         onSelect={handleSelectCity}
                         onSearch={handleCitySearch}
                         value={city}
                         disabled={!stateUuid}
-                        required
                     />
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField
-                        name="address.street_address"
-                        label="Rua"
-                        register={register}
-                        error={errors?.address?.street_address}
-                        required
-                    />
+                    <InputField name="address.street_address" label="Rua" register={register}
+                                error={errors.street_address}/>
 
-                    <InputField
-                        name="address.house_number"
-                        label="Número"
-                        register={register}
-                        error={errors?.address?.house_number}
-                        required
-                    />
+                    <InputField name="address.house_number" label="Número" register={register}
+                                error={errors.house_number}/>
 
                 </div>
 
                 <div className="flex gap-4">
-                    <InputField
-                        name="address.neighborhood"
-                        label="Bairro"
-                        register={register}
-                        error={errors?.address?.neighborhood}
-                        required
-                    />
+                    <InputField name="address.neighborhood" label="Bairro" register={register}
+                                error={errors.neighborhood}/>
 
                     <InputField
                         name="address.address_line_2"
                         label="Complemento"
                         register={register}
-                        error={errors?.address?.address_line_2}
+                        error={errors.address_line_2}
                     />
                 </div>
             </section>
@@ -345,12 +253,14 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
                                                 name={`cellphones.${index}.number`}
                                                 label="Telefone"
                                                 register={register}
+                                                //@ts-ignore
                                                 error={errors?.cellphones?.[index]?.number}
                                             />
                                             <InputField
                                                 name={`cellphones.${index}.description`}
                                                 label="Descrição"
                                                 register={register}
+                                                //@ts-ignore
                                                 error={errors?.cellphones?.[index]?.description}
                                                 className="w-[300px]"
                                             />
@@ -369,8 +279,7 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
 
 
                 </div>
-                <Button className="mt-2 w-[180px]" text="Adicionar número +" type="button"
-                        onClick={() => handleAddCellphoneNumber()}/>
+                <Button className="mt-2 w-[190px]" text="Adicionar número +" type="button" onClick={() => handleAddCellphoneNumber()} />
             </section>
 
             <section className="mt-2 flex gap-2">
@@ -381,4 +290,4 @@ const EditPatientForm = ({uuid, onClose, patientData}: EditPatientFormProps) => 
     );
 };
 
-export default EditPatientForm;
+export default EditDoctorForm;

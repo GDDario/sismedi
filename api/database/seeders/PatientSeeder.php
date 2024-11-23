@@ -36,7 +36,7 @@ class PatientSeeder extends Seeder
                 Address::factory()
                     ->state([
                         'street_address' => 'Good Street',
-                        'house_number' => 'AB65'
+                        'house_number' => 'AB65',
                     ])
             )
             ->has(Cellphone::factory()

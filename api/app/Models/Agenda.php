@@ -17,7 +17,7 @@ class Agenda extends Model
         'doctor_id',
         'session_date',
         'obs',
-        'craeted_at',
+        'created_at',
         'updated_at'
     ];
 

@@ -2,10 +2,15 @@
 
 namespace App\Services;
 
+use App\DTO\CreateDoctorDTO;
+use App\DTO\UpdateDoctorDTO;
 use App\Exceptions\NotFoundException;
+use App\Models\Cellphone;
 use App\Models\Doctor;
 use App\Repositories\DoctorRepository;
 use App\Util\PaginationUtil;
+use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
 class DoctorService
@@ -25,7 +30,7 @@ class DoctorService
 
             return new Response($DoctorData, Response::HTTP_OK);
         } catch (NotFoundException $e) {
-            return new Response(['message' => 'Doctor not found.'], Response::HTTP_NOT_FOUND);
+            return new Response(['message' => "Doctor uuid $uuid not found."], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -64,32 +69,83 @@ class DoctorService
     private function arrangeDoctorData(Doctor $DoctorsData): array
     {
         return [
-            'Doctor' => [
+            'doctor' => [
                 'uuid' => $DoctorsData->uuid,
                 'name' => $DoctorsData->name,
                 'email' => $DoctorsData->email,
                 'cpf' => $DoctorsData->cpf,
+                'rg' => $DoctorsData->rg,
                 'crm' => $DoctorsData->crm,
+                'birth_date' => $DoctorsData->birth_date,
                 'email_verified_at' => $DoctorsData->email_verified_at,
-                'created_at' => $DoctorsData->created_at,
-                'updated_at' => $DoctorsData->updated_at,
-                'deleted_at' => $DoctorsData->deleted_at
+                'created_at' => date('d/m/Y H:i', strtotime($DoctorsData->created_at)),
+                'updated_at' => date('d/m/Y H:i', strtotime($DoctorsData->updated_at)),
+                'deleted_at' => $DoctorsData->deleted_at ? date('d/m/Y H:i', strtotime($DoctorsData->deleted_at)) : null
             ],
             'address' => [
-                'street_address' => $DoctorsData->street_address,
-                'house_number' => $DoctorsData->house_number,
-                'address_line_2' => $DoctorsData->address_line_2,
-                'neighborhood' => $DoctorsData->neighborhood,
-                'postal_code' => $DoctorsData->postal_code,
-                'city_uuid' => $DoctorsData->city_uuid,
-                'city_name' => $DoctorsData->city_name,
-                'ibge_code' => $DoctorsData->ibge_code,
-                'state_uuid' => $DoctorsData->state_uuid,
-                'state_name' => $DoctorsData->state_name,
-                'state_code' => $DoctorsData->state_code,
-                'state_ibge_code' => $DoctorsData->state_ibge_code,
-                'ddd' => $DoctorsData->ddd
-            ]
+                'street_address' => $DoctorsData->address->street_address,
+                'house_number' => $DoctorsData->address->house_number,
+                'address_line_2' => $DoctorsData->address->address_line_2,
+                'neighborhood' => $DoctorsData->address->neighborhood,
+                'postal_code' => $DoctorsData->address->postal_code,
+                'city_uuid' => $DoctorsData->address->city_uuid,
+                'city_name' => $DoctorsData->address->city_name,
+                'state_uuid' => $DoctorsData->address->state_uuid,
+                'state_name' => $DoctorsData->address->state_name,
+                'state_code' => $DoctorsData->address->state_code,
+                'state_ibge_code' => $DoctorsData->address->state_ibge_code
+            ],
+            'cellphones' => $this->arrangeCellphones($DoctorsData->cellphones)
         ];
+    }
+
+    private function arrangeCellphones(Collection $cellphones): array
+    {
+        return $cellphones->map(function (Cellphone $cellphone) {
+            return [
+                'uuid' => $cellphone->uuid,
+                'number' => $cellphone->number,
+                'description' => $cellphone->description,
+            ];
+        })->toArray();
+    }
+
+    public function create(CreateDoctorDTO $dto)
+    {
+        $doctor = $this->repository->insert($dto);
+
+        if (is_null($doctor)) {
+            return new Response(['message' => 'Could not update the doctor.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            return new Response(['message' => 'Created successfully'], Response::HTTP_OK);
+        }
+    }
+
+    public function delete(string $uuid)
+    {
+        try {
+            if ($this->repository->destroy($uuid)) {
+                return new Response(['message' => 'Doctor deleted successfully'], Response::HTTP_OK);
+            } else {
+                return new Response(['message' => 'Could not delete the doctor.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } catch (NotFoundException $e) {
+            return new Response($e->getMessage(), 404);
+        }
+    }
+
+    public function update(UpdateDoctorDTO $dto): Response
+    {
+        try {
+            $doctor = $this->repository->update($dto);
+
+            if (is_null($doctor)) {
+                return new Response(['message' => 'Could not update the doctor.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                return new Response(['message' => 'Doctor updated successfully.'], Response::HTTP_OK);
+            }
+        } catch (NotFoundException $e) {
+            return new Response(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
     }
 }

@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->uuid()->unique();
             $table->string('CRM');
+            $table->string('rg', '13');
+            $table->date('birth_date');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

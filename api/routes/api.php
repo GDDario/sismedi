@@ -48,6 +48,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/search', [DoctorController::class, 'search']);
         Route::get('/{uuid}', [DoctorController::class, 'show']);
         Route::get('/agenda/{id}', [DoctorController::class, 'getAgenda']);
+        Route::post('', [DoctorController::class, 'create']);
+        Route::delete('/{uuid}', [DoctorController::class, 'delete']);
+        Route::put('/{uuid}', [DoctorController::class, 'update']);
     });
 
     Route::prefix('medicine')->group(function () {
