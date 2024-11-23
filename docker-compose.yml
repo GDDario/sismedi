@@ -1,54 +1,68 @@
 services:
-  php:
-    build:
-      context: .docker/php
-    container_name: sismedi-php
-    volumes:
-      - ./:/var/www/html/sismedi
-    networks:
-      - sismedi-network
+    php:
+        build:
+            context: .docker/php
+        container_name: sismedi-php
+        volumes:
+            - ./:/var/www/html/sismedi
+        networks:
+            - sismedi-network
 
-  nginx:
-    build:
-      context: .docker/nginx
-    container_name: sismedi-nginx
-    volumes:
-      - ./:/var/www/html/sismedi
-    ports:
-      - "8080:80"
-    networks:
-      - sismedi-network
+    nginx:
+        build:
+            context: .docker/nginx
+        container_name: sismedi-nginx
+        volumes:
+            - ./:/var/www/html/sismedi
+        ports:
+            - "8080:80"
+        networks:
+            - sismedi-network
 
-  mysql:
-    image: mysql:9.0.0
-    container_name: sismedi-mysql
-    platform: linux/amd64
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: sismedi
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    networks:
-      - sismedi-network
-#          ipv4_address: 172.25.0.10
+    mysql:
+        image: mysql:9.0.0
+        container_name: sismedi-mysql
+        platform: linux/amd64
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql-data:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: sismedi
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        networks:
+            - sismedi-network
+    #          ipv4_address: 172.25.0.10
 
-  mailpit:
-    image: axllent/mailpit
-    container_name: mailpit
-    ports:
-      - "8025:8025"
-      - "1025:1025"
-    restart: unless-stopped
-    volumes:
-      - ./data:/data
-    environment:
-      MP_MAX_MESSAGES: 5000
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
-    networks:
-      - sismedi-network
+    mailpit:
+        image: axllent/mailpit
+        container_name: sismedi-mailpit
+        ports:
+            - "8025:8025"
+            - "1025:1025"
+        restart: unless-stopped
+        volumes:
+            - ./data:/data
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+        networks:
+            - sismedi-network
+
+    soketi:
+        container_name: sismedi-soketi
+        restart: unless-stopped
+        image: 'quay.io/soketi/soketi:0.17-16-alpine'
+        ports:
+            - '${SOKETI_PORT:-6001}:6001'
+            - '${SOKETI_METRICS_SERVER_PORT:-960 1}:9601'
+        environment:
+            - SOKETI_DEBUG='${DEBUG:-1}'
+            - METRICS_SERVER_PORT=${SOKETI_METRICS_SERVER_PORT:-9601}
+            - DEFAULT_APP_ENABLE_CLIENT_MESSAGES=${DEFAULT_APP_ENABLE_CLIENT_MESSAGES:-false}
+        networks:
+            - sismedi-network
 
 #  node:
 #    build:
@@ -64,11 +78,11 @@ services:
 #      - sismedi-network
 
 networks:
-  sismedi-network:
-    driver: bridge
+    sismedi-network:
+        driver: bridge
 #    ipam:
 #      config:
 #        - subnet: 172.25.0.0/16
 
 volumes:
-  mysql-data:
+    mysql-data:

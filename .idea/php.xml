@@ -139,6 +139,9 @@
       <path value="$PROJECT_DIR$/api/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/api/vendor/symfony/event-dispatcher" />
       <path value="$PROJECT_DIR$/api/vendor/brianium/paratest" />
+      <path value="$PROJECT_DIR$/api/vendor/pusher/pusher-php-server" />
+      <path value="$PROJECT_DIR$/api/vendor/paragonie/sodium_compat" />
+      <path value="$PROJECT_DIR$/api/vendor/laravel/horizon" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
