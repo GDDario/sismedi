@@ -20,12 +20,13 @@ class Address extends Model
         'neighborhood',
         'postal_code',
         'city_id',
-        'patient_id'
+        'patient_id',
+        'user_id'
     ];
 
     public function patient(): BelongsTo
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(Patient::class, 'user_id', 'id');
     }
 
     public function city(): BelongsTo

@@ -3,20 +3,24 @@ import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@t
 // @ts-ignore
 import {doctor} from "../../../../../.jest/mocks/doctorsMock.ts";
 import EditButton from "../../../../shared-components/Table/EditButton.tsx";
-import EditDoctorModal from "./EditDoctorModal.tsx";
 import AppointsButton from "./AppointsButton.tsx";
-import {format, isValid} from "date-fns";
 import {OpenModal} from "../../types.ts";
 import {useDispatch, useSelector} from "react-redux";
 import DoctorsTablePagination from "./DoctorsTablePagination.tsx";
 import {fetchDoctors} from "../../store/doctorsSlice.ts";
 import {DateUtil} from "../../../../util/DateUtil.ts";
+import ConfirmationMessage from "../../../../shared-components/ConfirmationMessage/ConfirmationMessage.tsx";
+import {DoctorService} from "../../services/DoctorService.ts";
+import {showMessage} from "../../../../store/messageSlice.ts";
+import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
+import EditDoctorModal from "../EditDoctorModal/EditDoctorModal.tsx";
 
 const columnHelper = createColumnHelper();
 
 const DoctorsTable = () => {
-    const [openEditModal, setOpenEditModal] = useState<OpenModal>({open: false, uuid: undefined});
+    const [editModal, setEditModal] = useState<OpenModal>({open: false, uuid: undefined});
     const [openAppointsModal, setOpenAppointsModal] = useState<OpenModal>({open: false, uuid: undefined});
+    const [deleteModal, setDeleteModal] = useState<OpenModal>({open: false, uuid: undefined});
     const dispatch = useDispatch();
     const doctorsState = useSelector((state: any) => state.doctors);
 
@@ -25,6 +29,15 @@ const DoctorsTable = () => {
         dispatch(fetchDoctors({page: 1, per_page: 17}));
     }, []);
 
+    const deleteDoctor = async (): Promise<void> => {
+        await DoctorService.delete(deleteModal.uuid!);
+
+        dispatch(showMessage({message: 'Doctor deleted successfully!', type: 'success'}));
+        // @ts-ignore
+        dispatch(fetchDoctors({page: 1, per_page: 17}));
+        setDeleteModal({open: false, uuid: undefined});
+    }
+
     const columns = useMemo(() => [
         columnHelper.accessor('uuid', {
             header: 'ID',
@@ -32,7 +45,7 @@ const DoctorsTable = () => {
         }),
         columnHelper.accessor('name', {
             header: 'Nome',
-            cell: info => info.getValue() + 'Nome',
+            cell: info => info.getValue(),
         }),
         columnHelper.accessor('cpf', {
             header: 'CPF',
@@ -59,10 +72,10 @@ const DoctorsTable = () => {
                 return (
                     <>
                         <EditButton onClick={() => {
-                            console.log('Clicou');
-                            setOpenEditModal({open: true, uuid});
+                            setEditModal({open: true, uuid});
                         }}/>
                         <AppointsButton onClick={() => setOpenAppointsModal({open: true, uuid})}/>
+                        <DeleteButton onClick={() => setDeleteModal({open: true, uuid})}/>
                     </>
                 );
             }
@@ -75,10 +88,6 @@ const DoctorsTable = () => {
         data: doctorsState.data.data,
         getCoreRowModel: getCoreRowModel(),
     });
-
-    const closeEditModal = () => {
-        setOpenEditModal({uuid: undefined, open: false});
-    }
     
     if (doctorsState.error) return <div>Error: {doctorsState.error}</div>;
 
@@ -118,14 +127,27 @@ const DoctorsTable = () => {
 
                 <DoctorsTablePagination />
 
-                {openEditModal.open && (
+                {editModal.open && (
                     <EditDoctorModal
-                        uuid={openEditModal.uuid!}
-                        visible={openEditModal.open}
-                        onClose={closeEditModal}
+                        uuid={editModal.uuid!}
+                        visible={editModal.open}
+                        onClose={() => {
+                        setEditModal({uuid: undefined, open: false});
+                        dispatch(fetchDoctors({page: 1, per_page: 17}));
+                        }}
                     />
                 )}
-                <p>Open appoints modal to doctor {openAppointsModal.uuid}</p>
+
+                <ConfirmationMessage
+                    title="Excluir médico"
+                    loading={false}
+                    onConfirm={() => deleteDoctor()}
+                    onCancel={() => setDeleteModal({uuid: undefined, open: false})}
+                    visible={deleteModal.open}
+                    onClose={() => setDeleteModal({uuid: undefined, open: false})}
+                >
+                    Tem <b>certeza</b> que deseja excluir esse paciente? Essa ação <b>não</b> poderá ser desfeita.
+                </ConfirmationMessage>
             </div>
         </section>
     );

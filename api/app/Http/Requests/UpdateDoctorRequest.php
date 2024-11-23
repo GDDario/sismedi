@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CNSRule;
+use App\Rules\CRMRule;
 use App\Rules\CPFRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class UpdatePatientRequest extends FormRequest
+class UpdateDoctorRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,14 +19,13 @@ class UpdatePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Patient object
-            'patient.name' => 'required',
-            'patient.email' => 'required|email',
-            'patient.cpf' => ['required', new CPFRule],
-//            'patient.cns' => ['required', new CNSRule],
-            'patient.cns' => ['required'],
-            'patient.rg' => 'required',
-            'patient.birth_date' => 'required|date',
+            // Doctor object
+            'doctor.name' => 'required',
+            'doctor.email' => 'required|email',
+            'doctor.cpf' => ['required', new CPFRule],
+            'doctor.crm' => ['required', new CRMRule],
+            'doctor.rg' => 'required',
+            'doctor.birth_date' => 'required|date',
 
             // Address object
             'address.street_address' => 'required',

@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CNSRule;
+use App\Rules\CRMRule;
 use App\Rules\CPFRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class UpdatePatientRequest extends FormRequest
+class CreateDoctorRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,14 +19,14 @@ class UpdatePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Patient object
-            'patient.name' => 'required',
-            'patient.email' => 'required|email',
-            'patient.cpf' => ['required', new CPFRule],
-//            'patient.cns' => ['required', new CNSRule],
-            'patient.cns' => ['required'],
-            'patient.rg' => 'required',
-            'patient.birth_date' => 'required|date',
+            // Doctor object
+            'doctor.name' => 'required',
+            'doctor.email' => 'required|email|unique:users,email',
+            'doctor.cpf' => ['required', new CPFRule, 'unique:users,cpf'],
+            'doctor.crm' => ['required', new CRMRule, 'unique:doctors,crm'],
+            'doctor.rg' => 'required|unique:doctors,rg',
+            'doctor.birth_date' => 'required|date',
+            'doctor.password' => 'required|confirmed',
 
             // Address object
             'address.street_address' => 'required',
@@ -38,6 +38,22 @@ class UpdatePatientRequest extends FormRequest
             // Cellphones
             "cellphones" => "array|min:1",
             "cellphones.*.number" => 'required|size:11'
+        ];
+    }
+
+    /**
+     * Get the custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'doctor.email' => 'Email já cadastrado.',
+            'doctor.cpf' => ['CPF já cadastrado.'],
+            'doctor.crm' => 'CRM já cadastrado.',
+            'doctor.rg' => 'RG já cadastrado.',
+            'password.required' => 'O campo password é obrigatório.',
         ];
     }
 

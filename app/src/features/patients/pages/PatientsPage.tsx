@@ -15,6 +15,7 @@ const PatientsPage = () => {
 
     useEffect(() => {
         dispatch(setTitle('Gerenciar pacientes'));
+        document.title = "Sismedi - Pacientes";
     }, []);
 
     return (
