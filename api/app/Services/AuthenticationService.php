@@ -15,9 +15,8 @@ class AuthenticationService
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
 
+            $user->type = $user->getType();
             $user = $user->toArray();
-
-            unset($user['id']);
 
             return new Response(['user' => $user, 'token' => $token], Response::HTTP_OK);
         }
@@ -29,9 +28,8 @@ class AuthenticationService
     {
         $user = Auth::user();
 
+        $user->type = $user->getType();
         $user = $user->toArray();
-
-        unset($user['id']);
 
         return new Response($user, Response::HTTP_OK);
     }

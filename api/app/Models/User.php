@@ -83,7 +83,7 @@ class User extends Authenticatable
         return $this->assistant()->exists();
     }
 
-    public function getUserType(): string
+    public function getType(): string
     {
         if ($this->isPatient()) {
             return 'patient';
