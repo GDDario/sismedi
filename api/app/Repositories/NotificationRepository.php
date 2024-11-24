@@ -18,6 +18,11 @@ class NotificationRepository
         return $notifications->toArray();
     }
 
+    public function markAllAsSeen(int $userId): void
+    {
+        Notification::where('user_id', $userId)->update(['seen' => 1]);
+    }
+
     public function markAsDismissedById(int $id): void
     {
         Notification::where('id', $id)->first()->update(['dismised' => 1]);

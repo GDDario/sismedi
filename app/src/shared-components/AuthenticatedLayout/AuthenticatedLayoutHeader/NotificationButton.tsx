@@ -10,8 +10,8 @@ const NotificationButton = () => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const popoverRef = useRef(null);
     const user = useSelector(selectUser);
-    const [notifications, setNotifications] = useState([]);
-
+    const [notifications, setNotifications] = useState<any>([]);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -42,7 +42,7 @@ const NotificationButton = () => {
     useEffect(() => {
         if (user.uuid) {
             console.log('User uuid', user.uuid);
-            getNotSeenNotifications();
+            getNotDismisedNotifications();
             const websocketConfig = new WebSocketConfig(user.uuid, onNotificationArrived);
             websocketConfig.subscribe();
 
@@ -52,59 +52,35 @@ const NotificationButton = () => {
         }
     }, [user.uuid]);
 
-    const getNotSeenNotifications = async () => {
+    const getNotDismisedNotifications = async () => {
         const notifications = await NotificationService.getNotDismised(user.uuid);
 
         setNotifications(notifications.data);
+        console.log('notifications', notifications.data)
+        setUnreadCount(notifications.data.filter(notification => !notification.seen).length);
     }
 
-    let queue = Promise.resolve();
-    const onNotificationArrived = (notification) => {
-        queue = queue.then(
-            () =>
-                new Promise((resolve) => {
-                    console.log(
-                        "%cNotification Soketi",
-                        "background: green; color: white; font-weight: bold"
-                    );
-                    console.log(notification);
-                    console.log(
-                        "%cNotification Soketi",
-                        "background: green; color: white; font-weight: bold"
-                    );
-
-
-                })
-        );
-    };
-
-    const resolveNodesWs = useCallback((notification) => {
-        // setNodes((currentNodes) => {
-        //     const stateNodes = currentNodes.map((node) => {
-        //         if (notification.step_id === node.id) {
-        //             return {
-        //                 ...node,
-        //                 data: {
-        //                     ...node.data,
-        //                     output: { ...notification.response },
-        //                 },
-        //             };
-        //         }
-        //         return node;
-        //     });
-        //
-        //     dispatch(
-        //         addCode({
-        //             nodes: stateNodes,
-        //         })
-        //     );
-        //     return stateNodes;
-        // });
+    const onNotificationArrived = useCallback((notification: any) => {
+        setNotifications((prevNotifications: any) => [
+            ...prevNotifications,
+            notification,
+        ]);
+        setUnreadCount((prevCount) => prevCount + 1);
     }, []);
 
     const togglePopover = () => {
-        setIsPopoverOpen((prev) => !prev);
+        setIsPopoverOpen((prev) => {
+            if (!prev) {
+                markAllAsSeen();
+            }
+            return !prev;
+        });
     };
+
+    const markAllAsSeen = async () => {
+        await NotificationService.markAllAsSeen();
+        setUnreadCount(0);
+    }
 
     const dismissNotification = async (id: number) => {
         await NotificationService.dismissNotification(id).then(() => {
@@ -126,12 +102,20 @@ const NotificationButton = () => {
     return (
         <div className="relative z-1000" ref={popoverRef}>
             {/* Botão de notificação */}
-            <button
-                className="p-2 rounded-full bg-white bg-opacity-25 hover:bg-opacity-50"
-                onClick={togglePopover}
-            >
-                <IoNotifications color="black" size={22}/>
-            </button>
+            <div className="relative">
+                <button
+                    className="p-2 rounded-full bg-white bg-opacity-25 hover:bg-opacity-50"
+                    onClick={togglePopover}
+                >
+                    <IoNotifications color="black" size={22}/>
+                </button>
+                {unreadCount > 0 && (
+                    <span
+                        className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {unreadCount}
+                    </span>
+                )}
+            </div>
 
             {/* Popover body */}
             {isPopoverOpen && (

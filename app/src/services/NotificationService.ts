@@ -21,4 +21,11 @@ export class NotificationService {
 
         return reponse.data;
     }
+
+    static async markAllAsSeen() {
+        const url: string = `/notification/seen`;
+        const reponse = await axiosInstance.post(url);
+
+        return reponse.data;
+    }
 }

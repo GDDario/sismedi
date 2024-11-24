@@ -25,12 +25,15 @@ class WebSocketConfig {
             disableStats: true,
             enabledTransports: ["ws"],
             cluster: "mt1",
-            // authEndpoint: "/broadcasting/auth",
-            // auth: {
-            //     headers: {
-            //         Authorization: `Bearer ${localStorage.getItem("jwt_access_token") || ""}`,
-            //     },
-            // },
+        });
+
+        this.client.connection.bind("disconnected", () => {
+            console.warn("Pusher desconectado. Tentando reconectar...");
+            this.connectPusher();
+        });
+
+        this.client.connection.bind("error", (error: any) => {
+            console.error("Erro no Pusher:", error);
         });
     }
 
@@ -42,6 +45,14 @@ class WebSocketConfig {
 
         const channelName = `notifications.${this.id}`;
         this.channel = this.client.subscribe(channelName);
+
+        this.channel.bind("pusher:subscription_succeeded", () => {
+            console.log("Inscrição bem-sucedida no canal:", channelName);
+        });
+
+        this.channel.bind("pusher:subscription_error", (status: any) => {
+            console.error("Erro ao se inscrever no canal:", status);
+        });
 
         this.channel.bind("App\\Events\\AppointmentUpdatedEvent", this.notificationEvent);
     }

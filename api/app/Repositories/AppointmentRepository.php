@@ -219,11 +219,13 @@ class AppointmentRepository
             'appointment_uuid' => $appointment->uuid
         ];
 
-        Notification::create([
+        $notification = Notification::query()->create([
             'data' => $data,
             'user_id' => $appointment->patient->user->id
         ]);
-        event(new AppointmentUpdatedEvent($data, $appointment->patient->user->uuid));
+        $notificationArray = $notification->toArray();
+        unset($notificationArray['user_id']);
+        event(new AppointmentUpdatedEvent($notificationArray, $appointment->patient->user->uuid));
     }
 
     private function generateMessage(?string $formattedDate, string $type): string

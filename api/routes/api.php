@@ -89,6 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('notification')->group(function () {
         Route::get('user/{user_uuid}', [NotificationController::class, 'getNotDismised']);
+        Route::post('seen', [NotificationController::class, 'markAllAsSeen']);
         Route::post('dismiss', [NotificationController::class, 'dismissAll']);
         Route::post('dismiss/{id}', [NotificationController::class, 'dismissById']);
     });

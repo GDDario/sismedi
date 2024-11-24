@@ -20,6 +20,12 @@ class NotificationController extends Controller
         return $this->service->getNotDismised($request->route('user_uuid'));
     }
 
+    public function markAllAsSeen(): Response {
+        $userId = Auth::user()->id;
+
+        return $this->service->markAllAsSeen($userId);
+    }
+
     public function dismissById(Request $request): Response
     {
         return $this->service->dismissById($request->route('id'));

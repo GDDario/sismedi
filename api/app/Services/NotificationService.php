@@ -10,6 +10,7 @@ use App\Repositories\AppointmentRepository;
 use App\Repositories\NotificationRepository;
 use App\Util\PaginationUtil;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
 
@@ -25,6 +26,12 @@ class NotificationService
     public function getNotDismised(string $userUuid): Response
     {
         return new Response(['data' => $this->repository->findNotDismised($userUuid)]);
+    }
+
+    public function markAllAsSeen(int $userId): Response {
+        $this->repository->markAllAsSeen($userId);
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     public function dismissById(int $id): Response
