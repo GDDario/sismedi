@@ -36,11 +36,16 @@ const NotificationButton = () => {
     }, [isPopoverOpen]);
 
     useEffect(() => {
-        const websocketConfig = new WebSocketConfig(user.uuid, onNotificationArrived);
-        websocketConfig.subscribe();
+        if (user.uuid != null) {
+            console.log('User uuid', user.uuid);
+            const websocketConfig = new WebSocketConfig(user.uuid, onNotificationArrived);
+            websocketConfig.subscribe();
 
-        return () => {websocketConfig.unsubscribe()}
-    }, [])
+            return () => {
+                websocketConfig.unsubscribe()
+            }
+        }
+    }, [user.uuid])
 
     let queue = Promise.resolve();
     const onNotificationArrived = (notification) => {
