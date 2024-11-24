@@ -9,6 +9,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MedicineCategoryController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StateController;
 use Illuminate\Support\Facades\Route;
@@ -84,5 +85,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('consultation-type')->group(function () {
         Route::get('', [ConsultationTypeController::class, 'index']);
         Route::get('search', [ConsultationTypeController::class, 'search']);
+    });
+
+    Route::prefix('notification')->group(function () {
+        Route::get('user/{user_uuid}', [NotificationController::class, 'getNotDismised']);
+        Route::post('dismiss', [NotificationController::class, 'dismissAll']);
+        Route::post('dismiss/{id}', [NotificationController::class, 'dismissById']);
     });
 });

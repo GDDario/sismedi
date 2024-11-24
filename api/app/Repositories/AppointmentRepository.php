@@ -4,11 +4,15 @@ namespace App\Repositories;
 
 use App\DTO\CreateAppointmentDTO;
 use App\DTO\UpdateAppointmentDTO;
+use App\Enum\AppointmentNotificationType;
+use App\Events\AppointmentUpdatedEvent;
 use App\Exceptions\NotFoundException;
 use App\Models\Appointment;
 use App\Models\ConsultationType;
 use App\Models\Doctor;
+use App\Models\Notification;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
@@ -94,19 +98,19 @@ class AppointmentRepository
     {
         $doctorAssignedAt = null;
 
-        if (!$appointment = Appointment::query()->where('uuid', $dto->uuid)->first()) {
+        if (!$appointment = Appointment::where('uuid', $dto->uuid)->first()) {
             throw new NotFoundException("Appointment with uuid $dto->uuid not found.");
         }
 
-        if (!$patient = Patient::query()->where('uuid', $dto->patientUuid)->first()) {
+        if (!$patient = Patient::where('uuid', $dto->patientUuid)->first()) {
             throw new NotFoundException("Patient with uuid $dto->patientUuid not found.");
         }
 
-        if ($dto->doctorUuid && !$doctor = Doctor::query()->where('uuid', $dto->doctorUuid)->first()) {
+        if ($dto->doctorUuid && !$doctor = Doctor::where('uuid', $dto->doctorUuid)->first()) {
             throw new NotFoundException("Doctor with uuid $dto->patientUuid not found.");
         }
 
-        if (!$consultationType = ConsultationType::query()->where('uuid', $dto->consultationTypeUuid)->first()) {
+        if (!$consultationType = ConsultationType::where('uuid', $dto->consultationTypeUuid)->first()) {
             throw new NotFoundException('Tipo de consulta não encontrado.');
         }
 
@@ -127,6 +131,8 @@ class AppointmentRepository
 
         $appointment->load('patient');
         $appointment->load('doctor');
+
+        $this->updated($appointment);
 
         return $appointment;
     }
@@ -188,5 +194,56 @@ class AppointmentRepository
         }
 
         return $query;
+    }
+
+    public function updated(Appointment $appointment)
+    {
+        $originalStatus = $appointment->getOriginal('canceled');
+        $newStatus = $appointment->canceled;
+        $appointmentDate = $appointment->appointment_date;
+        $formattedDate = null;
+        $type = $originalStatus != $newStatus ?
+            AppointmentNotificationType::CANCELED->value :
+            AppointmentNotificationType::UPDATED->value;
+
+        if ($appointmentDate) {
+            $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s', '2024-11-22 09:00:00');
+            $formattedDate = $formattedDate->format('d/m/Y H:i');
+        }
+
+        $message = $this->generateMessage($formattedDate, $type);
+
+        $data = [
+            'type' => $type,
+            'message' => $message,
+            'appointment_uuid' => $appointment->uuid
+        ];
+
+        Notification::create([
+            'data' => $data,
+            'user_id' => $appointment->patient->user->id
+        ]);
+        event(new AppointmentUpdatedEvent($data, $appointment->patient->user->uuid));
+    }
+
+    private function generateMessage(?string $formattedDate, string $type): string
+    {
+        $message = "";
+
+        if ($type === 'canceled') {
+            if (is_null($formattedDate)) {
+                $message = "Atenção: informamos que a sua consulta foi cancelada!";
+            } else {
+                $message = "Atenção: informamos que a sua consulta, programada para $formattedDate, foi cancelada!";
+            }
+        } else {
+            if (is_null($formattedDate)) {
+                $message = "Sua consulta teve uma atualização.";
+            } else {
+                $message = "Sua consulta na data de $formattedDate teve uma atualização.";
+            }
+        }
+
+        return $message;
     }
 }

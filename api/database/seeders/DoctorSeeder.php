@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Doctor;
 use App\Models\Address;
 use App\Models\Cellphone;
+use App\Models\Doctor;
+use Illuminate\Database\Seeder;
 
 class DoctorSeeder extends Seeder
 {

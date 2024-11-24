@@ -19,10 +19,10 @@ const AppointmentsPage = () => {
     return (
         <>
             <Button text="Cadastrar novo agendamento +" onClick={() => setOpenCreateModal(true)}/>
+
             <TableFilter filters={AppointmentsFilters} fetchFunction={fetchAppointments}/>
             <AppointmentsTable />
-            {/*<AssistantsTable/>*/}
-
+=
             <CreateAppointmentModal
                 visible={openCreateModal}
                 onClose={() => setOpenCreateModal(false)}

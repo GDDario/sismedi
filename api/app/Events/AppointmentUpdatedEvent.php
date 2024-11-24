@@ -12,22 +12,21 @@ use Illuminate\Queue\SerializesModels;
 
 class AppointmentUpdatedEvent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use SerializesModels;
 
-    private $data;
+    public $data;
+    protected $userId;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct($data)
+    public function __construct(array $data, string $userId)
     {
         $this->data = $data;
+        $this->userId = $userId;
     }
 
     public function broadcastOn(): array
     {
         return [
-            new Channel('event.notification'),
+            new Channel("notifications.{$this->userId}"),
         ];
     }
 

@@ -1,0 +1,15 @@
+meta {
+  name: Dismiss
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/notification/dismiss/2
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Address;
 use App\Models\UserType;
 use Illuminate\Database\Seeder;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {

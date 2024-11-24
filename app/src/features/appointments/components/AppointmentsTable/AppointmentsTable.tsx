@@ -11,6 +11,7 @@ import DeleteButton from "../../../../shared-components/Table/DeleteButton.tsx";
 import {AppointmentService} from "../../services/AppointmentService.ts";
 import {DateUtil} from "../../../../util/DateUtil.ts";
 import EditAppointmentModal from "../EditAppointmentModal/EditAppointmentModal.tsx";
+import AppointmentsTablePagination from "./AppointmentsTablePagination.tsx";
 
 const columnHelper = createColumnHelper();
 
@@ -123,7 +124,7 @@ const AppointmentsTable = () => {
                     </table>
                 </div>
 
-                <AssistantsTablePagination/>
+                <AppointmentsTablePagination/>
 
                 {editModal.open && (
                     <EditAppointmentModal

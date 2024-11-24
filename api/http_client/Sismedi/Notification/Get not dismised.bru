@@ -1,0 +1,15 @@
+meta {
+  name: Get not dismised
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/notification/user/a01771af-9104-3600-add4-0ca9fe5246f3
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

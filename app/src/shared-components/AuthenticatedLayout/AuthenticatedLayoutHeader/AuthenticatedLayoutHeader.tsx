@@ -7,7 +7,7 @@ const AuthenticatedLayoutHeader = () => {
     const pageName = useSelector(selectTitle);
 
     return (
-        <header className="sticky top-0 w-full pr-20 bg-mainBackgroundBlue h-[13vh]">
+        <header className="sticky top-0 w-full pr-20 bg-mainBackgroundBlue h-[13vh] z-[10000]">
             <div className="flex gap-4 justify-between items-end h-[13vh] pb-[3vh]">
                 <h1 className="text-white font-bold">{pageName}</h1>
 
