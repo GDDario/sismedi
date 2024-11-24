@@ -52,4 +52,51 @@ class User extends Authenticatable
             'updated_at' => 'datetime'
         ];
     }
+
+    public function patient()
+    {
+        return $this->hasOne(Patient::class);
+    }
+
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function assistant()
+    {
+        return $this->hasOne(Assistant::class);
+    }
+
+    public function isPatient(): bool
+    {
+        return $this->patient()->exists();
+    }
+
+    public function isDoctor(): bool
+    {
+        return $this->doctor()->exists();
+    }
+
+    public function isAssistant(): bool
+    {
+        return $this->assistant()->exists();
+    }
+
+    public function getUserType(): string
+    {
+        if ($this->isPatient()) {
+            return 'patient';
+        }
+
+        if ($this->isDoctor()) {
+            return 'doctor';
+        }
+
+        if ($this->isAssistant()) {
+            return 'assistant';
+        }
+
+        return 'unknown';
+    }
 }

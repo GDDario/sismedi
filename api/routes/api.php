@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [PatientController::class, 'create']);
         Route::put('{uuid}', [PatientController::class, 'update']);
         Route::delete('{uuid}', [PatientController::class, 'delete']);
-    });
+    })->middleware('checkUserType:assistant');
 
     Route::prefix('state')->group(function () {
         Route::get('search', [StateController::class, 'search']);
@@ -52,7 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [DoctorController::class, 'create']);
         Route::delete('/{uuid}', [DoctorController::class, 'delete']);
         Route::put('/{uuid}', [DoctorController::class, 'update']);
-    });
+    })->middleware('checkUserType:assistant');
 
     Route::prefix('medicine')->group(function () {
         Route::get('', [MedicineController::class, 'index']);
@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [MedicineController::class, 'create']);
         Route::put('/{uuid}', [MedicineController::class, 'update']);
         Route::delete('/{uuid}', [MedicineController::class, 'delete']);
-    });
+    })->middleware('checkUserType:assistant,doctor');
 
     Route::prefix('medicine-category')->group(function () {
         Route::get('search', [MedicineCategoryController::class, 'search']);
@@ -72,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [AssistantController::class, 'create']);
         Route::put('/{uuid}', [AssistantController::class, 'update']);
         Route::delete('/{uuid}', [AssistantController::class, 'delete']);
-    });
+    })->middleware('checkUserType:assistant');
 
     Route::prefix('appointment')->group(function () {
         Route::get('', [AppointmentController::class, 'index']);
