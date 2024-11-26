@@ -3,4 +3,5 @@ export interface User {
     username: string;
     email: string;
     picture_path?: string;
+    type: 'assistant' | 'patient' | 'doctor';
 }

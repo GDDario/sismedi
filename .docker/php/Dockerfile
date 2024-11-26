@@ -3,25 +3,30 @@ FROM php:8.3.11-fpm
 WORKDIR /var/www/html
 
 RUN apt-get update -y \
-    && apt-get install libzip-dev libicu-dev libpq-dev libmcrypt-dev libonig-dev libsodium-dev libpng-dev curl libxml2-dev wget vim -y \
-    && rm -r /var/lib/apt/lists/* \
+    && apt-get install -y --no-install-recommends \
+        libzip-dev \
+        curl \
+        libxml2-dev \
+        wget \
+        vim \
+        libonig-dev \
+    && docker-php-ext-configure mbstring \
     && docker-php-ext-install \
         zip \
         mbstring \
         pdo \
         pdo_mysql \
-        pdo_pgsql \
         opcache \
-        sodium \
-        gd \
+        pcntl \
         xml \
-        pcntl
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 RUN chown -R www-data:www-data /var/www/html
 
-COPY php.ini /etc/php.ini
+COPY php.ini /usr/local/etc/php/php.ini
 
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh

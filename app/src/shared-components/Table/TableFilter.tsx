@@ -43,7 +43,6 @@ const TableFilter = ({filters, fetchFunction}: TableFilterProps) => {
                 !target.classList.contains('menu') &&
                 !target.classList.contains('filter-item')
             ) {
-                console.log('Target classList', target.classList)
                 setMenuOpen(false);
             }
         };

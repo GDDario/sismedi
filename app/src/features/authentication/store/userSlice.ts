@@ -1,11 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {User} from "../models/user.ts";
+import {undefined} from "zod";
 
 const initialState: User = {
     uuid: '',
     username: '',
     email: '',
     picture_path: '',
+    type: 'patient',
 };
 
 const userSlice = createSlice({
