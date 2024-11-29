@@ -29,7 +29,9 @@ Tecnologias:
 
 - [Arthur Vinicius da Silva Bertossi](https://github.com/arthurbertossi);
 - [Gabriel Donizetti Dário](https://github.com/GDDario);
-- [José Bernardes Stella d’Avila Netto](https://github.com/nettodavila).
+- [Gabriel Marques Lima](https://github.com/Bi3lzera);
+- [José Bernardes Stella d’Avila Netto](https://github.com/nettodavila);
+- [Roberto Rocha Duran](https://github.com/RobertoGarrote44);
 
 ## Professores
 
